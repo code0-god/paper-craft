@@ -1,0 +1,351 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Paper Craft writing-pattern atlas version 1",
+  "type": "object",
+  "required": [
+    "atlas_version",
+    "reviewed_at",
+    "selection_scope",
+    "venues",
+    "papers",
+    "observations"
+  ],
+  "properties": {
+    "atlas_version": {
+      "const": 1
+    },
+    "reviewed_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "selection_scope": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "venues": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/venue"
+      }
+    },
+    "papers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/paper"
+      }
+    },
+    "observations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/observation"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "locator": {
+      "type": "object",
+      "required": [
+        "pdf_page",
+        "section",
+        "detail"
+      ],
+      "properties": {
+        "pdf_page": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "section": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "detail": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        }
+      },
+      "additionalProperties": false
+    },
+    "read_coverage": {
+      "type": "object",
+      "required": [
+        "status",
+        "read_at",
+        "method",
+        "locators",
+        "unread_scope",
+        "limitations"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "read",
+            "partial",
+            "unread"
+          ]
+        },
+        "read_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "method": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "locators": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/locator"
+          }
+        },
+        "unread_scope": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "limitations": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "unread"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "read_at": {
+                "type": "null"
+              },
+              "locators": {
+                "maxItems": 0
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "read_at": {
+                "type": "string",
+                "format": "date"
+              },
+              "locators": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "paper": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "venue_id",
+        "year",
+        "publication_url",
+        "paper_url",
+        "doi",
+        "exact_revision",
+        "pdf_sha256",
+        "page_count",
+        "read_coverage",
+        "notes"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "venue_id": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "year": {
+          "type": "integer",
+          "minimum": 1900
+        },
+        "publication_url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://[^/\\s@]+/\\S*"
+        },
+        "paper_url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://[^/\\s@]+/\\S*"
+        },
+        "doi": {
+          "type": "string",
+          "pattern": "^10\\.\\d{4,9}/\\S+$"
+        },
+        "exact_revision": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "pdf_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "page_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "read_coverage": {
+          "$ref": "#/$defs/read_coverage"
+        },
+        "notes": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        }
+      },
+      "additionalProperties": false
+    },
+    "venue": {
+      "type": "object",
+      "required": [
+        "venue_id",
+        "sampling_status",
+        "paper_ids",
+        "sample_size",
+        "scope_limit"
+      ],
+      "properties": {
+        "venue_id": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "sampling_status": {
+          "enum": [
+            "sampled",
+            "unsampled"
+          ]
+        },
+        "paper_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "uniqueItems": true
+        },
+        "sample_size": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "scope_limit": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        }
+      },
+      "additionalProperties": false
+    },
+    "observation": {
+      "type": "object",
+      "required": [
+        "id",
+        "venue_id",
+        "paper_id",
+        "category",
+        "observation",
+        "scope_limit",
+        "generalization",
+        "verification_status",
+        "locators"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "venue_id": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "paper_id": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "category": {
+          "enum": [
+            "official_requirement",
+            "official_recommendation",
+            "observed_pattern",
+            "independent_guidance"
+          ]
+        },
+        "observation": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "scope_limit": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "generalization": {
+          "const": "sample_only"
+        },
+        "verification_status": {
+          "enum": [
+            "verified",
+            "unverified"
+          ]
+        },
+        "locators": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/locator"
+          },
+          "minItems": 1
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "not": {
+            "properties": {
+              "category": {
+                "enum": [
+                  "official_requirement",
+                  "official_recommendation"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "$comment": "Category vocabulary distinguishes official requirements, official recommendations, observed patterns and independent guidance. Paper-derived atlas entries cannot establish official classifications; use exact venue profiles for these. validate_writing_patterns.py additionally checks IDs, links, sample counts, actual dates, page bounds and locator membership in recorded read coverage. Neither schema nor validator verifies source truth, live availability, scientific validity or current rule applicability."
+}

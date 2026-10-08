@@ -176,6 +176,17 @@
       "notes": "Independent field methodology, select metrics by claim; not mandatory venue review criteria."
     }
   },
-  "writing_style_observations": [],
+  "writing_style_observations": [
+    {
+      "paper_url": "https://www.csl.cornell.edu/~cbatten/pdfs/golden-apu-ubmark-cal2024.pdf",
+      "observation": "The implementation passage bounds the supported instruction subset, operand width and vector length. Locators: PDF p3, III.",
+      "scope_limit": "One sampled 2024 paper, read partially as text. Not an official requirement or venue-wide pattern; no inference to the target profile year/stage. Full provenance and coverage: venues/writing-patterns.json."
+    },
+    {
+      "paper_url": "https://www.pdl.cmu.edu/PDL-FTP/associated/Address_Scaling_Architectural_Support.pdf",
+      "observation": "Prior-method limitations lead into a locality insight, followed by contrasting existing and proposed organizations. Locators: PDF p1, I; PDF p2, II; Figures 1-2.",
+      "scope_limit": "One sampled 2024 paper, read partially as text. Not an official requirement or venue-wide pattern; no inference to the target profile year/stage. Full provenance and coverage: venues/writing-patterns.json."
+    }
+  ],
   "notes": "Continuing journal profile; year=null explicitly. Publisher/special-issue rules are not transferred to regular submissions."
 }

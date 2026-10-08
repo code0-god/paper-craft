@@ -58,5 +58,7 @@ editions are historical support, not confirmation of a current/future edition.
 TC/TPDS author pages were unavailable; ACM author pages returned 403. These four
 profiles remain usable for exact identity plus independent domain review, with all
 official rules UNKNOWN. No special-issue limits or publisher-wide template defaults
-are treated as regular-journal requirements. No representative-paper style analysis
-or full-profile verification is claimed. Follow the refresh procedure in README.
+are treated as regular-journal requirements. No full-profile verification or paper
+style study is claimed for those four journals. The separate [writing-pattern atlas](writing-patterns.md)
+records bounded ISCA/CAL paper observations, not official requirements. Follow the
+refresh procedure in README.

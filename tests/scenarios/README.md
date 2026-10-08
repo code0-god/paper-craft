@@ -30,3 +30,27 @@ Install with no user source attachments present; core review must remain usable 
 ## Evidence record
 
 For each actual run record: case ID; timestamp; input hashes; installed skill path; prompt; artifact paths; criterion verdicts/evidence; hard-failure checks; final verdict; skipped/unknown dependencies. Keep generated private manuscript reports out of distributed skill resources. Scenario inputs and this rubric remain test resources; the installed skill does not depend on them.
+
+## Scientific reasoning regressions
+
+[scientific-cases.json](scientific-cases.json) adds three required controlled cases:
+per-row versus stripe-shared scaling, finite-width saturation order, and mixed
+measured/modeled latency inference. Three negative controls cover a justified
+fixed-interface design, an explicitly untested systems hypothesis, and an edit
+that preserves numeric token counts while changing scientific meaning.
+
+Start each case in a fresh session with only its raw inputs and prompt. Keep the
+evaluator manifest and other cases out of the reviewing model's context. Follow the
+[blind execution protocol](counterfactual/README.md); record every independent
+repeat rather than selecting the best response. Inspect the complete argument,
+source locations, arithmetic, evidence limits and false positives. Keyword matches
+and unit-test results do not establish semantic PASS. Treat these synthetic
+PoTal-inspired exercises as tests of review behavior, not findings about an actual
+paper or implementation.
+
+For cross-mode consistency, review the same hashed input in technical,
+argumentation and Suggest Edits modes. Make the earlier report available as a
+fallible artifact with its source hash; require fresh context checks and explicit
+revision of any prior mistake. Map stable claim IDs and compare the core judgments,
+assumptions, evidence provenance and proposed qualifications. Protect the original
+and keep changed claim strength visible in the editing ledger.

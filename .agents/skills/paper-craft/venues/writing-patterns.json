@@ -1,0 +1,488 @@
+{
+  "atlas_version": 1,
+  "reviewed_at": "2026-10-08",
+  "selection_scope": "Four accessible author-hosted architecture papers selected for contrasting argument organization, not random sampling. Two ISCA 2024 and two CAL 2024 papers. All observations are partial text readings; exact PDF revisions UNKNOWN. Other named venues explicitly unsampled.",
+  "venues": [
+    {
+      "venue_id": "ISCA",
+      "sampling_status": "sampled",
+      "paper_ids": [
+        "tartan",
+        "cloud-carbon"
+      ],
+      "sample_size": 2,
+      "scope_limit": "Two purposively selected 2024 papers only; no representative sample, venue-wide style, current-year guidance or acceptance prediction."
+    },
+    {
+      "venue_id": "CAL",
+      "sampling_status": "sampled",
+      "paper_ids": [
+        "virtual-vector",
+        "address-scaling"
+      ],
+      "sample_size": 2,
+      "scope_limit": "Two purposively selected 2024 papers only; no representative sample, venue-wide style, current-year guidance or acceptance prediction."
+    },
+    {
+      "venue_id": "MICRO",
+      "sampling_status": "unsampled",
+      "paper_ids": [],
+      "sample_size": 0,
+      "scope_limit": "No papers sampled or read for this venue in this atlas. Extension slot only; no observed writing patterns claimed."
+    },
+    {
+      "venue_id": "HPCA",
+      "sampling_status": "unsampled",
+      "paper_ids": [],
+      "sample_size": 0,
+      "scope_limit": "No papers sampled or read for this venue in this atlas. Extension slot only; no observed writing patterns claimed."
+    },
+    {
+      "venue_id": "ASPLOS",
+      "sampling_status": "unsampled",
+      "paper_ids": [],
+      "sample_size": 0,
+      "scope_limit": "No papers sampled or read for this venue in this atlas. Extension slot only; no observed writing patterns claimed."
+    },
+    {
+      "venue_id": "SOSP",
+      "sampling_status": "unsampled",
+      "paper_ids": [],
+      "sample_size": 0,
+      "scope_limit": "No papers sampled or read for this venue in this atlas. Extension slot only; no observed writing patterns claimed."
+    },
+    {
+      "venue_id": "OSDI",
+      "sampling_status": "unsampled",
+      "paper_ids": [],
+      "sample_size": 0,
+      "scope_limit": "No papers sampled or read for this venue in this atlas. Extension slot only; no observed writing patterns claimed."
+    }
+  ],
+  "papers": [
+    {
+      "id": "tartan",
+      "title": "Tartan: Microarchitecting a Robotic Processor",
+      "venue_id": "ISCA",
+      "year": 2024,
+      "publication_url": "https://doi.org/10.1109/ISCA59077.2024.00047",
+      "paper_url": "https://www.pdl.cmu.edu/PDL-FTP/associated/Tartan-ISCA24.pdf",
+      "doi": "10.1109/ISCA59077.2024.00047",
+      "exact_revision": "UNKNOWN",
+      "pdf_sha256": "9245b70fe31bd8e7914e83ac31c0ba24080f3c9532c54f9c29b0f491d27e7000",
+      "page_count": 19,
+      "read_coverage": {
+        "status": "partial",
+        "read_at": "2026-10-08",
+        "method": "Primary public PDF text passages read with web PDF extraction; downloaded PDF hash checked.",
+        "locators": [
+          {
+            "pdf_page": 4,
+            "section": "III; Table I; Figure 1",
+            "detail": "Workload setup and bottleneck discussion"
+          },
+          {
+            "pdf_page": 5,
+            "section": "IV; Figure 2",
+            "detail": "Oriented accesses and proposed vector loads"
+          },
+          {
+            "pdf_page": 13,
+            "section": "VIII-C/D; Figures 9-11",
+            "detail": "Component comparisons and parameter tradeoffs"
+          },
+          {
+            "pdf_page": 14,
+            "section": "VIII-E; Figure 12; Table IV",
+            "detail": "Combined results and estimated overhead"
+          }
+        ],
+        "unread_scope": "Partial text reading: sections III, IV and VIII-C through VIII-E; no claim of a complete paper or artifact appendix review.",
+        "limitations": "Text-only structural observation. No visual figure/table inspection, equation proof, code execution, result reproduction or scientific-validity certification."
+      },
+      "notes": "PDF page 1 is an ACM cover; PDF page 2 is printed page 548. Cover publication date 2025-07-23 does not change the ISCA 2024 proceedings year. Exact revision UNKNOWN."
+    },
+    {
+      "id": "cloud-carbon",
+      "title": "Designing Cloud Servers for Lower Carbon",
+      "venue_id": "ISCA",
+      "year": 2024,
+      "publication_url": "https://doi.org/10.1109/ISCA59077.2024.00041",
+      "paper_url": "https://www.pdl.cmu.edu/PDL-FTP/CloudComputing/Wang_ISCA24.pdf",
+      "doi": "10.1109/ISCA59077.2024.00041",
+      "exact_revision": "UNKNOWN",
+      "pdf_sha256": "f36dffcba70bd9dd25e20ecd0d2d0bfc6912cd5866c6453c671ad7e0061ba891",
+      "page_count": 19,
+      "read_coverage": {
+        "status": "partial",
+        "read_at": "2026-10-08",
+        "method": "Primary public PDF text passages read with web PDF extraction; downloaded PDF hash checked.",
+        "locators": [
+          {
+            "pdf_page": 5,
+            "section": "IV",
+            "detail": "Assumptions and framework component inputs/outputs"
+          },
+          {
+            "pdf_page": 6,
+            "section": "IV; Figure 6",
+            "detail": "Framework overview caption and component interfaces"
+          },
+          {
+            "pdf_page": 11,
+            "section": "VI",
+            "detail": "Per-core carbon comparison narrative"
+          },
+          {
+            "pdf_page": 12,
+            "section": "VI; Table IV; Figure 11",
+            "detail": "Incremental configurations and carbon-intensity conditions"
+          },
+          {
+            "pdf_page": 13,
+            "section": "VIII",
+            "detail": "Open questions and stated assumptions"
+          }
+        ],
+        "unread_scope": "Partial text reading: section IV overview and Figure 6 caption, VI carbon savings discussion and VIII discussion. Other implementation details and appendix not audited.",
+        "limitations": "Text-only structural observation. No visual figure/table inspection, equation proof, code execution, result reproduction or scientific-validity certification."
+      },
+      "notes": "ISCA 2024 author-hosted PDF; local PDF page numbers equal printed page numbers. Exact revision UNKNOWN."
+    },
+    {
+      "id": "virtual-vector",
+      "title": "Supporting a Virtual Vector Instruction Set on a Commercial Compute-in-SRAM Accelerator",
+      "venue_id": "CAL",
+      "year": 2024,
+      "publication_url": "https://doi.org/10.1109/LCA.2023.3341389",
+      "paper_url": "https://www.csl.cornell.edu/~cbatten/pdfs/golden-apu-ubmark-cal2024.pdf",
+      "doi": "10.1109/LCA.2023.3341389",
+      "exact_revision": "UNKNOWN",
+      "pdf_sha256": "f6348a2ff96295bd90f8f773bc909e4e4cb7ac9dda4672194307fd7747278bc7",
+      "page_count": 4,
+      "read_coverage": {
+        "status": "partial",
+        "read_at": "2026-10-08",
+        "method": "Primary public PDF text passages read with web PDF extraction; downloaded PDF hash checked.",
+        "locators": [
+          {
+            "pdf_page": 3,
+            "section": "III",
+            "detail": "Implemented instruction subset and stated operand bounds"
+          },
+          {
+            "pdf_page": 3,
+            "section": "IV-A; Table II",
+            "detail": "Bit packing and transfer discussion"
+          },
+          {
+            "pdf_page": 4,
+            "section": "IV-C",
+            "detail": "Measured/theoretical discrepancy and transfer overhead narrative"
+          },
+          {
+            "pdf_page": 4,
+            "section": "IV-D; V",
+            "detail": "KNN tradeoffs and future comparisons"
+          }
+        ],
+        "unread_scope": "Partial text reading: sections III, IV-A through IV-D and V. Figure rendering and numerical tables were not visually checked; abstract and early architecture sections not re-audited here.",
+        "limitations": "Text-only structural observation. No visual figure/table inspection, equation proof, code execution, result reproduction or scientific-validity certification."
+      },
+      "notes": "CAL volume 23(1), 2024, pages 29-32; online publication 2023-12-11 and current-version date 2024-02-26. Local PDF uses pages 1-4. Text extraction includes duplicated/garbled spans and broken cross-reference tokens; this is a reader limitation, not a judgment about rendered manuscript quality. Exact revision UNKNOWN."
+    },
+    {
+      "id": "address-scaling",
+      "title": "Address Scaling: Architectural Support for Fine-Grained Thread-Safe Metadata Management",
+      "venue_id": "CAL",
+      "year": 2024,
+      "publication_url": "https://doi.org/10.1109/LCA.2024.3373760",
+      "paper_url": "https://www.pdl.cmu.edu/PDL-FTP/associated/Address_Scaling_Architectural_Support.pdf",
+      "doi": "10.1109/LCA.2024.3373760",
+      "exact_revision": "UNKNOWN",
+      "pdf_sha256": "98c4b1e250696f36428162b217a4ef48fc9b2376fe482a65bc29862d65461910",
+      "page_count": 4,
+      "read_coverage": {
+        "status": "partial",
+        "read_at": "2026-10-08",
+        "method": "Primary public PDF text passages read with web PDF extraction; downloaded PDF hash checked.",
+        "locators": [
+          {
+            "pdf_page": 1,
+            "section": "I",
+            "detail": "Prior limitations and locality insight"
+          },
+          {
+            "pdf_page": 2,
+            "section": "II; Figures 1-2",
+            "detail": "Existing versus proposed organization and advantages"
+          },
+          {
+            "pdf_page": 3,
+            "section": "II-C/D",
+            "detail": "Deferred scaling-factor selection and ISA semantics"
+          },
+          {
+            "pdf_page": 3,
+            "section": "III; Table I; Figure 4",
+            "detail": "Simulator setup and four comparison settings"
+          },
+          {
+            "pdf_page": 4,
+            "section": "III-B; Figure 5; V",
+            "detail": "Cache-capacity cost and future-work discussion"
+          }
+        ],
+        "unread_scope": "Partial text reading: sections I, II, III and V plus referenced captions. Equation correctness and rendered figures/tables not verified; related-work coverage incomplete.",
+        "limitations": "Text-only structural observation. No visual figure/table inspection, equation proof, code execution, result reproduction or scientific-validity certification."
+      },
+      "notes": "CAL volume 23(1), 2024, pages 69-72. PDF page 1 is printed page 69. Publication date 2024-03-06; current-version date 2024-03-29. Exact revision UNKNOWN."
+    }
+  ],
+  "observations": [
+    {
+      "id": "tartan-1",
+      "venue_id": "ISCA",
+      "paper_id": "tartan",
+      "category": "observed_pattern",
+      "observation": "Measured bottlenecks precede the corresponding vector-load mechanism description.",
+      "scope_limit": "Only the cited passages of this sampled 2024 paper; not a venue-wide norm, current rule, mandatory reviewer criterion or evidence of acceptance causality.",
+      "generalization": "sample_only",
+      "verification_status": "verified",
+      "locators": [
+        {
+          "pdf_page": 4,
+          "section": "III; Table I; Figure 1",
+          "detail": "Workload setup and bottleneck discussion"
+        },
+        {
+          "pdf_page": 5,
+          "section": "IV; Figure 2",
+          "detail": "Oriented accesses and proposed vector loads"
+        }
+      ]
+    },
+    {
+      "id": "tartan-2",
+      "venue_id": "ISCA",
+      "paper_id": "tartan",
+      "category": "observed_pattern",
+      "observation": "Component comparisons precede combined end-to-end results, with estimated overhead reported separately.",
+      "scope_limit": "Only the cited passages of this sampled 2024 paper; not a venue-wide norm, current rule, mandatory reviewer criterion or evidence of acceptance causality.",
+      "generalization": "sample_only",
+      "verification_status": "verified",
+      "locators": [
+        {
+          "pdf_page": 13,
+          "section": "VIII-C/D; Figures 9-11",
+          "detail": "Component comparisons and parameter tradeoffs"
+        },
+        {
+          "pdf_page": 14,
+          "section": "VIII-E; Figure 12; Table IV",
+          "detail": "Combined results and estimated overhead"
+        }
+      ]
+    },
+    {
+      "id": "tartan-3",
+      "venue_id": "ISCA",
+      "paper_id": "tartan",
+      "category": "observed_pattern",
+      "observation": "The combined evaluation distinguishes approximation-enabled, approximation-disabled and legacy-software cases.",
+      "scope_limit": "Only the cited passages of this sampled 2024 paper; not a venue-wide norm, current rule, mandatory reviewer criterion or evidence of acceptance causality.",
+      "generalization": "sample_only",
+      "verification_status": "verified",
+      "locators": [
+        {
+          "pdf_page": 14,
+          "section": "VIII-E; Figure 12; Table IV",
+          "detail": "Combined results and estimated overhead"
+        }
+      ]
+    },
+    {
+      "id": "cloud-carbon-1",
+      "venue_id": "ISCA",
+      "paper_id": "cloud-carbon",
+      "category": "observed_pattern",
+      "observation": "The framework overview defines component inputs and outputs and states assumptions before detailed implementation.",
+      "scope_limit": "Only the cited passages of this sampled 2024 paper; not a venue-wide norm, current rule, mandatory reviewer criterion or evidence of acceptance causality.",
+      "generalization": "sample_only",
+      "verification_status": "verified",
+      "locators": [
+        {
+          "pdf_page": 5,
+          "section": "IV",
+          "detail": "Assumptions and framework component inputs/outputs"
+        },
+        {
+          "pdf_page": 6,
+          "section": "IV; Figure 6",
+          "detail": "Framework overview caption and component interfaces"
+        }
+      ]
+    },
+    {
+      "id": "cloud-carbon-2",
+      "venue_id": "ISCA",
+      "paper_id": "cloud-carbon",
+      "category": "observed_pattern",
+      "observation": "The evaluation moves from incremental per-core configurations to cluster savings under different carbon intensities.",
+      "scope_limit": "Only the cited passages of this sampled 2024 paper; not a venue-wide norm, current rule, mandatory reviewer criterion or evidence of acceptance causality.",
+      "generalization": "sample_only",
+      "verification_status": "verified",
+      "locators": [
+        {
+          "pdf_page": 11,
+          "section": "VI",
+          "detail": "Per-core carbon comparison narrative"
+        },
+        {
+          "pdf_page": 12,
+          "section": "VI; Table IV; Figure 11",
+          "detail": "Incremental configurations and carbon-intensity conditions"
+        }
+      ]
+    },
+    {
+      "id": "cloud-carbon-3",
+      "venue_id": "ISCA",
+      "paper_id": "cloud-carbon",
+      "category": "observed_pattern",
+      "observation": "A separate discussion identifies unresolved deployment, search and heterogeneous-compute questions.",
+      "scope_limit": "Only the cited passages of this sampled 2024 paper; not a venue-wide norm, current rule, mandatory reviewer criterion or evidence of acceptance causality.",
+      "generalization": "sample_only",
+      "verification_status": "verified",
+      "locators": [
+        {
+          "pdf_page": 13,
+          "section": "VIII",
+          "detail": "Open questions and stated assumptions"
+        }
+      ]
+    },
+    {
+      "id": "virtual-vector-1",
+      "venue_id": "CAL",
+      "paper_id": "virtual-vector",
+      "category": "observed_pattern",
+      "observation": "The implementation passage bounds the supported instruction subset, operand width and vector length.",
+      "scope_limit": "Only the cited passages of this sampled 2024 paper; not a venue-wide norm, current rule, mandatory reviewer criterion or evidence of acceptance causality.",
+      "generalization": "sample_only",
+      "verification_status": "verified",
+      "locators": [
+        {
+          "pdf_page": 3,
+          "section": "III",
+          "detail": "Implemented instruction subset and stated operand bounds"
+        }
+      ]
+    },
+    {
+      "id": "virtual-vector-2",
+      "venue_id": "CAL",
+      "paper_id": "virtual-vector",
+      "category": "observed_pattern",
+      "observation": "Microbenchmark discussion separates arithmetic opportunities from transfer and instruction-issue overheads.",
+      "scope_limit": "Only the cited passages of this sampled 2024 paper; not a venue-wide norm, current rule, mandatory reviewer criterion or evidence of acceptance causality.",
+      "generalization": "sample_only",
+      "verification_status": "verified",
+      "locators": [
+        {
+          "pdf_page": 3,
+          "section": "IV-A; Table II",
+          "detail": "Bit packing and transfer discussion"
+        },
+        {
+          "pdf_page": 4,
+          "section": "IV-C",
+          "detail": "Measured/theoretical discrepancy and transfer overhead narrative"
+        }
+      ]
+    },
+    {
+      "id": "virtual-vector-3",
+      "venue_id": "CAL",
+      "paper_id": "virtual-vector",
+      "category": "observed_pattern",
+      "observation": "The case study exposes costs of the abstraction and reserves CPU/GPU comparisons for future work.",
+      "scope_limit": "Only the cited passages of this sampled 2024 paper; not a venue-wide norm, current rule, mandatory reviewer criterion or evidence of acceptance causality.",
+      "generalization": "sample_only",
+      "verification_status": "verified",
+      "locators": [
+        {
+          "pdf_page": 4,
+          "section": "IV-D; V",
+          "detail": "KNN tradeoffs and future comparisons"
+        }
+      ]
+    },
+    {
+      "id": "address-scaling-1",
+      "venue_id": "CAL",
+      "paper_id": "address-scaling",
+      "category": "observed_pattern",
+      "observation": "Prior-method limitations lead into a locality insight, followed by contrasting existing and proposed organizations.",
+      "scope_limit": "Only the cited passages of this sampled 2024 paper; not a venue-wide norm, current rule, mandatory reviewer criterion or evidence of acceptance causality.",
+      "generalization": "sample_only",
+      "verification_status": "verified",
+      "locators": [
+        {
+          "pdf_page": 1,
+          "section": "I",
+          "detail": "Prior limitations and locality insight"
+        },
+        {
+          "pdf_page": 2,
+          "section": "II; Figures 1-2",
+          "detail": "Existing versus proposed organization and advantages"
+        }
+      ]
+    },
+    {
+      "id": "address-scaling-2",
+      "venue_id": "CAL",
+      "paper_id": "address-scaling",
+      "category": "observed_pattern",
+      "observation": "The evaluation names four comparison settings before isolating the cache-capacity cost of metadata.",
+      "scope_limit": "Only the cited passages of this sampled 2024 paper; not a venue-wide norm, current rule, mandatory reviewer criterion or evidence of acceptance causality.",
+      "generalization": "sample_only",
+      "verification_status": "verified",
+      "locators": [
+        {
+          "pdf_page": 3,
+          "section": "III; Table I; Figure 4",
+          "detail": "Simulator setup and four comparison settings"
+        },
+        {
+          "pdf_page": 4,
+          "section": "III-B; Figure 5; V",
+          "detail": "Cache-capacity cost and future-work discussion"
+        }
+      ]
+    },
+    {
+      "id": "address-scaling-3",
+      "venue_id": "CAL",
+      "paper_id": "address-scaling",
+      "category": "observed_pattern",
+      "observation": "Deferred design choices appear beside the mechanism, and the final section names further validation work.",
+      "scope_limit": "Only the cited passages of this sampled 2024 paper; not a venue-wide norm, current rule, mandatory reviewer criterion or evidence of acceptance causality.",
+      "generalization": "sample_only",
+      "verification_status": "verified",
+      "locators": [
+        {
+          "pdf_page": 3,
+          "section": "II-C/D",
+          "detail": "Deferred scaling-factor selection and ISA semantics"
+        },
+        {
+          "pdf_page": 4,
+          "section": "III-B; Figure 5; V",
+          "detail": "Cache-capacity cost and future-work discussion"
+        }
+      ]
+    }
+  ]
+}

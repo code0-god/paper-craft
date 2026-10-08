@@ -187,6 +187,17 @@
       "notes": "Independent field methodology, select metrics by claim; not mandatory venue review criteria."
     }
   },
-  "writing_style_observations": [],
+  "writing_style_observations": [
+    {
+      "paper_url": "https://www.pdl.cmu.edu/PDL-FTP/associated/Tartan-ISCA24.pdf",
+      "observation": "Measured bottlenecks precede the corresponding vector-load mechanism description. Locators: PDF p4, III; Table I; Figure 1; PDF p5, IV; Figure 2.",
+      "scope_limit": "One sampled 2024 paper, read partially as text. Not an official requirement or venue-wide pattern; no inference to the target profile year/stage. Full provenance and coverage: venues/writing-patterns.json."
+    },
+    {
+      "paper_url": "https://www.pdl.cmu.edu/PDL-FTP/CloudComputing/Wang_ISCA24.pdf",
+      "observation": "The framework overview defines component inputs and outputs and states assumptions before detailed implementation. Locators: PDF p5, IV; PDF p6, IV; Figure 6.",
+      "scope_limit": "One sampled 2024 paper, read partially as text. Not an official requirement or venue-wide pattern; no inference to the target profile year/stage. Full provenance and coverage: venues/writing-patterns.json."
+    }
+  ],
   "notes": "Exact named edition and track only; historical edition cannot establish a later edition's rules."
 }

@@ -1,6 +1,6 @@
 # Paper Craft
 
-Computer Architecture / Computer Systems 연구자를 위한 논문 작성·검토 Agent Skill입니다. 연구 질문과 기여를 정리하고, 논증과 실험 근거를 검토하며, 저자의 기술적 의미를 보존하는 퇴고를 지원합니다.
+Computer Architecture / Computer Systems 연구자를 위한 Evidence-Grounded Scientific Review Agent Skill입니다. 먼저 주장의 전제·반례·단순 대안과 실험 근거를 검토하고, 그 판단을 기술 검토·논증 검토·퇴고에서 공유합니다. 저자의 의도와 기술적 의미를 보존합니다.
 
 Codex, Claude Code 등 Agent Skills 호환 도구에서 사용합니다. Skill 본체는 [`.agents/skills/paper-craft/`](.agents/skills/paper-craft/SKILL.md)에 있으며, 같은 디렉터리를 각 도구의 발견 경로에 독립적으로 설치합니다.
 
@@ -158,6 +158,8 @@ $paper-craft main.tex를 기술적 의미를 보존하며 학술 영어로 퇴�
 
 $paper-craft 이 Accelerator 논문의 Baseline 공정성과 Claim–Evidence Matrix를 작성해줘.
 
+$paper-craft main.tex를 종합 과학 검토해줘. 먼저 Scientific Triage를 보여주고, 핵심 설계의 단순 대안과 수학·수치·하드웨어 계약, 근거에서 결론으로의 추론을 검토해줘.
+
 $paper-craft main.tex를 ISCA 2026 research submission 기준으로 검토해줘. 공식 지침을 확인하고 제출 전 검사 결과를 구분해줘.
 
 $paper-craft IEEE CAL continuing letter submission에 맞는 압축안을 제시해줘. 기여·실험 조건·한계를 보존해줘.
@@ -173,6 +175,7 @@ $paper-craft 목표 학회 관점에서 가상 리뷰와 심사 답변 준비안
 
 | 작업 | 주요 결과 |
 | --- | --- |
+| Scientific Review | 초기 Triage, hash-bound Claim Graph, 대안·반례, 수학/수치/HW/평가 계약, 검증 과제 |
 | Research Design | 연구 질문, 문제·Research Gap, 설계 가설, 검증 계획 |
 | Paper Architect | Argument Map, 섹션 역할, Paragraph-level Outline |
 | Novelty Audit | 설계 근거, 가까운 선행연구·단순 대안 비교, 입증된 기여와 미검증 항목 |
@@ -186,6 +189,10 @@ Architecture 지침은 프로세서·메모리·가속기·컴파일러와 HW/SW
 
 신규성은 비교 근거와 불확실성으로 설명합니다. 실험 결과나 참고문헌을 생성하지 않으며, 가상 리뷰를 실제 심사나 채택 확률로 제시하지 않습니다.
 
+주장 지원 상태와 검증 범위는 별도로 기록합니다. 원고에 보고된 수치, 수학적 확인, 소스 검사, 수치 재현, 시뮬레이션, 하드웨어 측정, 독립 재현, 가설·추론을 구분합니다. Evidence Existence, Evidence Validity, Inference Validity도 독립적으로 평가합니다. 원고의 표와 본문이 일치한다는 사실만으로 실험을 재현했다고 판단하지 않습니다.
+
+Claim Graph는 안정적인 ID와 원고 SHA-256을 사용합니다. 파일이 변경되면 이전 판단의 재사용을 중단하고 영향을 받는 주장을 재검토합니다. 그래프와 보고서 검증기의 PASS는 데이터 구조의 유효성만 뜻하며 과학적 판단을 대신하지 않습니다. 새 JSON 보고서는 `schema_version: 2`이며, 검증기는 기존 unversioned/v1 보고서도 읽습니다.
+
 ## 원고와 수정 모드
 
 LaTeX 프로젝트, `.tex`, `.bib`, Markdown, plain text를 지원합니다. PDF는 호스트에 추출·렌더 도구가 있을 때, DOCX는 적절한 문서 도구가 있을 때 검토합니다. 읽지 못한 파일이나 수행할 수 없는 검사는 명시합니다.
@@ -197,6 +204,20 @@ LaTeX 프로젝트, `.tex`, `.bib`, Markdown, plain text를 지원합니다. PDF
 | Apply Approved Edits | 승인된 수정만 실제 파일에 적용 |
 
 수치·단위·수식 의미·Citation Key·LaTeX Label을 보존합니다. 의미나 주장 범위가 달라지는 수정은 별도로 표시합니다. 연구 설계나 실험 결함은 문장 교정으로 감추지 않고 검증 과제로 분류합니다.
+
+수정 유형은 `language_only`, `structural`, `claim_qualification`, `technical_correction`, `evidence_alignment`로 표시합니다. 토큰 검사를 통과해도 숫자와 대상의 연결, 부정·비교 방향, 인과관계, 측정 방식이나 확신 수준이 달라질 수 있습니다. Editing Guard는 위험 신호와 주변 문맥을 제시하며, 의미 보존은 `UNKNOWN / MANUAL_REQUIRED`로 유지합니다.
+
+## 검토 결과와 연구 데이터 보호
+
+채팅 답변만 요청하면 파일을 만들지 않습니다. 결과 파일이 필요할 때는 사용자가 지정한 경로, `PAPER_CRAFT_OUTPUT_DIR`, 운영체제별 사용자 저장소 순으로 선택합니다. 기본 위치는 Skill 소스 저장소 밖입니다.
+
+| 운영체제 | 기본 결과 경로 |
+| --- | --- |
+| macOS | `~/Library/Application Support/PaperCraft/reviews/review-<UTC timestamp>/` |
+| Linux | `$XDG_STATE_HOME/paper-craft/reviews/` 또는 `~/.local/state/paper-craft/reviews/` 아래 개별 실행 디렉터리 |
+| Windows | `%LOCALAPPDATA%/PaperCraft/reviews/` 아래 개별 실행 디렉터리 |
+
+명시적으로 Git 저장소 내부를 지정하면 추적 중이거나 ignore되지 않은 경로를 경고합니다. 다른 저장소의 `.gitignore`를 자동으로 변경하지 않습니다. 이 개발 저장소의 `output/`, 임시 결과와 설치 백업은 ignore됩니다. 원본·제안 파일의 해시를 기록할 수 있으며 Review Only와 Suggest Edits는 원고를 변경하지 않습니다. 연구 파일의 외부 업로드는 하지 않습니다.
 
 ## Venue 지원 범위
 
@@ -215,6 +236,8 @@ KSC는 KCC·KCSE와 구분합니다. KSC 2026 일반논문의 심사용·출판�
 
 세부 범위와 출처: [Registry](.agents/skills/paper-craft/venues/registry.json), [Venue Guide](.agents/skills/paper-craft/references/venues/README.md), [공식 출처 목록](.agents/skills/paper-craft/references/venues/sources.md).
 
+[실제 논문 서술 패턴](.agents/skills/paper-craft/references/venues/writing-patterns.md)은 ISCA 2024와 IEEE CAL 2024 각 2편의 공개 논문을 대상으로 합니다. 정보 배치·설계 근거·평가·한계의 위치를 URL·페이지·섹션과 함께 기록합니다. `observed_pattern`은 공식 규정이나 Venue 전체의 필수 문체가 아닙니다. MICRO·HPCA·ASPLOS·SOSP·OSDI는 같은 형식으로 확장할 수 있으며 아직 표본 분석을 완료하지 않았습니다.
+
 ## 로컬 검사 도구
 
 다음 예시는 기본 사용자 설치 기준입니다. 프로젝트 로컬 설치라면 `PAPER_CRAFT`를 해당 Skill 디렉터리로 지정합니다.
@@ -225,13 +248,23 @@ PAPER_CRAFT="$HOME/.agents/skills/paper-craft"
 python3 "$PAPER_CRAFT/scripts/latex_integrity_check.py" /path/to/main.tex --json
 python3 "$PAPER_CRAFT/scripts/reference_audit.py" /path/to/main.tex --json
 python3 "$PAPER_CRAFT/scripts/editing_guard.py" /path/to/original.tex /path/to/proposed.tex --json
+python3 "$PAPER_CRAFT/scripts/review_output.py" --inputs /path/to/main.tex --json
+python3 "$PAPER_CRAFT/scripts/argument_graph.py" validate /path/to/graph.json \
+  --project-root /path/to/project --check-inputs --json
+python3 "$PAPER_CRAFT/scripts/validate_review_report.py" /path/to/review.json --json
+python3 "$PAPER_CRAFT/scripts/numerical_contract_check.py"
+python3 "$PAPER_CRAFT/scripts/validate_writing_patterns.py" --json
+python3 "$PAPER_CRAFT/scripts/pdf_reader.py" /path/to/paper.pdf --json
+python3 "$PAPER_CRAFT/scripts/pdf_reader.py" /path/to/paper.pdf --render-pages 1,3-5 --json
 python3 "$PAPER_CRAFT/scripts/venue_preflight.py" /path/to/main.tex \
   --venue ISCA --year 2026 --track research --stage submission --offline --json
 ```
 
 스크립트는 기본적으로 읽기 전용이며 네트워크·원고 업로드 기능이 없습니다. Agent 호스트의 데이터 처리 설정은 사용하는 환경을 따릅니다. Python 도구는 표준 라이브러리만 사용합니다.
 
-LaTeX 빌드는 명시적으로 `--build`를 지정한 경우 임시 복사본에서 실행하며 `latexmk`·TeX 배포판이 필요합니다. PDF 페이지 검사는 `pdfinfo`가 있을 때 수행합니다. 누락된 도구는 SKIPPED, 판단 불가는 UNKNOWN, 발견된 위반은 FAIL로 보고합니다. PASS는 실제 수행한 검사 범위에 한정되며, 종료 코드 0도 전체 제출 준비 완료를 뜻하지 않습니다.
+LaTeX 빌드는 명시적으로 `--build`를 지정한 경우 임시 복사본에서 실행하며 `latexmk`·TeX 배포판이 필요합니다. 기존 Venue Preflight의 PDF 페이지 검사는 `pdfinfo`를 사용합니다. 선택적 PDF Reader는 설치된 Poppler 또는 macOS Swift/PDFKit으로 페이지별 텍스트·메타데이터·렌더링을 수행합니다. OCR은 `--ocr`로 요청한 경우에만 수행하며 불확실성을 유지합니다. 텍스트 추출이나 이미지 생성은 수식·표·그림의 시각적 검토를 완료했다는 뜻이 아닙니다. LaTeX 소스와 PDF의 동일 개정본 여부는 해시를 연결한 제공 build manifest 없이 UNKNOWN입니다. 추가 필수 라이브러리는 없습니다.
+
+누락된 도구는 SKIPPED, 판단 불가는 UNKNOWN, 발견된 위반은 FAIL로 보고합니다. PASS는 실제 수행한 검사 범위에 한정되며, 종료 코드 0도 전체 제출 준비 완료를 뜻하지 않습니다.
 
 매크로·조건부 TeX와 복잡한 bibliography 구조, 인용 진위, 기술적 의미, 렌더링·익명화·최종 제출 정책은 추가 도구 또는 연구자 확인이 필요합니다.
 
@@ -262,6 +295,8 @@ python3 .agents/skills/paper-craft/scripts/validate_profiles.py --json
 ```
 
 npm 설치·업데이트·백업 검증과 Python 정적 검사 테스트를 제공합니다. AI 의미 검토는 별도의 [재현 시나리오](https://github.com/code0-god/paper-craft/blob/main/tests/scenarios/README.md)로 확인합니다. 실제 실행 범위는 [검증 기록](https://github.com/code0-god/paper-craft/blob/main/tests/VERIFICATION.md)에 있습니다. 이 개발 자료는 npm 배포물에 포함되지 않습니다.
+
+GitHub Actions는 Python 3.10/3.14, Ubuntu/macOS/Windows 및 Node.js 18/22/26 조합에서 테스트·구조 검증·문법 검사·npm 패키징·독립 설치를 실행하도록 구성되어 있습니다. Ruff와 basedpyright는 별도의 개발 검사이며 런타임 의존성이 아닙니다. PDF/LaTeX 도구가 필요한 검사는 가용성을 따로 표시합니다. CI의 구조·프로그램 검증은 과학적 심사 판단의 정확성을 보증하지 않습니다.
 
 버그와 사용 중 발견한 문제는 [GitHub Issues](https://github.com/code0-god/paper-craft/issues)에 기록할 수 있습니다.
 

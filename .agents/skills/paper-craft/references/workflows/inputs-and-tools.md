@@ -16,12 +16,17 @@ Use only relevant readers. Manuscripts are read-only by default; do not execute 
 
 Inventory files before reviewing. For a LaTeX project choose the intended main document and project root, follow actual dependencies, and report files that cannot be read. A directory with multiple main documents needs explicit selection or a labeled assumption. Do not assume that every sibling `.tex` file is active in the current build.
 
+Uncertainty follows possible symbol sources, not unrelated prose macros. Literal missing labels/citation keys fail when their defining graph is closed. Conditional/dynamic producers, external labels, missing includes and `includeonly`-excluded files can leave definitions unresolved. Excluded includes may restore cached `.aux` symbols; those references stay SKIPPED until confirmed rather than being falsely declared missing. The static reader never executes or expands auxiliary TeX.
+
 ## Package tools
 
 ```bash
 python3 scripts/latex_integrity_check.py /absolute/project/main.tex --project-root /absolute/project --json
 python3 scripts/reference_audit.py /absolute/project/main.tex --json
 python3 scripts/editing_guard.py /absolute/original.tex /absolute/revised.tex --json
+python3 scripts/argument_graph.py validate /absolute/graph.json --project-root /absolute/project --check-inputs --json
+python3 scripts/validate_review_report.py /absolute/review.json --json
+python3 scripts/pdf_reader.py /absolute/manuscript.pdf --json
 python3 scripts/source_material.py inspect /absolute/input.html --source-id B --json
 python3 scripts/validate_profiles.py --help
 python3 scripts/venue_preflight.py --help
@@ -31,4 +36,6 @@ Use each tool's help for optional arguments. The LaTeX tool can request installe
 
 State which files were actually read, which tools ran, the tested scope, and checks skipped or unknown. For PDFs/DOCX without suitable readers, request a supported source or proceed only with independently supplied text, explicitly limiting the report. Never report reviewing an unreadable document.
 
-Reports belong in a separate user-selected or clearly identified output directory. Use stable file/section/line, table/figure ID, or PDF-page anchors. Record source hashes when preparing revisions so proposed and applied changes can be traced. No automatic transmission or fetching of manuscript-derived URLs; retrieving public official venue instructions is separate from uploading private research.
+The [optional PDF reader](pdf-reader.md) uses installed Poppler tools or macOS Swift/PDFKit. It reports page count, per-page text, metadata and requested rendering separately; unavailable capabilities are SKIPPED. Render with `--render-pages 1,3-5`; OCR requires explicit `--ocr` and remains uncertain. Text extraction or a PNG artifact is not visual examination of equations/figures. Without a supplied matching hash-binding build manifest, source/PDF version identity stays UNKNOWN.
+
+For requested artifacts, use the [private output policy](output-policy.md): explicit directory, environment override, then external OS user storage. Chat-only reports need no files. Use stable file/section/line, table/figure ID, or PDF-page anchors. Record source/proposal hashes and show Git-tracking warnings. No automatic transmission or fetching of manuscript-derived URLs; retrieving public official venue instructions is separate from uploading private research.

@@ -14,6 +14,7 @@
     ".agents/skills/paper-craft/**/*.yaml",
     ".agents/skills/paper-craft/**/*.json",
     ".agents/skills/paper-craft/**/*.py",
+    ".agents/skills/paper-craft/**/*.swift",
     ".agents/skills/paper-craft/**/*.csv"
   ],
   "engines": {

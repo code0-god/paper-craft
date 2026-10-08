@@ -88,8 +88,12 @@ remote model/service without the researcher's authorization.
 
 `field_methodology` and `observed_style` are advisory sources and cannot establish
 an official page/anonymity/AI rule. Independent guidance in profiles is labeled
-`independent_guidance`, not attributed to the venue. No representative-paper style
-study is currently claimed; `writing_style_observations` is empty in seeded profiles.
+`independent_guidance`, not attributed to the venue. The separate
+[writing-pattern atlas](writing-patterns.md) records partial text readings of two
+ISCA 2024 papers and two CAL 2024 letters. This small purposive sample does not
+establish representative venue style. MICRO, HPCA, ASPLOS, SOSP and OSDI are explicitly
+unsampled. Only the ISCA 2026 submission and continuing CAL profiles contain brief
+sampled-paper observations; their official rules and selection contract are separate.
 
 To add one, inspect named recent papers and record `paper_url`, `observation`, and
 `scope_limit`. Cite section/figure locations within the observation and explicitly
@@ -104,6 +108,7 @@ Run from the skill directory (all paths remain internal):
 
 ```sh
 python3 scripts/validate_profiles.py --json
+python3 scripts/validate_writing_patterns.py --json
 python3 scripts/venue_preflight.py /path/to/paper --venue ISCA --year 2026 --track research --stage submission --offline --json
 python3 scripts/venue_preflight.py /path/to/paper.tex --venue CAL --track letter --stage submission --pdf /path/to/paper.pdf --json
 ```
@@ -123,9 +128,12 @@ JSON uses `tool`, `status`, `findings`; each finding has `check`, `status`, `sev
 PASS proves package structure/provenance consistency, not manuscript acceptability.
 
 Deliver Venue Compliance Report with target tuple, applied vs unresolved rules,
-source URLs/check dates, technical review, separately labeled style advice, and
-preflight findings. Keep historical evidence and live revalidation status distinct.
-No acceptance prediction or invented score.
+source URLs/check dates and preflight findings. Report five distinct dimensions:
+**submission compliance**, **contribution fit**, **technical evidence**,
+**argument clarity**, and **observed writing patterns**. Keep independent guidance,
+sampled-paper observations, historical evidence and live revalidation status distinct.
+No acceptance prediction or invented score. See the atlas guide for source locators,
+read-coverage limits and the difference between structural PASS and scientific validity.
 
 ## Extend or refresh
 
