@@ -32,6 +32,7 @@ class Command:
     path: Path
     line: int
     offset: int
+    uncertain: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -47,6 +48,8 @@ class Project:
     entry: Path
     files: tuple[TexFile, ...]
     findings: tuple[Finding, ...]
+    possible_commands: tuple[Command, ...] = ()
+    incomplete_graph: bool = False
 
 
 class InputError(Exception):
@@ -148,6 +151,8 @@ def mask_definitions(text: str) -> str:
                          r"\\(?:def|gdef|edef|xdef)\s*\\[A-Za-z@]+[^\n{]*\{")
     characters = list(text)
     for match in pattern.finditer(text):
+        if escaped_at(text, match.start()):
+            continue
         end, depth = match.end(), 1
         while end < len(text) and depth:
             if text[end] in "{}" and not escaped_at(text, end):
@@ -190,42 +195,61 @@ def load_project(input_path: Path, root: Path | None = None) -> Project:
         entry = candidates[0]
     if not boundary.is_dir() or not entry.is_file() or not entry.is_relative_to(boundary):
         raise InputError("Entry must be an existing file inside --project-root")
-    pending = [entry]
-    files: list[TexFile] = []
+    from tex_uncertainty import possible_commands, scoped_commands
+
+    pending = [(entry, False)]
+    files: dict[Path, TexFile] = {}
+    possible: list[Command] = []
+    incomplete = False
+    selected_includes: set[str] | None = None
+    uncertain_includes = False
     findings: list[Finding] = []
-    visited: set[Path] = set()
+    visited: dict[Path, bool] = {}
     while pending:
-        path = pending.pop()
-        if path in visited:
+        path, inherited = pending.pop()
+        if path in visited and (inherited or not visited[path]):
             continue
-        visited.add(path)
+        visited[path] = inherited
         original = mask_tex(read_text(path))
         text = mask_definitions(original)
-        parsed = commands(path, text)
-        files.append(TexFile(path, text, parsed))
+        parsed = scoped_commands(path, text, inherited)
+        potential = possible_commands(path, original, text)
+        possible.extend(potential)
+        files[path] = TexFile(path, text, parsed)
         project = Project(boundary, entry, (), ())
         if re.search(r"\\(?:newcommand|renewcommand|providecommand|DeclareRobustCommand|def|gdef|edef|xdef)\b", original):
             findings.append(notice("macro_expansion", f"Macro definitions at {path}; macro-generated commands and conditional labels need manual review"))
-        conditional = bool(re.search(r"\\if[A-Za-z@]*\b", text))
+        conditional = any(command.uncertain for command in parsed)
         if conditional:
             findings.append(notice("conditional_commands", f"Conditional TeX branches at {path}; static reachability uncertain"))
-        for command in parsed:
+        for command in (*parsed, *potential):
+            if command.name == "includeonly":
+                uncertain_includes = command.uncertain or bool(command.value and not LITERAL.fullmatch(command.value))
+                selected_includes = None if uncertain_includes else {value.strip() for value in command.value.split(",")}
+                findings.append(notice("include_graph", "includeonly selection inspected without TeX expansion"))
+        for command in (*parsed, *potential):
             if command.name not in INCLUDE:
                 continue
+            if command.name == "include" and selected_includes is not None and command.value not in selected_includes:
+                incomplete = True
+                findings.append(notice("include_graph", f"Excluded include {command.value}; cached auxiliary symbols not inspected"))
+                continue
             if not LITERAL.fullmatch(command.value.strip()):
+                incomplete = True
                 findings.append(notice("include_graph", f"Dynamic input at {path}:{command.line}; manual resolution required"))
                 continue
             included = resolve_path(project, command, (".tex", ""))
+            conditional_input = command.uncertain or (command.name == "include" and uncertain_includes)
             if included:
-                pending.append(included)
+                pending.append((included, conditional_input))
             else:
-                findings.append(notice("include_path", f"Conditional input {command.value}; expansion required") if conditional
+                incomplete = True
+                findings.append(notice("include_path", f"Conditional input {command.value}; expansion required") if conditional_input
                                 else issue("include_path", f"Missing or outside project: {command.value}", command))
         if re.search(r"\\(?:input|include)\s+[^\s{]", text):
+            incomplete = True
             findings.append(notice("include_graph", f"Unbraced input at {path}; manual resolution required"))
-        if re.search(r"\\includeonly\b", text):
-            findings.append(notice("include_graph", "includeonly found; static graph includes all listed inputs"))
-    return Project(boundary, entry, tuple(files), tuple(findings))
+    return Project(boundary, entry, tuple(files.values()), tuple(findings), tuple(possible), incomplete)
 
 
 def all_commands(project: Project) -> tuple[Command, ...]:

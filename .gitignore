@@ -15,5 +15,10 @@ dist/
 !.env.example
 .npmrc
 tests/results/
+/output/
+/tmp/
+/temp/
+/ci-artifacts/
+**/paper-craft-backups/
 source-materials/*
 !source-materials/README.md

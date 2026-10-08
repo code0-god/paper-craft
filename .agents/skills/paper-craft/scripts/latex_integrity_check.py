@@ -25,6 +25,7 @@ from manuscript_common import (
     Project,
     all_commands,
     emit,
+    escaped_at,
     issue,
     load_project,
     notice,
@@ -41,18 +42,21 @@ def static_check(project: Project) -> list[Finding]:
     findings = list(project.findings)
     labels: dict[str, list[Command]] = defaultdict(list)
     parsed = all_commands(project)
-    conditional = any(item["check"] == "conditional_commands" for item in project.findings)
-    external = any(command.name == "externaldocument" for command in parsed)
+    producers = (*parsed, *project.possible_commands)
+    external = any(command.name == "externaldocument" for command in producers)
     dynamic = any(command.name == "label" and not LITERAL.fullmatch(command.value)
-                  for command in parsed)
+                  for command in producers)
+    possible = {command.value for command in project.possible_commands if command.name == "label"}
+    incomplete = external or dynamic or project.incomplete_graph
     for command in parsed:
         if command.name == "label" and LITERAL.fullmatch(command.value):
             labels[command.value].append(command)
     for label, definitions in labels.items():
+        definitions.sort(key=lambda command: command.uncertain)
         if len(definitions) > 1:
             for command in definitions[1:]:
                 message = f"Duplicate label {label}; first at {definitions[0].path}:{definitions[0].line}"
-                findings.append(notice("duplicate_label", "Conditional label candidates: " + message) if conditional
+                findings.append(notice("duplicate_label", "Conditional label candidates: " + message) if command.uncertain
                                 else issue("duplicate_label", message, command))
     for command in parsed:
         if command.name not in REFS:
@@ -61,22 +65,28 @@ def static_check(project: Project) -> list[Finding]:
             findings.append(notice("reference", f"Dynamic reference at {command.path}:{command.line}"))
             continue
         for label in command.value.split(","):
-            if label.strip() not in labels:
-                if external or dynamic or project.findings:
+            definitions = labels.get(label.strip(), [])
+            if not any(not item.uncertain for item in definitions):
+                if command.uncertain or definitions or label.strip() in possible or incomplete:
                     findings.append(notice("reference", f"Cannot resolve {label.strip()} with incomplete/dynamic/external graph"))
                 else:
                     findings.append(issue("unresolved_reference", f"Undefined label {label.strip()}", command))
     for file in project.files:
         for match in re.finditer(r"\\(?:crefrange|Crefrange)\s*\{[^{}]+\}\s*\{([^{}]+)\}", file.text):
+            if escaped_at(file.text, match.start()):
+                continue
             label = match.group(1)
-            if label not in labels:
-                at = Command("ref", label, file.path, file.text.count("\n", 0, match.start()) + 1, match.start())
-                findings.append(notice("reference", f"Cannot resolve range end {label}") if external or dynamic or project.findings
+            definitions = labels.get(label, [])
+            if not any(not item.uncertain for item in definitions):
+                source = next(item for item in parsed if item.path == file.path and item.offset == match.start())
+                at = Command("ref", label, file.path, source.line, source.offset, source.uncertain)
+                findings.append(notice("reference", f"Cannot resolve range end {label}") if at.uncertain or definitions or label in possible or incomplete
                                 else issue("unresolved_reference", f"Undefined range endpoint {label}", at))
         for match in re.finditer(r"\b(Figure|Fig\.|Table)\s*(?:~|\\(?:nobreakspace| )\s*)?\\(?:ref|cref|Cref|autoref)\{([^{}]+)\}", file.text):
             label = match.group(2)
             definitions = labels.get(label, [])
-            if not definitions:
+            if not definitions or definitions[0].uncertain or any(
+                    item.uncertain and match.start() <= item.offset < match.end() for item in file.commands):
                 continue
             source = next(item for item in project.files if item.path == definitions[0].path)
             stack: list[str] = []
@@ -101,7 +111,7 @@ def static_check(project: Project) -> list[Finding]:
         variants = [command, *(Command(command.name, directory + command.value, command.path,
                                       command.line, command.offset) for directory in graphic_dirs)]
         if not any(resolve_path(project, item, (".pdf", ".png", ".jpg", ".jpeg", ".eps", ".ps", ".mps", "")) for item in variants):
-            findings.append(notice("graphics_path", f"Conditional graphics {command.value}; expansion required") if conditional
+            findings.append(notice("graphics_path", f"Conditional graphics {command.value}; expansion required") if command.uncertain
                             else issue("graphics_path", f"Missing or outside project: {command.value}", command))
     findings.append(notice("static_scope", f"Inspected {len(project.files)} reachable file(s); no TeX macro expansion", "PASS"))
     findings.append(notice("semantic_references", "Reference meaning, counter binding and visual placement need manual review", "UNKNOWN"))

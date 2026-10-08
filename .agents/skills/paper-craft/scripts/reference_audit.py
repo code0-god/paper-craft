@@ -39,13 +39,27 @@ def audit(input_path: Path, root: Path | None = None) -> list[Finding]:
     findings = list(project.findings) if project else []
     parsed = all_commands(project) if project else ()
     keys: dict[str, list[str]] = defaultdict(list)
-    sources: set[Path] = {input_path.resolve()} if standalone else set()
+    possible_keys: set[str] = set()
+    possible_locations: dict[str, list[str]] = defaultdict(list)
+    sources: dict[Path, bool] = {input_path.resolve(): False} if standalone else {}
     if standalone and root is not None and not input_path.resolve().is_relative_to(root.resolve()):
         raise InputError("Bibliography must be inside --project-root")
-    incomplete = bool(findings)
-    for command in parsed:
+    potential = project.possible_commands if project else ()
+    incomplete = bool(project and project.incomplete_graph)
+    for command in potential:
         if command.name == "bibitem":
-            keys[command.value].append(f"{command.path}:{command.line}")
+            if LITERAL.fullmatch(command.value):
+                possible_keys.add(command.value)
+            else:
+                incomplete = True
+    for command in (*parsed, *potential):
+        if command.name == "bibitem" and command not in potential:
+            if not LITERAL.fullmatch(command.value):
+                incomplete = True
+                findings.append(notice("citation_key", f"Dynamic bibitem at {command.path}:{command.line}"))
+            else:
+                collection = possible_locations if command.uncertain else keys
+                collection[command.value].append(f"{command.path}:{command.line}")
         if command.name not in {"bibliography", "addbibresource"}:
             continue
         if project is None:
@@ -58,11 +72,10 @@ def audit(input_path: Path, root: Path | None = None) -> list[Finding]:
             resource = Command(command.name, value.strip(), command.path, command.line, command.offset)
             path = resolve_path(project, resource, (".bib", ""))
             if path:
-                sources.add(path)
+                sources[path] = sources.get(path, True) and command.uncertain
             else:
                 incomplete = True
-                conditional = any(item["check"] == "conditional_commands" for item in project.findings)
-                findings.append(notice("bibliography_path", f"Conditional bibliography {value.strip()}; expansion required") if conditional
+                findings.append(notice("bibliography_path", f"Conditional bibliography {value.strip()}; expansion required") if command.uncertain
                                 else issue("bibliography_path", f"Missing or outside project: {value.strip()}", command))
     for path in sorted(sources):
         text = read_text(path)
@@ -70,10 +83,16 @@ def audit(input_path: Path, root: Path | None = None) -> list[Finding]:
         text = re.sub(r"@comment\s*\{.*?\}", "", text, flags=re.IGNORECASE | re.DOTALL)
         text = re.sub(r"(?m)^\s*%.*$", "", text)
         for match in BIB_ENTRY.finditer(text):
-            keys[match.group(1)].append(f"{path}:{text.count(chr(10), 0, match.start()) + 1}")
-    for key, locations in keys.items():
+            collection = possible_locations if sources[path] else keys
+            collection[match.group(1)].append(f"{path}:{text.count(chr(10), 0, match.start()) + 1}")
+    for key in dict.fromkeys((*possible_locations, *keys)):
+        locations = keys.get(key, [])
+        candidates = possible_locations.get(key, [])
         if len(locations) > 1:
             findings.append(issue("duplicate_bib_key", f"Duplicate key {key}: {', '.join(locations)}"))
+        elif len(locations) + len(candidates) > 1:
+            findings.append(notice("duplicate_bib_key", f"Conditional duplicate key candidates {key}"))
+    possible_keys.update(possible_locations)
     for command in parsed:
         if re.fullmatch(r"(?:cites|parencites|textcites|autocites|footcites|smartcites|supercites)", command.name, re.IGNORECASE):
             findings.append(notice("multi_citation", f"Multi-citation syntax at {command.path}:{command.line}; inspect all argument groups manually"))
@@ -86,7 +105,7 @@ def audit(input_path: Path, root: Path | None = None) -> list[Finding]:
             continue
         for key in (value.strip() for value in command.value.split(",")):
             if key not in keys:
-                findings.append(notice("citation_key", f"Cannot resolve {key} with incomplete bibliography") if incomplete
+                findings.append(notice("citation_key", f"Cannot resolve {key} with incomplete bibliography") if incomplete or command.uncertain or key in possible_keys
                                 else issue("missing_citation_key", f"Citation key {key} absent from local bibliography", command))
     findings.append(notice("local_keys", f"Inspected {len(sources)} bibliography file(s), {len(keys)} unique key(s)", "PASS"))
     findings.append(notice("reference_authenticity", "Author/title/DOI accuracy, closest prior work and citation relevance need source verification", "UNKNOWN"))
