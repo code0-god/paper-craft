@@ -1,0 +1,39 @@
+{
+  "name": "@code0-god/paper-craft",
+  "version": "0.1.0",
+  "description": "Install and update the Paper Craft architecture and systems research Agent Skill",
+  "type": "module",
+  "license": "UNLICENSED",
+  "bin": {
+    "paper-craft": "bin/paper-craft.mjs"
+  },
+  "files": [
+    "bin/paper-craft.mjs",
+    ".agents/skills/paper-craft/**/*.md",
+    ".agents/skills/paper-craft/**/*.yaml",
+    ".agents/skills/paper-craft/**/*.json",
+    ".agents/skills/paper-craft/**/*.py",
+    ".agents/skills/paper-craft/**/*.csv"
+  ],
+  "engines": {
+    "node": ">=18.3.0"
+  },
+  "scripts": {
+    "test": "node --test tests/npm.test.mjs",
+    "test:python": "python3 -m unittest discover -s tests -q",
+    "check": "node --check bin/paper-craft.mjs && node --check tests/npm.test.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/code0-god/paper-craft.git"
+  },
+  "homepage": "https://github.com/code0-god/paper-craft#readme",
+  "bugs": {
+    "url": "https://github.com/code0-god/paper-craft/issues"
+  },
+  "keywords": ["agent-skills", "codex", "computer-architecture", "computer-systems", "academic-writing"],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}

@@ -4,6 +4,70 @@ Computer Architecture / Computer Systems 연구용 설치형 Agent Skill. 연구
 
 Canonical 패키지: [`.agents/skills/paper-craft/SKILL.md`](.agents/skills/paper-craft/SKILL.md). 이 디렉터리 전체만 복사해 사용할 수 있습니다. 원본 논문·첨부자료·테스트 디렉터리는 설치에 필요하지 않습니다.
 
+## npm / npx 설치와 업데이트
+
+패키지명 `@code0-god/paper-craft`, 실행 명령 `paper-craft`. Node.js 18.3+와 Python 3.10+가 필요합니다. Node CLI는 패키지 안의 기존 Python 설치기를 사용합니다. npm 설치 자체는 사용자 스킬 폴더를 변경하지 않으며, 별도의 `install` 또는 `update` 명령으로 복사합니다. 런타임 npm 의존성·postinstall hook은 없습니다.
+
+**현재 저장소에서 바로 실행 가능한 방법** — 레지스트리 게시 없이 로컬 설치:
+
+```bash
+npm install --global .
+paper-craft install
+# 이후 저장소 코드를 갱신한 뒤
+npm install --global .
+paper-craft update
+```
+
+전역 npm 설치 대신 로컬 tarball을 npx로 실행할 수 있습니다. 아래 예시는 0.1.0 파일명입니다. 버전을 변경했다면 `npm pack`이 출력한 파일명을 사용합니다.
+
+```bash
+npm pack
+npx --yes --package ./code0-god-paper-craft-0.1.0.tgz paper-craft install
+npx --yes --package ./code0-god-paper-craft-0.1.0.tgz paper-craft update
+```
+
+**npm 레지스트리에 게시된 뒤**에는 다음 명령으로 최신 릴리스를 설치·업데이트합니다. 현재 레지스트리 게시 완료를 주장하지 않습니다.
+
+```bash
+npx --yes @code0-god/paper-craft@latest install
+npx --yes @code0-god/paper-craft@latest update
+# 전역 실행 파일을 유지하려면
+npm install --global @code0-god/paper-craft@latest
+paper-craft install
+# 이후 업데이트
+npm install --global @code0-god/paper-craft@latest
+paper-craft update
+```
+
+대상 연구 저장소에서 `--project`를 지정하면 그 저장소의 `.agents/skills/paper-craft`에 설치합니다. 기본값은 사용자 경로 `~/.agents/skills/paper-craft`입니다. `--destination`은 마지막 디렉터리 이름까지 포함하며 `paper-craft`여야 합니다. 세 대상 옵션은 함께 사용할 수 없습니다.
+
+```bash
+npx --yes @code0-god/paper-craft@latest install --project
+npx --yes @code0-god/paper-craft@latest update --project
+paper-craft install --destination "/path with spaces/.agents/skills/paper-craft"
+paper-craft update --destination "/path with spaces/.agents/skills/paper-craft"
+paper-craft --help
+paper-craft --version
+```
+
+`update`는 현재 실행한 npm 패키지의 Skill을 복사합니다. 전역 CLI를 사용할 때는 먼저 npm 패키지도 갱신해야 합니다. 기존 설치는 백업으로 보존합니다. `install`은 기존 대상을 덮어쓰지 않습니다. 개발 저장소의 원본 Skill과 설치 대상이 겹치면 거부합니다. Python 실행 파일은 `--python /path/to/python3` 또는 `PAPER_CRAFT_PYTHON`으로 지정할 수 있습니다. `--help`/`--version`에는 Python이 필요하지 않습니다.
+
+npm tarball은 `package.json`, CLI, README와 Skill의 `.md/.yaml/.json/.py/.csv` 파일만 포함합니다. 첨부 원본·테스트·생성 보고서·캐시·개인 설정은 포함하지 않습니다. README의 저장소 전용 `tests/`·`source-materials/` 링크는 npm 배포물에 없으므로 전체 개발/검증 자료는 [GitHub 저장소](https://github.com/code0-god/paper-craft)에서 확인합니다.
+
+배포 담당자용 검증/게시 순서:
+
+```bash
+npm ci --ignore-scripts --no-audit --no-fund
+npm run check
+npm test
+npm run test:python
+npm pack --dry-run
+# 실제 게시 권한이 있는 계정에서만 실행
+npm publish --access public
+```
+
+새 릴리스는 `npm version patch --no-git-tag-version`으로 package.json/package-lock.json을 함께 갱신하고 위 검증을 반복합니다. `@code0-god` npm scope 소유권·게시 권한은 별도 확인해야 합니다. 메타데이터의 `UNLICENSED`는 별도 공개 라이선스를 부여하지 않은 현재 상태입니다.
+
 ## 환경과 설치
 
 Codex CLI 또는 Agent Skills 표준을 지원하는 호스트에서 사용합니다. 핵심 연구 검토는 호스트 모델이 수행합니다. 정적 검사 도구는 Python 3.10+ 표준 라이브러리만 필요합니다. LaTeX 빌드는 `latexmk`와 TeX 배포판, PDF 페이지 검사는 `pdfinfo`, PDF 텍스트 분석은 `pdftotext` 등 가용 도구가 있을 때만 수행합니다. DOCX는 호스트에 문서 추출 도구가 있을 때 지원하며, 미설치 기능은 `SKIPPED`로 보고합니다.
@@ -151,6 +215,15 @@ python3 -m unittest discover -s tests -v
 python3 .agents/skills/paper-craft/scripts/validate_skill.py --json
 python3 .agents/skills/paper-craft/scripts/validate_profiles.py --json
 ```
+
+npm CLI·tarball·실제 설치/업데이트 검사:
+
+```bash
+npm run check
+npm test
+```
+
+Node 내장 test runner가 임시 디렉터리에서 `npm pack`, 로컬/전역 prefix 설치, tarball 기반 `npm exec`와 실제 CLI를 실행합니다. 기존 사용자 홈·연구 원고는 변경하지 않습니다. 생성된 `tests/results/` 보고서와 tarball·캐시·비밀 설정은 `.gitignore`로 제외하며 재현 Fixture와 테스트 코드는 커밋합니다.
 
 개발용 lint/typecheck 도구가 있으면 다음을 실행합니다. 스킬 런타임에는 이 도구가 필요하지 않습니다. 저장소에 새 런타임 의존성을 추가하지 않았습니다.
 

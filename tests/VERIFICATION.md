@@ -61,3 +61,27 @@ A separate read-only code audit reproduced eight defects: standalone BibTeX inpu
 No real submitted paper or production experiment was supplied. The semantic examples are synthetic. No statistical claim about reviewer judgments, acceptance, scientific novelty, or model consistency is made. Real DOCX extraction/layout and real PDF rendering/geometry were **not run**; required tools/artifacts were unavailable. TeX macro expansion, conditional semantics, complex/generated bibliography structures, citation authenticity, complete anonymity, publisher form fields, ethics attestations and artifact reproducibility remain manual or require an appropriate tool. Static protected-token comparison cannot prove numerical associations or technical meaning.
 
 Writing-style observations from representative venue papers were **not sampled**; profile observations are empty and independent methodological advice is explicitly labeled. No GitHub installation against a real remote was attempted because this repository has no remote. Local copied-directory installation was actually exercised. No publication, remote upload, commit, or global user-skill replacement was performed.
+
+## npm distribution follow-up, 2026-10-08
+
+The subsequent request authorized repository commits and npm/npx installation/update support. The existing Skill was committed as `eabe469`; Git now has `origin` at `git@github.com:code0-god/paper-craft.git`. Generated reports, local evidence, attachments, caches, tarballs, node_modules and secret configuration are Git-ignored. Synthetic Fixtures, reproducible test code and this verification summary remain committed.
+
+Implemented `@code0-god/paper-craft@0.1.0` with a `paper-craft` executable. The Node wrapper uses the existing Python preserving installer instead of duplicating file mutation logic. `install` and `update` support user, project and explicit destinations. No npm dependencies or automatic installation lifecycle hooks were added. Packaging explicitly selects the entire Skill's required text/code/schema files and the CLI, with no repository-only inputs or generated Python caches.
+
+Actual `npm test` result: **9 PASS / 0 FAIL / 0 SKIPPED**, 5.007 seconds, macOS, Node 26.7.0, npm 12.0.2, Python 3.14.6. Native test-runner scenarios executed:
+
+1. Real `npm pack`: **54 public runtime files**, complete canonical Skill, no private source material, tests, cache or generated reports.
+2. Help/version with a nonexistent Python override: no installation or target changes.
+3. Default user / explicit user / project / relative destination routing, including paths with spaces.
+4. Unknown, missing or conflicting arguments, unavailable interpreter and simulated Python 3.9: graceful errors, existing target byte tree unchanged.
+5. Interpreter environment override, explicit precedence and executable paths with spaces.
+6. Real local `npm install --prefix`: package-relative payload copied independently; installed Skill/Profile validators PASS and offline venue selection works. npm package installation itself leaves the simulated home unchanged.
+7. Real global `npm install --global --prefix` and installed executable: refusal preserves the old tree; `update` stores an exact complete backup.
+8. Real offline `npm exec --package <local tarball>` installation.
+9. Actual `npx --package <local tarball>` update into a fresh target and repeat update: prior user data survives in a byte-identical backup.
+
+Subprocesses ran in unique temporary directories with isolated home/cache/config. Two observed test issues were corrected before the final run: npm 12's name-keyed pack JSON differs from older array output; inherited npm lifecycle `npm_config_allow_scripts` caused EALLOWSCRIPTS in a local install. The harness now accepts both JSON shapes and isolates npm configuration. User configuration was not edited. A separate read-only reviewer replayed the final `npm test`: **9/9 PASS**, no remaining findings.
+
+`npm run check` passed Node syntax checks for CLI and tests. Ruff checks passed; Basedpyright reported 0 errors/warnings for the Python code. The existing Python suite was rerun before the initial commit: **56 PASS**, 11.855 seconds. No JavaScript LSP/typecheck is claimed; unavailable Biome was not installed. Older Node/npm releases and Windows were not executed.
+
+Raw npm invocations/TAP and reviewer receipts are local Git-ignored evidence under `.omo/evidence/npm/` and `.omo/evidence/npm-distribution-code-review.md`. This committed summary is the portable record. No live registry publication or Git push was performed. Registry lookup for `@code0-god/paper-craft` returned E404; `@latest` instructions are explicitly conditional on publication and scope ownership. Local folder/tarball installation and update were actually tested and need no registry publication.
