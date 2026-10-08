@@ -1,276 +1,224 @@
 # Paper Craft
 
-Computer Architecture / Computer Systems 연구용 설치형 Agent Skill. 연구 설계, 논증 구조, 신규성, 실험 근거, 학술 퇴고, 가상 심사, Venue 검토, 제출 전 검사를 지원합니다. 서버·MCP·웹 서비스 없이 파일과 지침으로 동작합니다.
+Computer Architecture / Computer Systems 연구자를 위한 논문 작성·검토 Agent Skill입니다. 연구 질문과 기여를 정리하고, 논증과 실험 근거를 검토하며, 저자의 기술적 의미를 보존하는 퇴고를 지원합니다.
 
-Canonical 패키지: [`.agents/skills/paper-craft/SKILL.md`](.agents/skills/paper-craft/SKILL.md). 이 디렉터리 전체만 복사해 사용할 수 있습니다. 원본 논문·첨부자료·테스트 디렉터리는 설치에 필요하지 않습니다.
+Codex에서 `$paper-craft`로 호출합니다. Skill 본체는 [`.agents/skills/paper-craft/`](.agents/skills/paper-craft/SKILL.md)에 있으며, 디렉터리 전체를 독립적으로 설치할 수 있습니다.
 
-## npm / npx 설치와 업데이트
+## 빠른 시작
 
-패키지명 `@code0-god/paper-craft`, 실행 명령 `paper-craft`. Node.js 18.3+와 Python 3.10+가 필요합니다. Node CLI는 패키지 안의 기존 Python 설치기를 사용합니다. npm 설치 자체는 사용자 스킬 폴더를 변경하지 않으며, 별도의 `install` 또는 `update` 명령으로 복사합니다. 런타임 npm 의존성·postinstall hook은 없습니다.
+**필요 환경:** Agent Skills를 지원하는 Codex 또는 호환 호스트, Python 3.10+. npm/npx 설치에는 Node.js 18.3+가 필요합니다.
 
-**현재 저장소에서 바로 실행 가능한 방법** — 레지스트리 게시 없이 로컬 설치:
-
-```bash
-npm install --global .
-paper-craft install
-# 이후 저장소 코드를 갱신한 뒤
-npm install --global .
-paper-craft update
-```
-
-전역 npm 설치 대신 로컬 tarball을 npx로 실행할 수 있습니다. 아래 예시는 0.1.0 파일명입니다. 버전을 변경했다면 `npm pack`이 출력한 파일명을 사용합니다.
+현재 npm 릴리스는 준비 중입니다. GitHub 소스로 설치하려면:
 
 ```bash
+git clone https://github.com/code0-god/paper-craft.git
+cd paper-craft
 npm pack
-npx --yes --package ./code0-god-paper-craft-0.1.0.tgz paper-craft install
-npx --yes --package ./code0-god-paper-craft-0.1.0.tgz paper-craft update
+npm install --global ./code0-god-paper-craft-0.1.0.tgz
+paper-craft install
 ```
 
-**npm 레지스트리에 게시된 뒤**에는 다음 명령으로 최신 릴리스를 설치·업데이트합니다. 현재 레지스트리 게시 완료를 주장하지 않습니다.
+위 파일명은 0.1.0 기준입니다. 다른 버전에서는 `npm pack`이 출력한 파일명을 사용합니다. 설치 대상은 기본적으로 `~/.agents/skills/paper-craft`입니다. npm 패키지 설치 후 `paper-craft install`을 실행해야 호스트가 사용할 Skill이 복사됩니다.
+
+연구 저장소에서 Codex를 실행하고 다음과 같이 요청합니다. 스킬이 보이지 않으면 세션을 다시 시작합니다.
+
+```text
+$paper-craft main.tex의 연구 기여와 실험 근거를 검토해줘.
+```
+
+## 설치 방법
+
+### npm 릴리스 사용
+
+레지스트리에 릴리스가 게시된 뒤에는 npx로 바로 설치할 수 있습니다.
 
 ```bash
 npx --yes @code0-god/paper-craft@latest install
-npx --yes @code0-god/paper-craft@latest update
-# 전역 실행 파일을 유지하려면
+```
+
+전역 CLI를 유지하려면:
+
+```bash
 npm install --global @code0-god/paper-craft@latest
 paper-craft install
-# 이후 업데이트
-npm install --global @code0-god/paper-craft@latest
-paper-craft update
 ```
 
-대상 연구 저장소에서 `--project`를 지정하면 그 저장소의 `.agents/skills/paper-craft`에 설치합니다. 기본값은 사용자 경로 `~/.agents/skills/paper-craft`입니다. `--destination`은 마지막 디렉터리 이름까지 포함하며 `paper-craft`여야 합니다. 세 대상 옵션은 함께 사용할 수 없습니다.
+### 프로젝트 또는 지정 경로에 설치
+
+전역 CLI를 설치한 뒤, 대상 연구 저장소에서 실행합니다.
 
 ```bash
-npx --yes @code0-god/paper-craft@latest install --project
-npx --yes @code0-god/paper-craft@latest update --project
-paper-craft install --destination "/path with spaces/.agents/skills/paper-craft"
-paper-craft update --destination "/path with spaces/.agents/skills/paper-craft"
-paper-craft --help
-paper-craft --version
+paper-craft install --project
+paper-craft install --destination "/path/to/research/.agents/skills/paper-craft"
 ```
 
-`update`는 현재 실행한 npm 패키지의 Skill을 복사합니다. 전역 CLI를 사용할 때는 먼저 npm 패키지도 갱신해야 합니다. 기존 설치는 백업으로 보존합니다. `install`은 기존 대상을 덮어쓰지 않습니다. 개발 저장소의 원본 Skill과 설치 대상이 겹치면 거부합니다. Python 실행 파일은 `--python /path/to/python3` 또는 `PAPER_CRAFT_PYTHON`으로 지정할 수 있습니다. `--help`/`--version`에는 Python이 필요하지 않습니다.
+| 옵션 | 설치 위치 |
+| --- | --- |
+| `--user` 또는 옵션 생략 | `~/.agents/skills/paper-craft` |
+| `--project` | 현재 작업 디렉터리의 `.agents/skills/paper-craft` |
+| `--destination PATH` | 지정한 전체 디렉터리; 마지막 이름은 `paper-craft` |
 
-npm tarball은 `package.json`, CLI, README와 Skill의 `.md/.yaml/.json/.py/.csv` 파일만 포함합니다. 첨부 원본·테스트·생성 보고서·캐시·개인 설정은 포함하지 않습니다. README의 저장소 전용 `tests/`·`source-materials/` 링크는 npm 배포물에 없으므로 전체 개발/검증 자료는 [GitHub 저장소](https://github.com/code0-god/paper-craft)에서 확인합니다.
+세 대상 옵션은 함께 사용할 수 없습니다. Python 실행 파일은 `--python /path/to/python3` 또는 `PAPER_CRAFT_PYTHON` 환경변수로 지정합니다. 사용 가능한 명령은 `paper-craft --help`, CLI 버전은 `paper-craft --version`으로 확인합니다.
 
-배포 담당자용 검증/게시 순서:
+### npm 없이 설치
 
-```bash
-npm ci --ignore-scripts --no-audit --no-fund
-npm run check
-npm test
-npm run test:python
-npm pack --dry-run
-# 실제 게시 권한이 있는 계정에서만 실행
-npm publish --access public
-```
-
-새 릴리스는 `npm version patch --no-git-tag-version`으로 package.json/package-lock.json을 함께 갱신하고 위 검증을 반복합니다. `@code0-god` npm scope 소유권·게시 권한은 별도 확인해야 합니다.
-
-프로젝트는 [MIT License](LICENSE)로 배포합니다. 독립 설치된 Skill에도 동일한 [라이선스 사본](.agents/skills/paper-craft/LICENSE)을 포함합니다. 외부 참고자료 원본의 권리는 각 권리자에게 있으며 이 프로젝트의 MIT 선택이 해당 원본을 재라이선스하지 않습니다. 원본 파일은 패키지에 포함하지 않습니다.
-
-## 환경과 설치
-
-Codex CLI 또는 Agent Skills 표준을 지원하는 호스트에서 사용합니다. 핵심 연구 검토는 호스트 모델이 수행합니다. 정적 검사 도구는 Python 3.10+ 표준 라이브러리만 필요합니다. LaTeX 빌드는 `latexmk`와 TeX 배포판, PDF 페이지 검사는 `pdfinfo`, PDF 텍스트 분석은 `pdftotext` 등 가용 도구가 있을 때만 수행합니다. DOCX는 호스트에 문서 추출 도구가 있을 때 지원하며, 미설치 기능은 `SKIPPED`로 보고합니다.
-
-Codex 프로젝트 로컬 발견 경로는 `.agents/skills`, 사용자 경로는 `~/.agents/skills`입니다. 프로젝트 루트에서 Codex를 실행하고 `/skills` 또는 `$paper-craft`로 선택합니다. 변경이 보이지 않으면 세션을 다시 시작합니다. [공식 Codex Skill 문서](https://learn.chatgpt.com/docs/build-skills)
-
-현재 저장소에서 바로 사용:
-
-```bash
-cd /path/to/paper-craft
-python3 .agents/skills/paper-craft/scripts/validate_skill.py --json
-codex
-```
-
-다른 프로젝트에서 사용하도록 사용자 범위에 설치:
+이 저장소에서는 프로젝트 로컬 Skill을 바로 사용할 수 있습니다. 다른 프로젝트나 사용자 경로로 복사하려면 저장소 루트에서 실행합니다.
 
 ```bash
 python3 .agents/skills/paper-craft/scripts/install_skill.py \
   --destination "$HOME/.agents/skills/paper-craft"
 ```
 
-다른 저장소의 프로젝트 로컬 설치:
-
-```bash
-python3 .agents/skills/paper-craft/scripts/install_skill.py \
-  --destination /path/to/research-repo/.agents/skills/paper-craft
-```
-
-수동 설치도 가능합니다. 대상이 없는지 먼저 확인하고 디렉터리 전체를 복사합니다. 심볼릭 링크에 의존하지 않습니다.
+수동 설치는 대상 디렉터리가 없을 때 Skill 전체를 복사합니다.
 
 ```bash
 mkdir -p "$HOME/.agents/skills"
 cp -R .agents/skills/paper-craft "$HOME/.agents/skills/paper-craft"
 ```
 
-이미 설치되어 있다면 수동 덮어쓰기 대신 아래 업데이트 명령을 사용합니다. Git 업데이트는 기존 사용자 변경을 보존할 수 있는 `git pull --ff-only`로 수행합니다.
-
-```bash
-git pull --ff-only
-python3 .agents/skills/paper-craft/scripts/install_skill.py \
-  --destination "$HOME/.agents/skills/paper-craft" --update
-```
-
-설치기는 기존 대상이 있으면 기본적으로 거부합니다. `--update`는 이전 디렉터리를 보존하고 새 패키지로 교체합니다. `skills/` 아래 설치의 백업은 그 상위 디렉터리의 `paper-craft-backups/`에 저장하여 중복 스킬 발견을 피합니다. 로컬 수정 사항은 백업에서 검토·병합하십시오.
-
-GitHub Skill Installer 사용:
+Codex의 Skill Installer로도 설치할 수 있습니다.
 
 ```text
 $skill-installer https://github.com/code0-god/paper-craft/tree/main/.agents/skills/paper-craft
-Install into ~/.agents/skills, preserving the complete paper-craft directory.
+사용자 경로 ~/.agents/skills에 설치해줘.
 ```
 
-Git 원격은 `git@github.com:code0-god/paper-craft.git`, 브랜치는 `main`입니다. GitHub 설치는 해당 커밋이 원격에 올라간 뒤 사용할 수 있습니다. 재현 가능한 설치에는 `--ref`에 특정 커밋을 지정합니다. Installer CLI가 설치되어 있다면 다음 형태로 실행할 수 있습니다. `INSTALLER`는 해당 환경의 실제 `install-skill-from-github.py` 경로입니다.
+설치 위치와 발견 방식은 [Codex 공식 Skill 문서](https://learn.chatgpt.com/docs/build-skills)를 참고하세요.
+
+## 업데이트
+
+npm 릴리스에서 설치했다면:
 
 ```bash
-python3 "$INSTALLER" --repo code0-god/paper-craft --ref main \
-  --path .agents/skills/paper-craft --dest "$HOME/.agents/skills"
+npx --yes @code0-god/paper-craft@latest update
+# 프로젝트 로컬 설치
+npx --yes @code0-god/paper-craft@latest update --project
 ```
 
-## 호출 예제
+전역 CLI를 사용하는 경우 npm 패키지를 먼저 갱신하고 Skill에 반영합니다.
 
-원고 경로, 증거 자료, 대상 Venue·연도·트랙·단계를 함께 제공하면 검토 범위가 명확해집니다. 원고 언어는 임의로 바꾸지 않으며 보고서 언어는 요청할 수 있습니다.
+```bash
+npm install --global @code0-god/paper-craft@latest
+paper-craft update
+```
+
+GitHub 소스에서 설치했다면 해당 checkout에서 `git pull --ff-only`, `npm pack`, 새 tarball의 전역 npm 설치를 수행한 뒤 `paper-craft update`를 실행합니다. npm 없이 설치한 경우 갱신한 소스의 Python 설치기에 `--update`를 추가합니다.
+
+`install`은 기존 설치를 덮어쓰지 않습니다. `update`는 현재 실행한 패키지의 Skill을 복사하고 이전 디렉터리를 백업합니다. 결과 JSON에 백업 경로가 표시됩니다. 기본 사용자 설치의 백업은 `~/.agents/paper-craft-backups/`에 저장됩니다. 로컬 수정 사항은 백업에서 검토·병합하세요. 개발 저장소의 원본 Skill과 대상 경로가 겹치면 설치를 거부합니다.
+
+## 사용 예제
+
+원고 경로와 함께 연구 분야, 증거 자료, 목표 Venue·연도·트랙·제출 단계를 제공하세요. 원고 언어를 유지하며, 보고서는 한국어 또는 영어로 요청할 수 있습니다.
 
 ```text
-$paper-craft 이 연구 아이디어가 Motivation 수준인지 실제 Novelty인지 검토해줘.
-$paper-craft main.tex의 서론부터 결론까지 논증 구조와 개선된 Outline을 작성해줘.
-$paper-craft main.tex를 기술적 의미를 보존하며 학술 영어로 퇴고해줘. 먼저 수정안과 Diff를 보여줘.
-$paper-craft 이 Accelerator Architecture 논문의 설계 근거, Baseline, 실험 평가를 검토해줘.
-$paper-craft main.tex를 ISCA 2026 research submission 기준으로 리뷰해줘. 공식 지침을 재확인해줘.
-$paper-craft IEEE CAL continuing letter submission에 맞춰 압축안을 제시해줘. 기여와 근거를 보존해줘.
-$paper-craft 목표 학회 심사자 관점에서 비판적으로 평가하고 심사 대응 준비를 도와줘.
+$paper-craft 이 아이디어의 Motivation, Failure Mechanism, Insight와 실제 Contribution을 구분해줘.
+
+$paper-craft main.tex의 전체 논증 지도와 섹션별·문단별 개선 Outline을 작성해줘.
+
+$paper-craft main.tex를 기술적 의미를 보존하며 학술 영어로 퇴고해줘. 먼저 수정안·근거·Diff를 보여줘.
+
+$paper-craft 이 Accelerator 논문의 Baseline 공정성과 Claim–Evidence Matrix를 작성해줘.
+
+$paper-craft main.tex를 ISCA 2026 research submission 기준으로 검토해줘. 공식 지침을 확인하고 제출 전 검사 결과를 구분해줘.
+
+$paper-craft IEEE CAL continuing letter submission에 맞는 압축안을 제시해줘. 기여·실험 조건·한계를 보존해줘.
+
+$paper-craft 목표 학회 관점에서 가상 리뷰와 심사 답변 준비안을 작성해줘.
 ```
 
-공통 결과에는 위치·심각도·근거·해석·수정 방향·추가 실험·검증 상태가 포함됩니다. 신규성은 절대 점수로 판정하지 않습니다. 가상 심사는 공식 평가나 채택 확률 예측이 아닙니다.
+## 지원하는 작업
 
-## 기능과 원본 보존
+| 작업 | 주요 결과 |
+| --- | --- |
+| Research Design | 연구 질문, 문제·Research Gap, 설계 가설, 검증 계획 |
+| Paper Architect | Argument Map, 섹션 역할, Paragraph-level Outline |
+| Novelty Audit | 설계 근거, 가까운 선행연구·단순 대안 비교, 입증된 기여와 미검증 항목 |
+| Evidence Audit | Claim–Evidence Matrix, 수치·실험 조건·불확실성·일반화 범위 검토 |
+| Academic Editor | 논리·구조·언어 순서의 수정안, 근거, 의미 위험, Unified Diff |
+| Reviewer Simulation | 우선순위별 지적, 기술 질문, 추가 실험, 심사 대응 준비 |
+| Venue Advisor | 정확한 대상 프로파일, 공식 규정과 작성 권고 구분 |
+| Submission Preflight | LaTeX·인용·경로 검사, 제출 형식과 수동 확인 항목 |
 
-- Research Design: 연구 질문·문제·Failure Mechanism·Research Gap·가설·검증 계획.
-- Paper Architect: 전체 Argument Map, 섹션의 질문/주장/근거/연결, Paragraph-level Outline.
-- Novelty Audit: Motivation–Challenge–Insight–Method–Contribution 연결, 가장 가까운 선행연구·단순 대안·Ablation 검토.
-- Evidence Audit: Claim–Evidence Matrix, 수치·조건·Baseline·불확실성·일반화 범위·인과 해석 검토.
-- Academic Editor: 논리, 구조, 언어 순서의 퇴고; 영문·국문 지원.
-- Reviewer Simulation: Critical/Major/Minor/Suggestion 분류, 기술 질문·수정 방향·심사 대응.
-- Venue Advisor: 정확한 Venue/연도/트랙/단계 프로파일, 공식 규정과 독립 권고 분리.
-- Submission Preflight: LaTeX 무결성·인용·경로·템플릿 정적 검사, 수동 제출 체크.
+Architecture 지침은 프로세서·메모리·가속기·컴파일러와 HW/SW co-design을 다룹니다. 실측, RTL, cycle model, 분석 모델, 추정치를 구분합니다. Systems 지침은 OS·분산·스토리지·네트워크·ML 시스템과 운영 경험을 다루며 설계·통합·구현·측정·운영 기여도 검토합니다.
 
-Architecture 지침은 프로세서·메모리·병렬·가속기·DNN/LLM·양자화·FPGA/ASIC·컴파일러·HW/SW co-design을 다룹니다. 측정·RTL·cycle model·분석 모델·추정치를 분리합니다. Systems 지침은 OS·분산·스토리지·네트워크·클라우드·런타임·자원관리·스케줄링·ML 시스템·운영 경험을 다룹니다. 알고리즘 외 설계·통합·측정·운영 기여도 인정합니다.
+신규성은 비교 근거와 불확실성으로 설명합니다. 실험 결과나 참고문헌을 생성하지 않으며, 가상 리뷰를 실제 심사나 채택 확률로 제시하지 않습니다.
 
-기본 모드는 **Review Only**. 수정안 요청은 **Suggest Edits**. 실제 파일 적용은 **Apply Approved Edits**이며 승인된 수정만 적용합니다. 원본 스냅샷/버전관리 기준, Unified Diff, 수정 근거 기록을 유지합니다. 수치·단위·수식·인용키·Label 보존 검사와 수동 의미 검토를 함께 사용합니다. 논리나 실험 결함을 문장 교정으로 감추지 않습니다.
+## 원고와 수정 모드
 
-## 검사 도구
+LaTeX 프로젝트, `.tex`, `.bib`, Markdown, plain text를 지원합니다. PDF는 호스트에 추출·렌더 도구가 있을 때, DOCX는 적절한 문서 도구가 있을 때 검토합니다. 읽지 못한 파일이나 수행할 수 없는 검사는 명시합니다.
 
-`PAPER_CRAFT`는 현재 설치 디렉터리입니다. 아래 명령은 원고를 읽기 전용으로 검사합니다.
+| 모드 | 동작 |
+| --- | --- |
+| Review Only | 기본 모드. 진단 보고서만 작성 |
+| Suggest Edits | 원문·수정안·근거·의미 위험·Diff 제시 |
+| Apply Approved Edits | 승인된 수정만 실제 파일에 적용 |
+
+수치·단위·수식 의미·Citation Key·LaTeX Label을 보존합니다. 의미나 주장 범위가 달라지는 수정은 별도로 표시합니다. 연구 설계나 실험 결함은 문장 교정으로 감추지 않고 검증 과제로 분류합니다.
+
+## Venue 지원 범위
+
+16개 Venue의 연도·트랙·단계별 캐시 프로파일 18개를 제공합니다.
+
+- Architecture: ISCA, MICRO, HPCA, ASPLOS, PACT, IEEE CAL, IEEE TC, ACM TACO
+- Systems: SOSP, OSDI, EuroSys, USENIX ATC, NSDI, ACM TOCS, IEEE TPDS
+- 관련 분야: MLSys
+
+프로파일은 부분적으로 검증되어 있습니다. TC·TACO·TOCS·TPDS의 공식 규칙은 현재 UNKNOWN입니다. 지원 Venue가 모든 연도·트랙·제출 단계를 포함한다는 의미는 아닙니다. 캐시의 검증일은 과거 확인 기록이며, 투고 시에는 정확한 대상의 공식 지침을 다시 확인합니다.
+
+공식 규정과 독립적인 연구 방법론·스타일 권고를 구분합니다. 오프라인 검토에서는 현행 규정 준수 여부를 UNKNOWN으로 유지합니다. 확인되지 않은 분량·Appendix·익명화·AI 정책을 추정하지 않습니다.
+
+세부 범위와 출처: [Registry](.agents/skills/paper-craft/venues/registry.json), [Venue Guide](.agents/skills/paper-craft/references/venues/README.md), [공식 출처 목록](.agents/skills/paper-craft/references/venues/sources.md).
+
+## 로컬 검사 도구
+
+다음 예시는 기본 사용자 설치 기준입니다. 프로젝트 로컬 설치라면 `PAPER_CRAFT`를 해당 Skill 디렉터리로 지정합니다.
 
 ```bash
-PAPER_CRAFT="$PWD/.agents/skills/paper-craft"
+PAPER_CRAFT="$HOME/.agents/skills/paper-craft"
+
 python3 "$PAPER_CRAFT/scripts/latex_integrity_check.py" /path/to/main.tex --json
 python3 "$PAPER_CRAFT/scripts/reference_audit.py" /path/to/main.tex --json
 python3 "$PAPER_CRAFT/scripts/editing_guard.py" /path/to/original.tex /path/to/proposed.tex --json
-python3 "$PAPER_CRAFT/scripts/validate_profiles.py" --json
 python3 "$PAPER_CRAFT/scripts/venue_preflight.py" /path/to/main.tex \
   --venue ISCA --year 2026 --track research --stage submission --offline --json
 ```
 
-LaTeX 빌드를 요청한 경우에만 `latex_integrity_check.py --build`를 사용합니다. 임시 복사본에서 shell escape를 끄고 실행합니다. 이것은 OS sandbox가 아니므로 신뢰할 수 없는 프로젝트를 실행하지 않습니다. 정적 검사에는 실행·원격 업로드·네트워크 요청이 없습니다.
+스크립트는 기본적으로 읽기 전용이며 네트워크·원고 업로드 기능이 없습니다. Agent 호스트의 데이터 처리 설정은 사용하는 환경을 따릅니다. Python 도구는 표준 라이브러리만 사용합니다.
 
-JSON 상태: `PASS`는 실제 수행한 해당 검사 통과, `FAIL`은 발견된 위반, `SKIPPED`는 미실행/지원 부족, `UNKNOWN`은 판단 불가. 종료 코드 0은 검사 보고서 생성 성공이며 전체 제출 적합성 보증이 아닙니다. 1은 검출된 실패, 2는 잘못된 입력/사용법입니다. 보고서 내부 항목을 함께 확인하십시오. 정적 TeX 분석은 매크로 확장·동적 경로·모든 패키지 동작을 해석하지 않습니다.
+LaTeX 빌드는 명시적으로 `--build`를 지정한 경우 임시 복사본에서 실행하며 `latexmk`·TeX 배포판이 필요합니다. PDF 페이지 검사는 `pdfinfo`가 있을 때 수행합니다. 누락된 도구는 SKIPPED, 판단 불가는 UNKNOWN, 발견된 위반은 FAIL로 보고합니다. PASS는 실제 수행한 검사 범위에 한정되며, 종료 코드 0도 전체 제출 준비 완료를 뜻하지 않습니다.
 
-## Venue Intelligence
+매크로·조건부 TeX와 복잡한 bibliography 구조, 인용 진위, 기술적 의미, 렌더링·익명화·최종 제출 정책은 추가 도구 또는 연구자 확인이 필요합니다.
 
-16개 우선 Venue: ISCA, MICRO, HPCA, ASPLOS, PACT, SOSP, OSDI, EuroSys, USENIX ATC, NSDI, MLSys, IEEE CAL, IEEE TC, ACM TACO, ACM TOCS, IEEE TPDS. Registry와 버전별 JSON은 [`venues/`](.agents/skills/paper-craft/venues/registry.json)에 있습니다.
+## 참고자료 추가
 
-공식 CFP·Author Instructions를 실제 확인한 규정에 출처 URL, 출처 종류, 검증일, 적용 범위와 상태를 저장합니다. 상태는 `verified`, `unverified`, `outdated`, `conflicting`. 확인하지 못한 분량·Appendix·AI 정책은 `null`/`UNKNOWN`입니다. 프로파일 선택은 연도·트랙·단계까지 일치해야 합니다. Conference의 과거 연도를 새 연도에 적용하지 않으며, journal의 continuing 지침도 최신 확인이 필요합니다.
-
-프로파일 검증과 현재 투고 규정 검증은 다릅니다. 로컬 preflight는 네트워크를 사용하지 않습니다. 캐시만으로 현재 적용 가능성을 확정하지 않고 `UNKNOWN`과 재확인 항목을 보고합니다. 온라인 검토에서는 Agent가 공식 출처를 다시 읽고 관련 규칙을 갱신합니다. 실제 페이지 수·익명화·정책 준수·Artifact 준비 등 자동 확정이 어려운 항목은 수동 확인합니다. 갱신 절차·우선순위·규칙별 상태는 [Venue 가이드](.agents/skills/paper-craft/references/venues/README.md)를 따릅니다.
-
-## 참고자료 A/B
-
-`source-materials/`는 로컬 입력 위치입니다. 원본 파일·추출 텍스트·개인 경로는 Git에 자동 포함하지 않으며 배포 설치에도 포함하지 않습니다. 저작권 확인 없이 원문을 복제·배포하지 않습니다.
-
-- A: [Motivation ≠ Novelty](https://gisbi-kim.github.io/motivation-is-not-novelty/) 웹 원문 확인 기반. 직접 첨부 파일은 아직 제공되지 않았습니다. 사례·휴리스틱을 보편적 합격 조건으로 만들지 않습니다.
-- B: 제공된 `논문_논리적_글쓰기.html`을 HTMLParser로 안전하게 읽었습니다. source guide에 제목·해시·HTML 위치와 짧은 해석을 기록합니다. 원본은 Downloads에 보존됩니다.
-
-후속 첨부자료 반영:
-
-1. A/B 원본을 로컬 `source-materials/`로 복사하거나 기존 로컬 경로를 지정합니다. HTML은 열어 실행하지 않습니다.
-2. 정적 추출 보고서를 생성합니다. 원본을 수정하지 않으며 source ID·SHA256·형식·행/블록 위치를 기록합니다.
+원본은 작업 저장소의 `source-materials/` 또는 별도 로컬 경로에 보관합니다. 원본 자료가 없어도 핵심 Skill은 동작합니다. HTML은 스크립트를 실행하지 않고 정적으로 추출합니다.
 
 ```bash
-python3 .agents/skills/paper-craft/scripts/source_material.py inspect \
+python3 "$PAPER_CRAFT/scripts/source_material.py" inspect \
   /path/to/reference.html --source-id B --json
 ```
 
-3. `$paper-craft`에 이 보고서와 원본 경로를 제공하고 source guide 갱신을 요청합니다. 원문에 명시된 내용, 자료 기반 해석, 독립 연구 지침을 구분하고 기존 해시와 비교합니다. 자료에 없는 내용은 자료 주장으로 적지 않습니다.
-4. 새 원문을 실제 읽은 뒤 [source guide](.agents/skills/paper-craft/references/core/source-guides.md)의 상태·근거 위치·날짜를 수정합니다. 패키지 검증과 관련 시나리오를 다시 실행합니다.
+출력의 SHA-256·행·섹션 위치를 기록하고 `$paper-craft`에 원본 경로와 함께 관련 source guide 갱신을 요청합니다. 실제 원문, 자료 기반 해석, 독립적으로 추가한 지침을 구분하세요. 원본 해시가 바뀌면 근거 위치를 다시 확인합니다. 원본 파일은 자동으로 패키지에 포함하지 않습니다.
 
-자료가 없어도 설치·핵심 워크플로는 동작합니다. 세부 입력 절차는 [source-materials/README.md](source-materials/README.md)를 따릅니다.
+해석 범위: [Source Guide](.agents/skills/paper-craft/references/core/source-guides.md). 저장소 입력 절차: [source-materials 안내](https://github.com/code0-god/paper-craft/blob/main/source-materials/README.md).
 
-## 테스트와 검증
+## 개발과 검증
 
-표준 라이브러리 자동 테스트:
+저장소 checkout에서 실행합니다.
 
 ```bash
-python3 -m unittest discover -s tests -v
+npm ci --ignore-scripts --no-audit --no-fund
+npm run check
+npm test
+npm run test:python
 python3 .agents/skills/paper-craft/scripts/validate_skill.py --json
 python3 .agents/skills/paper-craft/scripts/validate_profiles.py --json
 ```
 
-npm CLI·tarball·실제 설치/업데이트 검사:
+npm 설치·업데이트·백업 검증과 Python 정적 검사 테스트를 제공합니다. AI 의미 검토는 별도의 [재현 시나리오](https://github.com/code0-god/paper-craft/blob/main/tests/scenarios/README.md)로 확인합니다. 실제 실행 범위는 [검증 기록](https://github.com/code0-god/paper-craft/blob/main/tests/VERIFICATION.md)에 있습니다. 이 개발 자료는 npm 배포물에 포함되지 않습니다.
 
-```bash
-npm run check
-npm test
-```
+버그와 사용 중 발견한 문제는 [GitHub Issues](https://github.com/code0-god/paper-craft/issues)에 기록할 수 있습니다.
 
-Node 내장 test runner가 임시 디렉터리에서 `npm pack`, 로컬/전역 prefix 설치, tarball 기반 `npm exec`와 실제 CLI를 실행합니다. 기존 사용자 홈·연구 원고는 변경하지 않습니다. 생성된 `tests/results/` 보고서와 tarball·캐시·비밀 설정은 `.gitignore`로 제외하며 재현 Fixture와 테스트 코드는 커밋합니다.
+## 라이선스
 
-개발용 lint/typecheck 도구가 있으면 다음을 실행합니다. 스킬 런타임에는 이 도구가 필요하지 않습니다. 저장소에 새 런타임 의존성을 추가하지 않았습니다.
-
-```bash
-ruff check .agents/skills/paper-craft/scripts tests
-basedpyright
-```
-
-호스트의 스킬 발견 목록은 지원되는 Codex 버전에서 다음으로 확인할 수 있습니다. 이 명령은 의미 검토 실행 테스트가 아닙니다. 출력에는 사용자 설정이 포함될 수 있으므로 원본 출력 전체를 공유하지 않습니다.
-
-```bash
-codex debug prompt-input '$paper-craft Review this architecture research idea.'
-```
-
-명시 호출의 실제 검토 실행은 Codex 대화에서 예제 프롬프트를 입력하거나 read-only CLI로 확인합니다.
-
-```bash
-codex exec --ephemeral --sandbox read-only \
-  '$paper-craft Review this idea: memory traffic slows inference; combine a cache and prefetcher; no experiments or closest-work comparison yet. Do not edit files.'
-```
-
-AI 의미 검토는 unit test가 대신 증명하지 않습니다. [시나리오](tests/scenarios/README.md)에 재현 입력·프롬프트·기대 검토 기준을 제공합니다. 실제 실행 결과와 미실행 검사는 [검증 기록](tests/VERIFICATION.md)에 분리해 기록합니다.
-
-## 핵심 구조
-
-```text
-.agents/skills/paper-craft/
-  SKILL.md                 발견·모드·라우팅·안전 규칙
-  agents/openai.yaml       UI 메타데이터·자동 호출 정책
-  references/core/         논증·신규성·근거·출처 가이드
-  references/domains/      Architecture·Systems·HW/SW co-design
-  references/workflows/    연구·구조·퇴고·심사·입력·제출 절차
-  references/venues/       공식 규정·캐시·갱신 절차
-  venues/                  Registry·연도/트랙/단계별 프로파일
-  schemas/                 Venue·검토 보고서 스키마
-  scripts/                 LaTeX·인용·수정 보존·자료·설치·검증
-  assets/                  보고서·근거·수정 추적 템플릿
-source-materials/           로컬 원본 입력, 배포 제외
-tests/                     자동 테스트·Fixture·의미 검토 시나리오
-```
-
-## 한계와 갱신
-
-정적 검사 통과는 연구의 타당성·신규성·기술적 의미 보존이나 최종 채택을 보장하지 않습니다. 의미 평가는 근거를 읽는 Agent와 연구자의 검증이 필요합니다. 수치 비교는 제공된 표·실험 데이터의 범위에 한정됩니다. PDF 그림·페이지 배치, DOCX 레이아웃, 익명화와 제출 사이트 필드는 도구/수동 검토가 필요합니다. 확인 실패한 Venue 규칙은 남아 있을 수 있으며, 투고 시점에 공식 지침을 재확인해야 합니다.
-
-향후 개선은 실제 사용에서 드러난 누락된 TeX 명령, 새 Venue/트랙의 공식 프로파일, 더 다양한 의미 평가 사례부터 추가합니다. 현재 없는 실험 결과나 최신 규정을 추정해 채우지 않습니다.
-
-규격 확인 기준일: 2026-10-08. [Agent Skills specification](https://agentskills.io/specification), [OpenAI Codex 저장소](https://github.com/openai/codex), [Codex Skill 작성 지침](https://learn.chatgpt.com/docs/build-skills).
+[MIT](LICENSE). 독립 Skill에도 동일한 [라이선스 사본](.agents/skills/paper-craft/LICENSE)이 포함됩니다. 외부 참고자료 원본의 권리는 각 권리자에게 있으며, 이 프로젝트의 MIT 라이선스로 재라이선스하지 않습니다.
