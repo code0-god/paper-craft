@@ -2,6 +2,10 @@
 
 Use for quantitative, causal, and generalization claims. Read the relevant domain guide for the claim's metric and implementation constraints.
 
+Use shared claim IDs from [scientific review](scientific-review.md). Check **evidence existence**, **evidence validity**, and **inference validity** separately. For each axis state established, failed or unknown, with its locator and reasoning: does a relevant artifact exist; does its method/condition test this claim; would its result, assumed true, entail this conclusion? A table can pass existence while its measurement method remains unknown and its causal interpretation fails. Report these separately rather than collapsing them into one confidence score.
+
+For each record retain provenance: manuscript-reported evidence, mathematical verification, source-code verification, numerical reproduction, simulation results, hardware measurement, independently reproduced results, hypothesis, inference or unknown. Then record performed and unperformed verification scope: `manuscript_internal_check`, `independent_mathematical_check`, `source_verification`, `numerical_reproduction`, `code_rtl_verification`, `hardware_measurement_review`. Reading a report of a measurement is an internal/source check, not performing that measurement; reading RTL is not executing RTL. Numerical reproduction of a synthetic arithmetic example does not reproduce the paper's model. Only claim independent reproduction when matching inputs, implementation, conditions, invocation and resulting artifacts are available and were actually run.
+
 ## Six evidence states
 
 Use these exact identifiers in JSON/CSV reports. These describe semantic support; they are distinct from tool check results such as PASS, FAIL, SKIPPED, and UNKNOWN.
@@ -29,6 +33,8 @@ Extract consequential claims from Abstract, Introduction, Design, Evaluation, an
 6. Bound generalization to tested machines, workloads, distributions, scales, and failure conditions. Record counterexamples and missing coverage. Summarize sensitivity and ablation evidence for the specific claim, not as a checklist quota.
 
 ## Decisions and outputs
+
+Evaluate competing explanations before causal attribution and inspect the composition behind bounds. For measured host time plus modeled device time with transfer/DRAM excluded, apply the [evaluation contract](../domains/numerical-contracts.md): cost omission alone cannot prove an end-to-end lower bound when overlap or model error is unresolved. State the strongest supported partial estimate and its uncertainty without inventing timings.
 
 Produce the Claim–Evidence Matrix and prioritized findings. Suggested new experiments must say **proposed**, identify a hypothesis and comparator, and leave result fields empty. Citation lookup suggestions are not verified references. If a number can be recalculated from supplied rows, record the formula and source rows; do not silently replace manuscript numbers.
 

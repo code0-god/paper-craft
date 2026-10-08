@@ -2,6 +2,8 @@
 
 Read for operating systems, distributed systems, storage, networking, cloud infrastructure, runtimes, resource management, scheduling, ML systems, or production experience. Respect the exact venue and track: implementation, measurement, and operational insights can be contributions without new algorithms.
 
+Use the [shared scientific review](../core/scientific-review.md) and early [minimal alternative audit](../core/counterfactual-audit.md) for comprehensive reviews. Consider a simpler configuration, scheduling policy or integration under the same guarantees. Accept exclusions demonstrated by real constraints. Evaluate observation, measurement method and inferred cause separately using [evidence.md](../core/evidence.md); successful integration or operational knowledge need not imply algorithmic novelty.
+
 ## Problem, mechanism, and implementation
 
 Identify the deployment constraint and whose outcome improves. Separate a trace-observed failure, hypothesized cause, prototype result, controlled deployment result, and production experience. Trace requests through the whole system and define boundaries, dependencies, trust assumptions, and integration cost. Confirm which components are implemented, emulated, mocked, or proposed.

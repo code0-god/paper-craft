@@ -2,90 +2,337 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://paper-craft.local/schemas/review-report.schema.json",
   "title": "Paper Craft review report",
-  "description": "Optional structured semantic review and actual tool results. Structural validity does not prove scientific correctness.",
-  "type": "object",
-  "required": ["task", "mode", "inputs", "findings", "checks", "limitations"],
-  "properties": {
-    "task": {"type": "string", "minLength": 1},
-    "mode": {"enum": ["review_only", "suggest_edits", "apply_approved_edits"]},
-    "inputs": {
-      "type": "array", "minItems": 1,
-      "items": {
-        "type": "object", "required": ["path", "read_status"],
-        "properties": {
-          "path": {"type": "string", "minLength": 1},
-          "sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
-          "read_status": {"enum": ["read", "partial", "unreadable", "missing"]},
-          "notes": {"type": "string"}
-        },
-        "additionalProperties": false
-      }
-    },
-    "target": {
-      "type": ["object", "null"],
-      "properties": {
-        "venue_id": {"type": "string"},
-        "year": {"type": ["integer", "null"]},
-        "track": {"type": "string"},
-        "stage": {"type": "string"},
-        "profile_path": {"type": ["string", "null"]},
-        "verification_status": {"enum": ["verified", "unverified", "outdated", "conflicting"]}
-      },
-      "required": ["venue_id", "year", "track", "stage", "verification_status"],
-      "additionalProperties": false
-    },
-    "findings": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": ["id", "location", "category", "severity", "evidence", "explanation", "recommendation", "evidence_state"],
-        "properties": {
-          "id": {"type": "string", "minLength": 1},
-          "location": {"type": "string", "minLength": 1},
-          "category": {"type": "string", "minLength": 1},
-          "severity": {"enum": ["Critical", "Major", "Minor", "Suggestion"]},
-          "evidence": {"type": "array", "items": {"type": "string"}},
-          "explanation": {"type": "string", "minLength": 1},
-          "recommendation": {"type": "string", "minLength": 1},
-          "additional_material": {"type": "array", "items": {"type": "string"}},
-          "proposed_revision": {"type": ["string", "null"]},
-          "technical_meaning_risk": {"type": ["string", "null"]},
-          "evidence_state": {"$ref": "#/$defs/evidence_state"}
-        },
-        "additionalProperties": false
-      }
-    },
-    "claims": {
-      "type": "array",
-      "items": {
-        "type": "object", "required": ["id", "text", "location", "evidence_locations", "evidence_state", "notes"],
-        "properties": {
-          "id": {"type": "string"}, "text": {"type": "string"}, "location": {"type": "string"},
-          "evidence_locations": {"type": "array", "items": {"type": "string"}},
-          "evidence_state": {"$ref": "#/$defs/evidence_state"},
-          "notes": {"type": "string"}
-        },
-        "additionalProperties": false
-      }
-    },
-    "checks": {
-      "type": "array",
-      "items": {
-        "type": "object", "required": ["name", "status", "evidence", "limits"],
-        "properties": {
-          "name": {"type": "string"},
-          "status": {"enum": ["PASS", "FAIL", "SKIPPED", "UNKNOWN"]},
-          "evidence": {"type": "string"}, "limits": {"type": "string"}
-        },
-        "additionalProperties": false
-      }
-    },
-    "limitations": {"type": "array", "items": {"type": "string"}}
-  },
+  "description": "Version 2 separates provenance, performed verification, and evidence existence/validity/inference. Unversioned and version 1 reports remain readable. Structural validity never proves scientific correctness. External graph freshness requires argument_graph.py validate --check-inputs.",
+  "oneOf": [{"$ref": "#/$defs/legacy"}, {"$ref": "#/$defs/v2"}],
   "$defs": {
     "evidence_state": {
-      "enum": ["directly_verified", "partially_verified", "indirectly_supported", "needs_validation", "unsupported", "cannot_determine"]
+      "enum": [
+        "directly_verified",
+        "partially_verified",
+        "indirectly_supported",
+        "needs_validation",
+        "unsupported",
+        "cannot_determine"
+      ]
+    },
+    "verification_scope": {
+      "type": "object",
+      "required": ["performed", "unperformed"],
+      "properties": {
+        "performed": {"type": "array", "items": {"type": "string"}},
+        "unperformed": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "locator": {
+      "type": "object",
+      "required": ["input_id", "locator"],
+      "properties": {"input_id": {"type": "string", "minLength": 1}, "locator": {"type": "string", "minLength": 1}},
+      "additionalProperties": false
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["kind", "artifacts", "run_locator"],
+      "properties": {
+        "kind": {
+          "enum": [
+            "manuscript_reported",
+            "mathematical_check",
+            "source_code",
+            "numerical_reproduction",
+            "simulation",
+            "hardware_measurement",
+            "independently_reproduced",
+            "hypothesis",
+            "inference",
+            "unknown"
+          ]
+        },
+        "artifacts": {"type": "array", "items": {"$ref": "#/$defs/locator"}},
+        "run_locator": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "evidence_axis": {
+      "type": "object",
+      "required": ["status", "rationale", "locators"],
+      "properties": {
+        "status": {"enum": ["PASS", "FAIL", "SKIPPED", "UNKNOWN"]},
+        "rationale": {"type": "string", "minLength": 1},
+        "locators": {"type": "array", "items": {"$ref": "#/$defs/locator"}}
+      },
+      "additionalProperties": false
+    },
+    "evidence_axes": {
+      "type": "object",
+      "required": ["existence", "validity", "inference"],
+      "properties": {
+        "existence": {"$ref": "#/$defs/evidence_axis"},
+        "validity": {"$ref": "#/$defs/evidence_axis"},
+        "inference": {"$ref": "#/$defs/evidence_axis"}
+      },
+      "additionalProperties": false
+    },
+    "edit": {
+      "type": "object",
+      "required": ["id", "categories", "claim_ids", "evidence", "assumptions", "scope_impact"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"},
+        "categories": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "language_only",
+              "structural",
+              "claim_qualification",
+              "technical_correction",
+              "evidence_alignment"
+            ]
+          }
+        },
+        "claim_ids": {"type": "array", "items": {"type": "string"}},
+        "evidence": {"type": "array", "items": {"type": "string"}},
+        "assumptions": {"type": "array", "items": {"type": "string"}},
+        "scope_impact": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "legacy": {
+      "type": "object",
+      "required": ["task", "mode", "inputs", "findings", "checks", "limitations"],
+      "properties": {
+        "task": {"type": "string", "minLength": 1},
+        "mode": {"enum": ["review_only", "suggest_edits", "apply_approved_edits"]},
+        "inputs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["path", "read_status"],
+            "properties": {
+              "path": {"type": "string", "minLength": 1},
+              "sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+              "read_status": {"enum": ["read", "partial", "unreadable", "missing"]},
+              "notes": {"type": "string"}
+            },
+            "additionalProperties": false
+          }
+        },
+        "target": {
+          "type": ["object", "null"],
+          "properties": {
+            "venue_id": {"type": "string"},
+            "year": {"type": ["integer", "null"]},
+            "track": {"type": "string"},
+            "stage": {"type": "string"},
+            "profile_path": {"type": ["string", "null"]},
+            "verification_status": {"enum": ["verified", "unverified", "outdated", "conflicting"]}
+          },
+          "required": ["venue_id", "year", "track", "stage", "verification_status"],
+          "additionalProperties": false
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "location",
+              "category",
+              "severity",
+              "evidence",
+              "explanation",
+              "recommendation",
+              "evidence_state"
+            ],
+            "properties": {
+              "id": {"type": "string", "minLength": 1},
+              "location": {"type": "string", "minLength": 1},
+              "category": {"type": "string", "minLength": 1},
+              "severity": {"enum": ["Critical", "Major", "Minor", "Suggestion"]},
+              "evidence": {"type": "array", "items": {"type": "string"}},
+              "explanation": {"type": "string", "minLength": 1},
+              "recommendation": {"type": "string", "minLength": 1},
+              "additional_material": {"type": "array", "items": {"type": "string"}},
+              "proposed_revision": {"type": ["string", "null"]},
+              "technical_meaning_risk": {"type": ["string", "null"]},
+              "evidence_state": {"$ref": "#/$defs/evidence_state"}
+            },
+            "additionalProperties": false
+          }
+        },
+        "claims": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "text", "location", "evidence_locations", "evidence_state", "notes"],
+            "properties": {
+              "id": {"type": "string"},
+              "text": {"type": "string"},
+              "location": {"type": "string"},
+              "evidence_locations": {"type": "array", "items": {"type": "string"}},
+              "evidence_state": {"$ref": "#/$defs/evidence_state"},
+              "notes": {"type": "string"}
+            },
+            "additionalProperties": false
+          }
+        },
+        "checks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "status", "evidence", "limits"],
+            "properties": {
+              "name": {"type": "string"},
+              "status": {"enum": ["PASS", "FAIL", "SKIPPED", "UNKNOWN"]},
+              "evidence": {"type": "string"},
+              "limits": {"type": "string"}
+            },
+            "additionalProperties": false
+          }
+        },
+        "limitations": {"type": "array", "items": {"type": "string"}},
+        "schema_version": {"type": "integer", "const": 1}
+      },
+      "additionalProperties": false
+    },
+    "v2": {
+      "type": "object",
+      "required": ["task", "mode", "inputs", "findings", "checks", "limitations", "schema_version", "verification_scope"],
+      "properties": {
+        "task": {"type": "string", "minLength": 1},
+        "mode": {"enum": ["review_only", "suggest_edits", "apply_approved_edits"]},
+        "inputs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["path", "read_status", "id"],
+            "properties": {
+              "path": {"type": "string", "minLength": 1},
+              "sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+              "read_status": {"enum": ["read", "partial", "unreadable", "missing"]},
+              "notes": {"type": "string"},
+              "id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"}
+            },
+            "additionalProperties": false
+          }
+        },
+        "target": {
+          "type": ["object", "null"],
+          "properties": {
+            "venue_id": {"type": "string"},
+            "year": {"type": ["integer", "null"]},
+            "track": {"type": "string"},
+            "stage": {"type": "string"},
+            "profile_path": {"type": ["string", "null"]},
+            "verification_status": {"enum": ["verified", "unverified", "outdated", "conflicting"]}
+          },
+          "required": ["venue_id", "year", "track", "stage", "verification_status"],
+          "additionalProperties": false
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "location",
+              "category",
+              "severity",
+              "evidence",
+              "explanation",
+              "recommendation",
+              "evidence_state",
+              "provenance",
+              "verification_scope",
+              "evidence_axes",
+              "claim_ids"
+            ],
+            "properties": {
+              "id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"},
+              "location": {"type": "string", "minLength": 1},
+              "category": {"type": "string", "minLength": 1},
+              "severity": {"enum": ["Critical", "Major", "Minor", "Suggestion"]},
+              "evidence": {"type": "array", "items": {"type": "string"}},
+              "explanation": {"type": "string", "minLength": 1},
+              "recommendation": {"type": "string", "minLength": 1},
+              "additional_material": {"type": "array", "items": {"type": "string"}},
+              "proposed_revision": {"type": ["string", "null"]},
+              "technical_meaning_risk": {"type": ["string", "null"]},
+              "evidence_state": {"$ref": "#/$defs/evidence_state"},
+              "provenance": {"$ref": "#/$defs/provenance"},
+              "verification_scope": {"$ref": "#/$defs/verification_scope"},
+              "evidence_axes": {"$ref": "#/$defs/evidence_axes"},
+              "claim_ids": {"type": "array", "items": {"type": "string"}},
+              "current_state": {"enum": ["open", "resolved", "disputed", "deferred"]}
+            },
+            "additionalProperties": false
+          }
+        },
+        "claims": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "text",
+              "location",
+              "evidence_locations",
+              "evidence_state",
+              "notes",
+              "provenance",
+              "verification_scope",
+              "evidence_axes"
+            ],
+            "properties": {
+              "id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"},
+              "text": {"type": "string"},
+              "location": {"type": "string"},
+              "evidence_locations": {"type": "array", "items": {"type": "string"}},
+              "evidence_state": {"$ref": "#/$defs/evidence_state"},
+              "notes": {"type": "string"},
+              "provenance": {"$ref": "#/$defs/provenance"},
+              "verification_scope": {"$ref": "#/$defs/verification_scope"},
+              "evidence_axes": {"$ref": "#/$defs/evidence_axes"}
+            },
+            "additionalProperties": false
+          }
+        },
+        "checks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "status", "evidence", "limits"],
+            "properties": {
+              "name": {"type": "string"},
+              "status": {"enum": ["PASS", "FAIL", "SKIPPED", "UNKNOWN"]},
+              "evidence": {"type": "string"},
+              "limits": {"type": "string"}
+            },
+            "additionalProperties": false
+          }
+        },
+        "limitations": {"type": "array", "items": {"type": "string"}},
+        "schema_version": {"type": "integer", "const": 2},
+        "verification_scope": {"$ref": "#/$defs/verification_scope"},
+        "argument_graph": {"$ref": "argument-graph.schema.json"},
+        "argument_graph_reference": {
+          "type": "object",
+          "required": ["path", "sha256", "claim_ids"],
+          "properties": {
+            "path": {"type": "string", "minLength": 1},
+            "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+            "claim_ids": {"type": "array", "items": {"type": "string"}}
+          },
+          "additionalProperties": false
+        },
+        "edits": {"type": "array", "items": {"$ref": "#/$defs/edit"}}
+      },
+      "additionalProperties": false,
+      "not": {"required": ["argument_graph", "argument_graph_reference"]}
     }
-  },
-  "additionalProperties": false
+  }
 }

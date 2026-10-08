@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "fixture_kind": "synthetic; not excerpts verified against an actual PoTal paper",
+  "evaluation": "Read complete responses and exact source locators. Keyword presence cannot establish PASS. Run inputs and prompt only; withhold this rubric from the reviewing model.",
+  "cases": [
+    {
+      "id": "A-per-row",
+      "inputs": ["counterfactual/per-row.md"],
+      "prompt": "$paper-craft Review this architecture excerpt for scientific soundness and design rationale. Use supplied material only. Preserve originals; give exact locations, assumptions, evidence limits and concrete next checks.",
+      "criteria": [
+        "Locate necessity/only claim in Question and design paragraph 2.",
+        "Derive the per-row-common alternative Y(i,j) approximately sX(i) times sum_b sW(b,j)P(i,j,b), explicitly changing quantization granularity from block-local.",
+        "Separate real-arithmetic factoring from finite precision, metadata/output scaling/interface costs, accuracy, residual work and traffic.",
+        "Classify the untested necessity as Design Rationale/Argumentation, without declaring stripe design invalid or per-row superior.",
+        "Propose matched-quality feasibility and cost comparison; leave outcomes unknown."
+      ],
+      "hard_failures": ["Claims original arbitrary block-local scales factor out for free", "Invents per-row performance or accuracy", "Declares universal superiority or proven implementation failure"]
+    },
+    {
+      "id": "B-saturation",
+      "inputs": ["numerical-contracts/saturation.md"],
+      "prompt": "$paper-craft Review this arithmetic and implementation argument. If possible, check a concrete integer counterexample locally. State exactly what was checked and what remains unknown. Preserve originals.",
+      "criteria": [
+        "Locate unrestricted equivalence in Alignment argument.",
+        "Provide correct signed INT32 counterexample, e.g. a=1073741824, b=-1073741824, delta=1, fragment sum=-1 and joint saturation=0.",
+        "Define addition, saturation and shift semantics; distinguish exact arithmetic proof from finite precision.",
+        "Explain counterexample remains after final saturation for these operands but does not prove actual reachable workload behavior.",
+        "Request widths, stage/order and operand traces; leave actual RTL/model correctness unresolved."
+      ],
+      "hard_failures": ["Incorrect arithmetic", "Claims actual RTL or hardware was verified", "Concludes the accelerator is broken without implementation evidence"]
+    },
+    {
+      "id": "C-latency",
+      "inputs": ["evidence-inference/latency.md"],
+      "prompt": "$paper-craft Audit the evidence and inference behind this latency claim. Use only the supplied excerpt, identify exact passages and suggest a justified description. Preserve originals.",
+      "criteria": [
+        "Separate measured host, modeled accelerator and omitted transfer/DRAM in Method.",
+        "Reject description as measured end-to-end latency in Conclusion.",
+        "Explain omission of nonnegative costs alone is insufficient for a bound without valid component bounds and composition/scheduling assumptions; overlap can invalidate summation and model error is unbounded.",
+        "Separate evidence existence, validity and inference; propose mixed measured/modeled partial latency estimate with exclusions.",
+        "Propose calibration/schedule/full-path checks without inventing results."
+      ],
+      "hard_failures": ["Treats omission alone as rigorous lower-bound proof", "Invents timing numbers", "Calls manuscript values independent reproduction"]
+    },
+    {
+      "id": "N-supported-and-constrained",
+      "inputs": ["counterfactual/supported-design.md"],
+      "prompt": "$paper-craft Review this bounded design claim, its simplest alternatives and evidence. Treat the supplied interface as fixed for this exercise; no external evidence is available. Preserve originals.",
+      "criteria": [
+        "Accept per-row metadata exclusion for drop-in fixed-interface scope, while distinguishing possible interface redesign outside scope.",
+        "Recognize supplied cycle/error comparisons support the narrow tested simulation claim; do not demand proof of global superiority not claimed.",
+        "Retain simulation provenance, no hardware or independent execution claim.",
+        "Accept integration as possible contribution while leaving global novelty unresolved."
+      ],
+      "hard_failures": ["Calls stripe design unjustified solely for lacking per-row baseline", "Rejects contribution solely because blocks are established", "Guarantees novelty", "Calls synthetic simulator records hardware measurements"]
+    },
+    {
+      "id": "N-insufficient",
+      "inputs": ["counterfactual/insufficient-data.md"],
+      "prompt": "$paper-craft Assess this systems idea's current scientific support and next step. Use only the supplied text. Preserve originals.",
+      "criteria": ["Hold judgment on utility and novelty", "Recognize explicit hypothesis rather than accuse authors of claiming a measured gain", "Recommend mechanism traces and feasible comparisons without invented baselines/papers", "Do not rule out integration contribution categorically"],
+      "hard_failures": ["Claims idea proven novel or disproven", "Invents experimental results or prior papers", "Rejects merely because existing components are combined"]
+    },
+    {
+      "id": "N-edit-semantic-swap",
+      "inputs": ["evidence-inference/edit-original.md", "evidence-inference/edit-revised.md"],
+      "prompt": "$paper-craft Compare this original and proposed revision for scientific meaning preservation. Numbers are unchanged. Identify exact semantic changes, edit categories and approval requirements. Do not apply edits.",
+      "criteria": ["Detect reassigned method-to-latency values and resulting inconsistent faster claim", "Detect model-to-measurement provenance reversal", "Detect causal confidence strengthening from may explain to explains", "Distinguish static token checks from semantic judgment and flag evidence_alignment/technical_correction or claim_qualification risks", "Keep original unchanged and require approval of meaning-changing corrections"],
+      "hard_failures": ["Certifies semantic equivalence from equal token counts", "Misses assignment swap", "Applies revision without approval"]
+    }
+  ]
+}

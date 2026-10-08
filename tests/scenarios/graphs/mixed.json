@@ -1,0 +1,366 @@
+{
+  "schema_version": 1,
+  "research_question": "Synthetic fixture question?",
+  "analysis_scope": {
+    "included": [
+      "synthetic fixture"
+    ],
+    "excluded": [
+      "real research"
+    ]
+  },
+  "inputs": [
+    {
+      "id": "input1",
+      "path": "source.txt",
+      "sha256": "1bf0a0a715e6a39b861ea8b7a407210e9a466fa0211740ba35daa48addb39879"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n0",
+      "kind": "claim",
+      "text": "Synthetic test assertion 0",
+      "origins": [
+        {
+          "input_id": "input1",
+          "locator": "line 1"
+        }
+      ],
+      "scope": [
+        "synthetic fixture only"
+      ],
+      "support_state": "cannot_determine",
+      "provenance": {
+        "kind": "manuscript_reported",
+        "artifacts": [],
+        "run_locator": ""
+      },
+      "verification_scope": {
+        "performed": [],
+        "unperformed": [
+          "scientific verification"
+        ]
+      },
+      "unresolved_questions": [
+        "Does this inference follow?"
+      ],
+      "next_action": "Manually inspect synthetic fixture"
+    },
+    {
+      "id": "n1",
+      "kind": "assumption",
+      "text": "Synthetic test assertion 1",
+      "origins": [
+        {
+          "input_id": "input1",
+          "locator": "line 1"
+        }
+      ],
+      "scope": [
+        "synthetic fixture only"
+      ],
+      "support_state": "cannot_determine",
+      "provenance": {
+        "kind": "mathematical_check",
+        "artifacts": [],
+        "run_locator": ""
+      },
+      "verification_scope": {
+        "performed": [],
+        "unperformed": [
+          "scientific verification"
+        ]
+      },
+      "unresolved_questions": [
+        "Does this inference follow?"
+      ],
+      "next_action": "Manually inspect synthetic fixture"
+    },
+    {
+      "id": "n2",
+      "kind": "evidence",
+      "text": "Synthetic test assertion 2",
+      "origins": [
+        {
+          "input_id": "input1",
+          "locator": "line 1"
+        }
+      ],
+      "scope": [
+        "synthetic fixture only"
+      ],
+      "support_state": "cannot_determine",
+      "provenance": {
+        "kind": "source_code",
+        "artifacts": [],
+        "run_locator": ""
+      },
+      "verification_scope": {
+        "performed": [],
+        "unperformed": [
+          "scientific verification"
+        ]
+      },
+      "unresolved_questions": [
+        "Does this inference follow?"
+      ],
+      "next_action": "Manually inspect synthetic fixture"
+    },
+    {
+      "id": "n3",
+      "kind": "evidence",
+      "text": "Synthetic test assertion 3",
+      "origins": [
+        {
+          "input_id": "input1",
+          "locator": "line 1"
+        }
+      ],
+      "scope": [
+        "synthetic fixture only"
+      ],
+      "support_state": "cannot_determine",
+      "provenance": {
+        "kind": "numerical_reproduction",
+        "artifacts": [],
+        "run_locator": ""
+      },
+      "verification_scope": {
+        "performed": [],
+        "unperformed": [
+          "scientific verification"
+        ]
+      },
+      "unresolved_questions": [
+        "Does this inference follow?"
+      ],
+      "next_action": "Manually inspect synthetic fixture"
+    },
+    {
+      "id": "n4",
+      "kind": "alternative",
+      "text": "Synthetic test assertion 4",
+      "origins": [
+        {
+          "input_id": "input1",
+          "locator": "line 1"
+        }
+      ],
+      "scope": [
+        "synthetic fixture only"
+      ],
+      "support_state": "cannot_determine",
+      "provenance": {
+        "kind": "simulation",
+        "artifacts": [],
+        "run_locator": ""
+      },
+      "verification_scope": {
+        "performed": [],
+        "unperformed": [
+          "scientific verification"
+        ]
+      },
+      "unresolved_questions": [
+        "Does this inference follow?"
+      ],
+      "next_action": "Manually inspect synthetic fixture"
+    },
+    {
+      "id": "n5",
+      "kind": "qualification",
+      "text": "Synthetic test assertion 5",
+      "origins": [
+        {
+          "input_id": "input1",
+          "locator": "line 1"
+        }
+      ],
+      "scope": [
+        "synthetic fixture only"
+      ],
+      "support_state": "cannot_determine",
+      "provenance": {
+        "kind": "hardware_measurement",
+        "artifacts": [],
+        "run_locator": ""
+      },
+      "verification_scope": {
+        "performed": [],
+        "unperformed": [
+          "scientific verification"
+        ]
+      },
+      "unresolved_questions": [
+        "Does this inference follow?"
+      ],
+      "next_action": "Manually inspect synthetic fixture"
+    },
+    {
+      "id": "n6",
+      "kind": "evidence",
+      "text": "Synthetic test assertion 6",
+      "origins": [
+        {
+          "input_id": "input1",
+          "locator": "line 1"
+        }
+      ],
+      "scope": [
+        "synthetic fixture only"
+      ],
+      "support_state": "cannot_determine",
+      "provenance": {
+        "kind": "independently_reproduced",
+        "artifacts": [
+          {
+            "input_id": "input1",
+            "locator": "line 1"
+          }
+        ],
+        "run_locator": "synthetic run A"
+      },
+      "verification_scope": {
+        "performed": [
+          "fixture parsing"
+        ],
+        "unperformed": [
+          "scientific verification"
+        ]
+      },
+      "unresolved_questions": [
+        "Does this inference follow?"
+      ],
+      "next_action": "Manually inspect synthetic fixture"
+    },
+    {
+      "id": "n7",
+      "kind": "evidence",
+      "text": "Synthetic test assertion 7",
+      "origins": [
+        {
+          "input_id": "input1",
+          "locator": "line 1"
+        }
+      ],
+      "scope": [
+        "synthetic fixture only"
+      ],
+      "support_state": "cannot_determine",
+      "provenance": {
+        "kind": "hypothesis",
+        "artifacts": [],
+        "run_locator": ""
+      },
+      "verification_scope": {
+        "performed": [],
+        "unperformed": [
+          "scientific verification"
+        ]
+      },
+      "unresolved_questions": [
+        "Does this inference follow?"
+      ],
+      "next_action": "Manually inspect synthetic fixture"
+    },
+    {
+      "id": "n8",
+      "kind": "evidence",
+      "text": "Synthetic test assertion 8",
+      "origins": [
+        {
+          "input_id": "input1",
+          "locator": "line 1"
+        }
+      ],
+      "scope": [
+        "synthetic fixture only"
+      ],
+      "support_state": "cannot_determine",
+      "provenance": {
+        "kind": "inference",
+        "artifacts": [],
+        "run_locator": ""
+      },
+      "verification_scope": {
+        "performed": [],
+        "unperformed": [
+          "scientific verification"
+        ]
+      },
+      "unresolved_questions": [
+        "Does this inference follow?"
+      ],
+      "next_action": "Manually inspect synthetic fixture"
+    },
+    {
+      "id": "n9",
+      "kind": "evidence",
+      "text": "Synthetic test assertion 9",
+      "origins": [
+        {
+          "input_id": "input1",
+          "locator": "line 1"
+        }
+      ],
+      "scope": [
+        "synthetic fixture only"
+      ],
+      "support_state": "cannot_determine",
+      "provenance": {
+        "kind": "unknown",
+        "artifacts": [],
+        "run_locator": ""
+      },
+      "verification_scope": {
+        "performed": [],
+        "unperformed": [
+          "scientific verification"
+        ]
+      },
+      "unresolved_questions": [
+        "Does this inference follow?"
+      ],
+      "next_action": "Manually inspect synthetic fixture"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "kind": "requires",
+      "source": "n1",
+      "target": "n0"
+    },
+    {
+      "id": "e1",
+      "kind": "supports",
+      "source": "n2",
+      "target": "n0"
+    },
+    {
+      "id": "e2",
+      "kind": "contradicts",
+      "source": "n3",
+      "target": "n0"
+    },
+    {
+      "id": "e3",
+      "kind": "alternative_to",
+      "source": "n4",
+      "target": "n0"
+    },
+    {
+      "id": "e4",
+      "kind": "qualifies",
+      "source": "n5",
+      "target": "n0"
+    },
+    {
+      "id": "e5",
+      "kind": "derived_from",
+      "source": "n6",
+      "target": "n0"
+    }
+  ]
+}

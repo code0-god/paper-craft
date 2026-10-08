@@ -2,6 +2,8 @@
 
 Use for novelty and contribution analysis. The nine-step procedure operationalizes the user's requested audit; [source-guides.md](source-guides.md) separates source interpretation from Paper Craft's additional guidance.
 
+Connect this audit to the common [scientific review](scientific-review.md) graph. Run the [minimal alternative audit](counterfactual-audit.md) early in technical reviews too, rather than deferring a necessity challenge until a separate novelty pass. Mathematical feasibility and hardware cost require independent judgments; lack of comparison is not proof that either design is better.
+
 ## Nine steps
 
 1. **Motivation:** state the consequential problem, affected setting, and evidence that it occurs. A difficult or important problem does not establish the novelty of its solution.

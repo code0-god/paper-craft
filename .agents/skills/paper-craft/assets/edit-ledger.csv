@@ -1,1 +1,1 @@
-edit_id,source_file,source_hash,location,original,revised,revision_rationale,technical_meaning_risk,approval_state,diff_path,verification
+edit_id,source_file,source_hash,location,original,revised,revision_rationale,technical_meaning_risk,approval_state,diff_path,verification,categories,claim_ids,evidence,assumptions,scope_impact

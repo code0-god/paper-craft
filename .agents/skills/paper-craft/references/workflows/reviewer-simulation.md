@@ -4,6 +4,8 @@ Use the exact venue/year/track/stage profile when known, then [novelty.md](../co
 
 State that the review is an AI-assisted simulation, not an actual committee review or an acceptance prediction. Do not invent a reviewer identity, official score, confidential criteria, or a probability of acceptance.
 
+Reuse the same current hash-bound argument graph, stable claim IDs, and current finding states used by technical review and editing. Validate current input hashes before reuse; stale source material requires explicit graph updates, not a fresh disconnected opinion. Cite claim IDs and evidence locators for each finding. When new material changes a finding, record its previous/current state (`open`, `resolved`, `disputed`, `deferred`), the new artifact/locator, performed verification, and the reason for the update. Do not silently resolve an issue in one mode while retaining it as critical in another. Distinguish evidence existence, methodological validity, and whether the inference supports the claimed scope; one axis cannot substitute for another.
+
 Assess **Significance; Novelty; Technical Soundness; Clarity; Experimental Rigor; Reproducibility; Limitations; Venue Fit**. Distinguish an official criterion from independent methodological judgment and observed paper style. Consider positive evidence and scope-qualified strengths, not only defects.
 
 Classify each issue:

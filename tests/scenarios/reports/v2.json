@@ -1,0 +1,172 @@
+{
+  "task": "review",
+  "mode": "review_only",
+  "inputs": [
+    {
+      "path": "source.txt",
+      "read_status": "read",
+      "id": "I1",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "location": "paragraph 1",
+      "category": "scope",
+      "severity": "Major",
+      "evidence": [
+        "source.txt:1"
+      ],
+      "explanation": "Scope requires evidence",
+      "recommendation": "Inspect evidence",
+      "evidence_state": "needs_validation",
+      "claim_ids": [
+        "C1"
+      ],
+      "current_state": "open",
+      "provenance": {
+        "kind": "manuscript_reported",
+        "artifacts": [
+          {
+            "input_id": "I1",
+            "locator": "paragraph 1"
+          }
+        ],
+        "run_locator": ""
+      },
+      "verification_scope": {
+        "performed": [
+          "source reading"
+        ],
+        "unperformed": [
+          "independent reproduction"
+        ]
+      },
+      "evidence_axes": {
+        "existence": {
+          "status": "UNKNOWN",
+          "rationale": "Requires scoped manual review",
+          "locators": [
+            {
+              "input_id": "I1",
+              "locator": "paragraph 1"
+            }
+          ]
+        },
+        "validity": {
+          "status": "UNKNOWN",
+          "rationale": "Requires scoped manual review",
+          "locators": [
+            {
+              "input_id": "I1",
+              "locator": "paragraph 1"
+            }
+          ]
+        },
+        "inference": {
+          "status": "UNKNOWN",
+          "rationale": "Requires scoped manual review",
+          "locators": [
+            {
+              "input_id": "I1",
+              "locator": "paragraph 1"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "checks": [],
+  "limitations": [],
+  "schema_version": 2,
+  "verification_scope": {
+    "performed": [
+      "source reading"
+    ],
+    "unperformed": [
+      "independent reproduction"
+    ]
+  },
+  "claims": [
+    {
+      "id": "C1",
+      "text": "A may help",
+      "location": "paragraph 1",
+      "evidence_locations": [
+        "source.txt:1"
+      ],
+      "evidence_state": "needs_validation",
+      "notes": "",
+      "provenance": {
+        "kind": "manuscript_reported",
+        "artifacts": [
+          {
+            "input_id": "I1",
+            "locator": "paragraph 1"
+          }
+        ],
+        "run_locator": ""
+      },
+      "verification_scope": {
+        "performed": [
+          "source reading"
+        ],
+        "unperformed": [
+          "independent reproduction"
+        ]
+      },
+      "evidence_axes": {
+        "existence": {
+          "status": "UNKNOWN",
+          "rationale": "Requires scoped manual review",
+          "locators": [
+            {
+              "input_id": "I1",
+              "locator": "paragraph 1"
+            }
+          ]
+        },
+        "validity": {
+          "status": "UNKNOWN",
+          "rationale": "Requires scoped manual review",
+          "locators": [
+            {
+              "input_id": "I1",
+              "locator": "paragraph 1"
+            }
+          ]
+        },
+        "inference": {
+          "status": "UNKNOWN",
+          "rationale": "Requires scoped manual review",
+          "locators": [
+            {
+              "input_id": "I1",
+              "locator": "paragraph 1"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "edits": [
+    {
+      "id": "E1",
+      "categories": [
+        "claim_qualification",
+        "evidence_alignment"
+      ],
+      "claim_ids": [
+        "C1"
+      ],
+      "evidence": [
+        "source.txt:1"
+      ],
+      "assumptions": [
+        "Scope confirmed by author"
+      ],
+      "scope_impact": "Narrows to measured conditions; requires approval"
+    }
+  ]
+}

@@ -16,6 +16,7 @@ from collections import Counter
 from pathlib import Path
 from typing import Final, TypedDict
 
+from editing_semantics import TouchedContext, semantic_hints
 from manuscript_common import (
     Finding,
     InputError,
@@ -45,6 +46,9 @@ class EditingReport(TypedDict):
     revised: str
     unified_diff: str
     semantic_review: str
+    semantic_signals: list[Finding]
+    touched_contexts: list[TouchedContext]
+    semantic_limits: list[str]
 
 
 class ProtectedTokens(TypedDict):
@@ -95,6 +99,8 @@ def review(original: Path, revised: Path) -> EditingReport:
         else:
             findings.append(notice(check, "Protected token multiset preserved", "PASS"))
     findings.append(notice("technical_meaning", "Token preservation cannot prove numerical associations, causality, scope or technical meaning; author review required", "UNKNOWN"))
+    signals, contexts = semantic_hints(before, after, NUMBER)
+    findings.extend(signals)
     diff = difflib.unified_diff(before.splitlines(keepends=True), after.splitlines(keepends=True),
                                fromfile=str(original), tofile=str(revised))
     patch = "".join(line if line.endswith("\n") else line + "\n\\ No newline at end of file\n"
@@ -102,7 +108,11 @@ def review(original: Path, revised: Path) -> EditingReport:
     return {"tool": "editing_guard", "status": "FAIL" if any(item["status"] == "FAIL" for item in findings) else "UNKNOWN",
             "findings": findings, "original": str(original.resolve()), "revised": str(revised.resolve()),
             "unified_diff": patch,
-            "semantic_review": "MANUAL_REQUIRED"}
+            "semantic_review": "MANUAL_REQUIRED", "semantic_signals": signals,
+            "touched_contexts": contexts,
+            "semantic_limits": ["English/Korean lexical hints are incomplete and can produce false positives",
+                                "Absence of signals cannot establish semantic equivalence; inspect whole affected paragraphs",
+                                "Protected-token PASS applies only to token preservation, never scientific correctness"]}
 
 
 def main() -> int:

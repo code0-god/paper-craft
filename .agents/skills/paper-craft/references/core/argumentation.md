@@ -2,6 +2,8 @@
 
 Use this guide for outlines, logical review, and structural editing. Its procedures are Paper Craft's interpretation of the writing principles mapped in [source-guides.md](source-guides.md), not official venue requirements.
 
+Use the current [scientific review](scientific-review.md) graph and claim IDs across technical, argument and editing passes. Test consequential premises against realistic [alternatives](counterfactual-audit.md) before making prose more persuasive. Revisit an earlier judgment when its premise changes; document the affected dependency and revised conclusion.
+
 ## Construct the argument before the table of contents
 
 Identify the research question, the answer the manuscript claims, and the evidence needed to connect them. Trace this chain: problem and scope; what existing approaches establish; unresolved obstacle; proposed insight or design choice; validation; bounded contribution. A section can serve more than one role. Systems experience and measurement papers may establish a new empirical finding rather than introduce a method.

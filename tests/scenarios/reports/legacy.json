@@ -1,0 +1,13 @@
+{
+  "task": "review",
+  "mode": "review_only",
+  "inputs": [
+    {
+      "path": "source.txt",
+      "read_status": "read"
+    }
+  ],
+  "findings": [],
+  "checks": [],
+  "limitations": []
+}

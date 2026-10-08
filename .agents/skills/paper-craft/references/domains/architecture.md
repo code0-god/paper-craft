@@ -2,6 +2,8 @@
 
 Read for processors, parallel architecture, caches/DRAM/NVM, memory hierarchies, accelerators, systolic arrays, DNN/LLM hardware, quantization, FPGA/ASIC, or compiler–architecture research. Select checks from the claims; no paper needs every metric below.
 
+Comprehensive reviews begin with the [shared scientific review](../core/scientific-review.md), including the early [minimal alternative audit](../core/counterfactual-audit.md). Apply [mathematical/numerical/hardware/evaluation contracts](numerical-contracts.md) to relevant core claims. In particular, scale factorization over real numbers does not establish a finite-width implementation's equivalence, and an omitted simpler design is a rationale question rather than proof of failure.
+
 ## Establish what was implemented and measured
 
 Tag each result as **physical measurement**, **RTL simulation**, **cycle model**, **analytical model**, or **estimate**. Record platform or model version, calibration evidence, assumptions, workload, configuration, measurement boundaries, and uncertainty. For FPGA or ASIC flows distinguish synthesis estimates, placement/routing results, timing closure, and fabricated measurements. A modeled value is not a verified physical value.
