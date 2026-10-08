@@ -1,14 +1,14 @@
 {
   "name": "@code0-god/paper-craft",
   "version": "0.1.0",
-  "description": "Install and update the Paper Craft architecture and systems research Agent Skill",
+  "description": "Install and update the portable Paper Craft architecture and systems research Agent Skill",
   "type": "module",
   "license": "MIT",
   "bin": {
     "paper-craft": "bin/paper-craft.mjs"
   },
   "files": [
-    "bin/paper-craft.mjs",
+    "bin/*.mjs",
     ".agents/skills/paper-craft/LICENSE",
     ".agents/skills/paper-craft/**/*.md",
     ".agents/skills/paper-craft/**/*.yaml",
@@ -20,9 +20,9 @@
     "node": ">=18.3.0"
   },
   "scripts": {
-    "test": "node --test tests/npm.test.mjs",
+    "test": "node --test tests/npm.test.mjs tests/agent-install.test.mjs",
     "test:python": "python3 -m unittest discover -s tests -q",
-    "check": "node --check bin/paper-craft.mjs && node --check tests/npm.test.mjs"
+    "check": "node --check bin/paper-craft.mjs && node --check bin/agent-targets.mjs && node --check tests/npm.test.mjs && node --check tests/agent-install.test.mjs"
   },
   "repository": {
     "type": "git",

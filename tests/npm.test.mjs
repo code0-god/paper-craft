@@ -3,7 +3,7 @@ import { spawnSync } from 'node:child_process';
 import { after, before, test } from 'node:test';
 import {
   appendFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync,
-  readdirSync, rmSync, symlinkSync, writeFileSync,
+  readdirSync, realpathSync, rmSync, symlinkSync, writeFileSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
@@ -79,7 +79,7 @@ test('tarball contains the complete skill and only public runtime files', () => 
   for (const path of sourceFiles) assert.ok(paths.includes(skill + path), path);
   for (const path of paths) {
     assert.ok(path === 'package.json' || path === 'README.md' || path === 'LICENSE'
-      || path === 'bin/paper-craft.mjs' || path.startsWith(skill), path);
+      || path === 'bin/paper-craft.mjs' || path === 'bin/agent-targets.mjs' || path.startsWith(skill), path);
     assert.doesNotMatch(path, /(?:__pycache__|\.pyc$|source-materials|(?:^|\/)tests\/)/);
   }
   assert.equal(manifest.name, '@code0-god/paper-craft');
@@ -224,4 +224,21 @@ test('npx updates from a local tarball and preserves existing files in a backup'
   assert.deepEqual(tree(report.backup), snapshot);
   assert.ok(existsSync(join(destination, 'SKILL.md')));
   assert.equal(existsSync(join(destination, 'npx-notes.txt')), false);
+});
+
+test('npx tarball installs every native project target with one JSON report', () => {
+  const project = join(temporary, 'npx native project');
+  mkdirSync(project);
+  const result = run(process.platform === 'win32' ? 'npx.cmd' : 'npx',
+    ['--yes', '--offline', '--ignore-scripts', '--no-audit', '--no-fund', '--package', tarball,
+      'paper-craft', 'install', '--agent', 'all', '--project'],
+    { cwd: project, shell: process.platform === 'win32' });
+  const report = JSON.parse(successful(result));
+  assert.equal(report.status, 'PASS');
+  assert.equal(report.targets.length, 8);
+  for (const prefix of ['.agents', '.claude', '.gemini', '.cursor', '.github', '.opencode', '.windsurf', '.devin']) {
+    const destination = join(project, prefix, 'skills/paper-craft');
+    assert.ok(report.targets.some(target => realpathSync(target.destination) === realpathSync(destination)));
+    assert.ok(existsSync(join(destination, 'SKILL.md')));
+  }
 });

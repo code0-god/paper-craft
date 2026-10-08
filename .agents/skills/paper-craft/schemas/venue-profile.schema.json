@@ -109,7 +109,22 @@
       ],
       "properties": {
         "paper_length_policy": {
-          "$ref": "#/$defs/rule"
+          "$ref": "#/$defs/rule",
+          "properties": {
+            "value": {
+              "type": ["object", "null"],
+              "required": ["max_pages", "basis"],
+              "properties": {
+                "min_pages": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "Optional inclusive minimum; must not exceed max_pages (checked by validate_profiles.py)."
+                },
+                "max_pages": {"type": "integer", "minimum": 1},
+                "basis": {"enum": ["all", "main"]}
+              }
+            }
+          }
         },
         "reference_page_policy": {
           "$ref": "#/$defs/rule"

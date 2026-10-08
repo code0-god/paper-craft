@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
-import { homedir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
+import { agentTargets, destinations } from './agent-targets.mjs';
 
 const packageRoot = dirname(dirname(fileURLToPath(import.meta.url)));
 const help = `Usage: paper-craft [install|update] [options]
@@ -13,7 +13,9 @@ Install the bundled Skill into ~/.agents/skills/paper-craft by default.
 Update copies this package version and preserves the previous directory.
 
   --user                Install for the current user (default)
-  --project             Install into cwd/.agents/skills/paper-craft
+  --project             Install into the agent's project skill directory
+  --agent TARGET        ${Object.keys(agentTargets).join(', ')}, all
+                        Default: codex; all installs every native target
   --destination PATH    Full target directory, named paper-craft
   --python EXECUTABLE   Python 3.10+ (or PAPER_CRAFT_PYTHON environment variable)
   -h, --help            Show help without installing
@@ -29,6 +31,7 @@ function main() {
       user: { type: 'boolean' },
       project: { type: 'boolean' },
       destination: { type: 'string' },
+      agent: { type: 'string' },
       python: { type: 'string' },
       help: { type: 'boolean', short: 'h' },
       version: { type: 'boolean', short: 'v' },
@@ -52,9 +55,12 @@ function main() {
   if (values.destination === '' || values.python === '') {
     throw new Error('--destination and --python must not be empty.');
   }
-  const destination = values.destination ?? join(
-    values.project ? process.cwd() : homedir(), '.agents', 'skills', 'paper-craft',
-  );
+  const agent = values.agent ?? 'codex';
+  const targets = destinations(agent, values.project);
+  if (agent === 'all' && values.destination !== undefined) {
+    throw new Error('--agent all cannot be combined with --destination.');
+  }
+  const selected = values.destination === undefined ? targets : [values.destination];
   const python = values.python ?? process.env.PAPER_CRAFT_PYTHON ?? (
     process.platform === 'win32' ? 'python' : 'python3'
   );
@@ -68,7 +74,8 @@ function main() {
     throw new Error('Python 3.10+ is required; set --python or PAPER_CRAFT_PYTHON.');
   }
   const args = [join(packageRoot, '.agents', 'skills', 'paper-craft', 'scripts', 'install_skill.py'),
-    '--destination', destination];
+    ...selected.flatMap(destination => ['--destination', destination])];
+  if (agent === 'all') args.push('--batch');
   if (command === 'update') args.push('--update');
   const result = spawnSync(python, args, { stdio: 'inherit' });
   if (result.error) throw result.error;

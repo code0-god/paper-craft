@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "notes": "16 venue IDs, exact versioned targets. research denotes main/regular/full research track; no implicit short, industry, Frontiers, special-issue or camera-ready fallback.",
+  "notes": "18 venue IDs, exact versioned targets. research denotes main/regular/full research track; no implicit short, industry, Frontiers, special-issue or camera-ready fallback.",
   "venues": [
     {
       "venue_id": "ISCA",
@@ -192,6 +192,33 @@
       ],
       "profiles": [
         "profiles/tpds-continuing-regular-submission.json"
+      ]
+    },
+    {
+      "venue_id": "KSC",
+      "display_name": "한국소프트웨어종합학술대회 (Korea Software Congress)",
+      "publication_type": "conference",
+      "official_domains": [
+        "kiise.or.kr"
+      ],
+      "profiles": [
+        "profiles/ksc-2026-research-submission.json",
+        "profiles/ksc-2026-research-camera-ready.json"
+      ]
+    },
+    {
+      "venue_id": "DAC",
+      "display_name": "Design Automation Conference (The Chips to Systems Conference)",
+      "publication_type": "conference",
+      "official_domains": [
+        "dac.com",
+        "acm.org",
+        "ieee.org"
+      ],
+      "profiles": [
+        "profiles/dac-2026-research-submission.json",
+        "profiles/dac-2026-research-camera-ready.json",
+        "profiles/dac-2027-research-submission.json"
       ]
     }
   ]

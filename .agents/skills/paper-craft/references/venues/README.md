@@ -20,6 +20,20 @@ camera-ready stage. ISCA 2026 submission and camera-ready profiles are separate.
 OSDI 2026 research and operational-systems profiles are separate. NSDI Frontiers and
 operational tracks require new profiles, not the research profile with changed labels.
 
+KSC means 한국소프트웨어종합학술대회 (Korea Software Congress), not KCC, KCSE or
+Korea Supercomputing Conference. Its 2026 `research` tuple denotes **일반논문**
+(general papers), including Oral/Poster presentation choices, and excludes the
+undergraduate/junior competition. Submission and publication templates differ.
+KSC's broad scope does not broaden Paper Craft beyond architecture/systems research.
+
+DAC means Design Automation Conference (The Chips to Systems Conference). Its
+`research` tuple covers regular Research Manuscripts in the electronic design and
+design-automation context, including architecture, systems and HW/SW co-design.
+Engineering Tracks, special sessions and WIP posters require their own context.
+DAC 2026 submission/final profiles and 2027 submission are separate: ACM versus IEEE
+template families must not leak across editions. Unknown font/class or AI details
+stay unknown even when another stage supplies them.
+
 ## Rule precedence and verification
 
 1. Exact current CFP and author instructions.

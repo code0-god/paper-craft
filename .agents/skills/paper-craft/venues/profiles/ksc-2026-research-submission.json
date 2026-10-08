@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "venue_id": "KSC",
+  "year": 2026,
+  "track": "research",
+  "submission_stage": "submission",
+  "publication_type": "conference",
+  "official_source_urls": [
+    "https://www.kiise.or.kr/conference/main/getContent.do?CC=KSC&CS=2026&content_no=2553&PARENT_ID=020300",
+    "https://www.kiise.or.kr/conference/board/boardview.do?CC=KSC&CS=2026&PARENT_ID=040100&NUM=427",
+    "https://www.kiise.or.kr/academy/main/getContent.fa?content_no=66&MENU_ID=060600"
+  ],
+  "last_verified_date": "2026-10-08",
+  "rules": {
+    "paper_length_policy": {
+      "value": {
+        "min_pages": 2,
+        "max_pages": 3,
+        "basis": "all"
+      },
+      "source_url": "https://www.kiise.or.kr/conference/main/getContent.do?CC=KSC&CS=2026&content_no=2553&PARENT_ID=020300",
+      "source_type": "submission_guidelines",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "KSC",
+        "year": 2026,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "논문 작성: 2–3-page manuscript using review template, submitted as PDF. No separate reference/appendix exclusion established; total manuscript limit recorded."
+    },
+    "reference_page_policy": {
+      "value": null,
+      "source_url": null,
+      "source_type": "unknown",
+      "verified_at": null,
+      "applies_to": {
+        "venue_id": "KSC",
+        "year": 2026,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "unverified",
+      "notes": "UNKNOWN: no verified applicable official rule retained for this exact edition, track and stage."
+    },
+    "appendix_supplementary_policy": {
+      "value": null,
+      "source_url": null,
+      "source_type": "unknown",
+      "verified_at": null,
+      "applies_to": {
+        "venue_id": "KSC",
+        "year": 2026,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "unverified",
+      "notes": "UNKNOWN: no verified applicable official rule retained for this exact edition, track and stage."
+    },
+    "template_requirements": {
+      "value": {
+        "required": true,
+        "documentclass": null,
+        "options": [],
+        "font_size_pt": null,
+        "template_url": "https://www.kiise.or.kr/conference02/data/DocForm_1.docx",
+        "format": "PDF",
+        "alternative_template_url": "https://www.kiise.or.kr/conference02/data/HwpForm_1.hwp"
+      },
+      "source_url": "https://www.kiise.or.kr/conference/main/getContent.do?CC=KSC&CS=2026&content_no=2553&PARENT_ID=020300",
+      "source_type": "submission_guidelines",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "KSC",
+        "year": 2026,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "논문 작성 / 작성 양식(심사용)"
+    },
+    "anonymity_requirements": {
+      "value": {
+        "double_blind": null,
+        "scope": "Omit author names, affiliations, email addresses and acknowledgments from review manuscript."
+      },
+      "source_url": "https://www.kiise.or.kr/conference/main/getContent.do?CC=KSC&CS=2026&content_no=2553&PARENT_ID=020300",
+      "source_type": "submission_guidelines",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "KSC",
+        "year": 2026,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "작성 양식(심사용) / 심사용 논문 제출; author anonymization explicit, reviewer anonymity not established."
+    },
+    "review_criteria": {
+      "value": [
+        "The paper must contribute to scholarship or industry, or demonstrate originality. Concurrently reviewed or previously published conference papers are ineligible."
+      ],
+      "source_url": "https://www.kiise.or.kr/conference/main/getContent.do?CC=KSC&CS=2026&content_no=2553&PARENT_ID=020300",
+      "source_type": "submission_guidelines",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "KSC",
+        "year": 2026,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "논문 작성; explicit eligibility only, not a complete scoring rubric. Oral submissions alone enter 우수논문 award review (심사용 논문 제출)."
+    },
+    "ai_disclosure_requirements": {
+      "value": null,
+      "source_url": null,
+      "source_type": "unknown",
+      "verified_at": null,
+      "applies_to": {
+        "venue_id": "KSC",
+        "year": 2026,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "unverified",
+      "notes": "UNKNOWN: no explicit generative-AI permission, prohibition or disclosure rule established from 2026 general-paper instructions or linked 연구윤리규정 (last listed revision 2021-11-26). No inference from silence."
+    },
+    "artifact_reproducibility_policy": {
+      "value": null,
+      "source_url": null,
+      "source_type": "unknown",
+      "verified_at": null,
+      "applies_to": {
+        "venue_id": "KSC",
+        "year": 2026,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "unverified",
+      "notes": "UNKNOWN: no verified applicable official rule retained for this exact edition, track and stage."
+    },
+    "writing_style_guidance": {
+      "value": null,
+      "source_url": null,
+      "source_type": "unknown",
+      "verified_at": null,
+      "applies_to": {
+        "venue_id": "KSC",
+        "year": 2026,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "unverified",
+      "notes": "UNKNOWN: no verified applicable official rule retained for this exact edition, track and stage."
+    },
+    "field_specific_evaluation_priorities": {
+      "value": {
+        "kind": "independent_guidance",
+        "items": [
+          "For architecture/systems papers within KSC’s broad information-science scope, make the system problem, concrete contribution and measured evidence explicit.",
+          "Report workload, platform, baseline and variability appropriate to the claim; preserve Korean or English manuscript language and technical meaning."
+        ]
+      },
+      "source_url": null,
+      "source_type": "field_methodology",
+      "verified_at": null,
+      "applies_to": {
+        "venue_id": "KSC",
+        "year": 2026,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "unverified",
+      "notes": "Independent Paper Craft methodology, not official venue criteria or a claim about all fields covered by this conference."
+    }
+  },
+  "writing_style_observations": [],
+  "notes": "KSC means 한국소프트웨어종합학술대회 (Korea Software Congress), organized by KIISE; not KCC, KCSE or Korea Supercomputing Conference. research maps only to 일반논문 (general papers), whose Oral/Poster choices are presentation modes; excludes 학부생/주니어논문경진대회 and invited/workshop submissions. 2026 exact edition. Official page headings read by direct HTTPS fetch after web reader returned 403; parent frame URL is case-sensitive /conference/KSC/2026/. No 2025 fallback. Conference December 21–23, 2026; submission October 12; notification November 16; final paper/registration November 25, subject to organizer updates."
+}

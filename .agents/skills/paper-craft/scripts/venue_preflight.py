@@ -154,9 +154,11 @@ def check_pdf(pdf: Path, rule: dict[str, JSONValue], offline: bool,
                 policy = rule.get("value")
                 if isinstance(policy, dict) and policy.get("basis") == "all":
                     limit = policy.get("max_pages")
-                    if isinstance(limit, int):
-                        status = ("PASS" if pages <= limit else "FAIL") if applicability(rule, offline) == "CACHED" else "UNKNOWN"
-                        message += f" Cached all-pages limit: {limit}; current-policy certification remains UNKNOWN."
+                    minimum = policy.get("min_pages", 0)
+                    if isinstance(limit, int) and isinstance(minimum, int):
+                        status = ("PASS" if minimum <= pages <= limit else "FAIL") if applicability(rule, offline) == "CACHED" else "UNKNOWN"
+                        bounds = f"{minimum}..{limit}" if "min_pages" in policy else str(limit)
+                        message += f" Cached all-pages limit: {bounds}; current-policy certification remains UNKNOWN."
                 else:
                     status = "UNKNOWN"
                     message += " Content/reference/appendix boundaries require manual rendered-page inspection."

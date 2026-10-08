@@ -198,6 +198,12 @@ def validate_profile(profile: dict[str, JSONValue], domains: list[str]) -> list[
                 errors.append(f"{key}: value requires integer max_pages")
             elif isinstance(value["max_pages"], bool) or value["max_pages"] <= 0:
                 errors.append(f"{key}: max_pages must be positive")
+            if isinstance(value, dict) and "min_pages" in value:
+                minimum, maximum = value["min_pages"], value.get("max_pages")
+                if isinstance(minimum, bool) or not isinstance(minimum, int) or minimum <= 0:
+                    errors.append(f"{key}: min_pages must be a positive integer")
+                elif isinstance(maximum, int) and minimum > maximum:
+                    errors.append(f"{key}: min_pages must not exceed max_pages")
             if isinstance(value, dict) and (not isinstance(value.get("basis"), str) or value.get("basis") not in {"all", "main"}):
                 errors.append(f"{key}: basis must be all or main")
         if key == "template_requirements" and raw.get("value") is not None:

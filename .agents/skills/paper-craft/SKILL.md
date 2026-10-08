@@ -8,6 +8,8 @@ description: "Academic paper writing and peer-review preparation for computer ar
 
 Improve research arguments and evidence while preserving the author's technical meaning. Work from supplied artifacts; distinguish measured results, model estimates, hypotheses, interpretation, and unknowns. Never invent results, citations, quotations, implementation status, or venue rules.
 
+Use this same self-contained skill in any Agent Skills-compatible host. Resolve references and scripts from the actual installed skill directory. Host-specific invocation syntax and discovery paths are described in [host compatibility](references/workflows/host-compatibility.md); OpenAI UI metadata is optional for other hosts. Without native skills, explicitly read this file and the relevant modules, and report unavailable file, shell, rendering, or network capabilities.
+
 ## Start and route
 
 1. Identify the task, manuscript root and reachable project files, research domain, manuscript language, requested output language, and available evidence. Reuse provided context. If a necessary artifact is absent, state the gap and do useful work supported by available material.
@@ -27,6 +29,9 @@ Improve research arguments and evidence while preserving the author's technical 
 | Submission Preflight | [Submission preflight](references/workflows/submission-preflight.md), [Venue intelligence](references/venues/README.md) |
 | File ingestion and static/build checks | [Inputs and tools](references/workflows/inputs-and-tools.md) |
 | Source A/B interpretation or later attachments | [Source guides](references/core/source-guides.md) |
+| Host installation, invocation, or manual loading | [Host compatibility](references/workflows/host-compatibility.md) |
+
+Read the guide(s) in the selected workflow row before producing that workflow's report. If those resources cannot be loaded, identify the unread modules and provide a limited review instead of claiming the full workflow was performed.
 
 Add [Architecture](references/domains/architecture.md), [Systems](references/domains/systems.md), or [HW/SW co-design](references/domains/codesign.md) according to the claims. Select relevant metrics; do not require every checklist item in every paper. Systems design, integration, implementation, measurement, and operational experience can constitute contributions without a new algorithm.
 

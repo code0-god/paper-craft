@@ -47,12 +47,12 @@ class VenueTests(unittest.TestCase):
 
     def test_registry_when_all_supported_targets_are_packaged(self) -> None:
         # Given the real shipped venue package.
-        expected = {"ISCA", "MICRO", "HPCA", "ASPLOS", "PACT", "SOSP", "OSDI", "EUROSYS", "ATC", "NSDI", "MLSYS", "CAL", "TC", "TACO", "TOCS", "TPDS"}
+        expected = {"ISCA", "MICRO", "HPCA", "ASPLOS", "PACT", "SOSP", "OSDI", "EUROSYS", "ATC", "NSDI", "MLSYS", "CAL", "TC", "TACO", "TOCS", "TPDS", "KSC", "DAC"}
         # When validating its CLI surface.
         result = self.run_tool("validate_profiles.py", [])
         # Then all identities and scoped metadata pass package validation.
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(json.loads(result.stdout)["profile_count"], 18)
+        self.assertEqual(json.loads(result.stdout)["profile_count"], 23)
         self.assertEqual({entry["venue_id"] for entry in json.loads((VENUES / "registry.json").read_text())["venues"]}, expected)
 
     def test_exact_year_when_future_edition_has_no_profile(self) -> None:
@@ -64,6 +64,47 @@ class VenueTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0)
         self.assertIsNone(report["profile"])
         self.assertEqual(report["status"], "UNKNOWN")
+
+    def test_ksc_general_paper_when_submission_and_final_rules_differ(self) -> None:
+        for stage, template in (("submission", "DocForm_1.docx"), ("camera-ready", "DocForm_2.docx")):
+            with self.subTest(stage=stage):
+                result = self.preflight(["--venue", "KSC", "--year", "2026", "--track", "research", "--stage", stage, "--offline"])
+                self.assertEqual(result.returncode, 0, result.stderr)
+                report = json.loads(result.stdout)
+                rules = report["profile"]["rules"]
+                self.assertTrue(rules["template_requirements"]["value"]["template_url"].endswith(template))
+                self.assertIsNone(rules["ai_disclosure_requirements"]["value"])
+                self.assertIsNone(rules["reference_page_policy"]["value"])
+                self.assertEqual(report["submission_compliance"], "UNKNOWN")
+                if stage == "submission":
+                    self.assertEqual(rules["paper_length_policy"]["value"], {"min_pages": 2, "max_pages": 3, "basis": "all"})
+                    self.assertIsNone(rules["anonymity_requirements"]["value"]["double_blind"])
+                    self.assertEqual(rules["anonymity_requirements"]["verification_status"], "verified")
+                else:
+                    self.assertIsNone(rules["paper_length_policy"]["value"])
+                    self.assertFalse(rules["anonymity_requirements"]["value"]["double_blind"])
+
+    def test_dac_when_edition_and_stage_select_distinct_instructions(self) -> None:
+        for year, stage, family in ((2026, "submission", "ACM"), (2026, "camera-ready", "ACM"), (2027, "submission", "IEEE")):
+            with self.subTest(year=year, stage=stage):
+                result = self.preflight(["--venue", "DAC", "--year", str(year), "--track", "research", "--stage", stage, "--offline"])
+                self.assertEqual(result.returncode, 0, result.stderr)
+                rules = json.loads(result.stdout)["profile"]["rules"]
+                self.assertEqual(rules["paper_length_policy"]["value"], {"max_pages": 6, "basis": "main"})
+                self.assertEqual(rules["reference_page_policy"]["value"]["limit"], 1)
+                self.assertEqual(rules["template_requirements"]["value"]["template_family"], family)
+                self.assertEqual(rules["template_requirements"]["value"]["allowed_font_sizes_pt"], [9, 10])
+                self.assertEqual(rules["anonymity_requirements"]["value"]["double_blind"], stage == "submission")
+                if stage == "submission":
+                    self.assertFalse(rules["ai_disclosure_requirements"]["value"]["prohibited_generation"])
+                    self.assertEqual(rules["ai_disclosure_requirements"]["verification_status"], "verified")
+
+    def test_new_venues_when_uncached_context_must_not_borrow_rules(self) -> None:
+        for venue, year, track, stage in (("KCC", 2026, "research", "submission"), ("KSC", 2025, "research", "submission"), ("KSC", 2026, "undergraduate", "submission"), ("DAC", 2027, "engineering", "submission"), ("DAC", 2027, "research", "camera-ready"), ("DAC", 2028, "research", "submission")):
+            with self.subTest(venue=venue, year=year, track=track, stage=stage):
+                result = self.preflight(["--venue", venue, "--year", str(year), "--track", track, "--stage", stage])
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertIsNone(json.loads(result.stdout)["profile"])
 
     def test_exact_track_when_industry_rules_are_absent(self) -> None:
         # Given research-only ISCA instructions.

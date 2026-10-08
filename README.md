@@ -2,7 +2,7 @@
 
 Computer Architecture / Computer Systems 연구자를 위한 논문 작성·검토 Agent Skill입니다. 연구 질문과 기여를 정리하고, 논증과 실험 근거를 검토하며, 저자의 기술적 의미를 보존하는 퇴고를 지원합니다.
 
-Codex에서 `$paper-craft`로 호출합니다. Skill 본체는 [`.agents/skills/paper-craft/`](.agents/skills/paper-craft/SKILL.md)에 있으며, 디렉터리 전체를 독립적으로 설치할 수 있습니다.
+Codex, Claude Code 등 Agent Skills 호환 도구에서 사용합니다. Skill 본체는 [`.agents/skills/paper-craft/`](.agents/skills/paper-craft/SKILL.md)에 있으며, 같은 디렉터리를 각 도구의 발견 경로에 독립적으로 설치합니다.
 
 ## 빠른 시작
 
@@ -20,11 +20,48 @@ paper-craft install
 
 위 파일명은 0.1.0 기준입니다. 다른 버전에서는 `npm pack`이 출력한 파일명을 사용합니다. 설치 대상은 기본적으로 `~/.agents/skills/paper-craft`입니다. npm 패키지 설치 후 `paper-craft install`을 실행해야 호스트가 사용할 Skill이 복사됩니다.
 
-연구 저장소에서 Codex를 실행하고 다음과 같이 요청합니다. 스킬이 보이지 않으면 세션을 다시 시작합니다.
+연구 저장소에서 도구를 실행하고 아래 호출 표에 맞춰 요청합니다. Codex 예시:
 
 ```text
 $paper-craft main.tex의 연구 기여와 실험 근거를 검토해줘.
 ```
+
+## 도구별 설치와 호출
+
+전역 CLI에서 `--agent`로 대상 도구를 선택합니다. 생략하면 기존과 같이 Codex에 설치합니다.
+
+```bash
+paper-craft install --agent claude
+paper-craft install --agent cursor --project
+paper-craft install --agent all --project
+paper-craft update --agent all --project
+```
+
+| `--agent` | 도구 | 프로젝트 설치 경로 | 사용자 설치 경로 | 호출 |
+| --- | --- | --- | --- | --- |
+| `codex` | Codex CLI / IDE | `.agents/skills/paper-craft` | `~/.agents/skills/paper-craft` | `$paper-craft` |
+| `claude` | Claude Code | `.claude/skills/paper-craft` | `~/.claude/skills/paper-craft` | `/paper-craft` |
+| `gemini` | Gemini CLI | `.gemini/skills/paper-craft` | `~/.gemini/skills/paper-craft` | `paper-craft` 스킬 사용 요청 |
+| `cursor` | Cursor | `.cursor/skills/paper-craft` | `~/.cursor/skills/paper-craft` | `/` 입력 후 스킬 선택 |
+| `copilot` | Copilot CLI | `.github/skills/paper-craft` | `~/.copilot/skills/paper-craft` | `/paper-craft` |
+| `opencode` | OpenCode | `.opencode/skills/paper-craft` | `~/.config/opencode/skills/paper-craft` | V2 `@paper-craft`, 그 외 이름으로 요청 |
+| `windsurf` | Windsurf 호환 경로 | `.windsurf/skills/paper-craft` | `~/.codeium/windsurf/skills/paper-craft` | `@paper-craft` |
+| `devin` | Devin Desktop | `.devin/skills/paper-craft` | `~/.config/devin/skills/paper-craft` | `@paper-craft` |
+
+`all`은 위 8개 대상의 경로에 설치합니다. 대상 도구 자체를 설치하거나 설정 파일을 변경하지 않습니다. 일괄 작업은 모든 경로를 먼저 점검하며, 실행 중 I/O 오류가 발생하면 완료·미처리 대상을 결과 JSON으로 구분합니다. `all`과 단일 `--destination`은 함께 사용할 수 없습니다.
+
+스킬 자동 발견을 지원하지 않는 도구는 완전한 디렉터리를 접근 가능한 경로에 복사하고 직접 읽도록 요청합니다.
+
+```bash
+paper-craft install --agent generic --destination /path/to/shared/paper-craft
+```
+
+```text
+/path/to/shared/paper-craft/SKILL.md를 읽고 관련 Reference를 따라 원고를 검토해줘.
+원본은 변경하지 말고, 실행할 수 없는 검사는 SKIPPED 또는 UNKNOWN으로 표시해줘.
+```
+
+첨부만 가능한 채팅 도구에는 SKILL.md와 필요한 Reference를 함께 제공합니다. 이는 수동 지침 로딩이며 자동 호출이나 Python 실행 지원을 의미하지 않습니다. 버전별 호출·발견 차이와 공식 출처는 [호환성 가이드](.agents/skills/paper-craft/references/workflows/host-compatibility.md)에 있습니다.
 
 ## 설치 방법
 
@@ -58,7 +95,7 @@ paper-craft install --destination "/path/to/research/.agents/skills/paper-craft"
 | `--project` | 현재 작업 디렉터리의 `.agents/skills/paper-craft` |
 | `--destination PATH` | 지정한 전체 디렉터리; 마지막 이름은 `paper-craft` |
 
-세 대상 옵션은 함께 사용할 수 없습니다. Python 실행 파일은 `--python /path/to/python3` 또는 `PAPER_CRAFT_PYTHON` 환경변수로 지정합니다. 사용 가능한 명령은 `paper-craft --help`, CLI 버전은 `paper-craft --version`으로 확인합니다.
+위 표는 기본 Codex 대상입니다. 다른 `--agent`의 경로는 도구별 표를 따릅니다. 세 대상 옵션은 함께 사용할 수 없습니다. Python 실행 파일은 `--python /path/to/python3` 또는 `PAPER_CRAFT_PYTHON` 환경변수로 지정합니다. 사용 가능한 명령은 `paper-craft --help`, CLI 버전은 `paper-craft --version`으로 확인합니다.
 
 ### npm 없이 설치
 
@@ -93,6 +130,8 @@ npm 릴리스에서 설치했다면:
 npx --yes @code0-god/paper-craft@latest update
 # 프로젝트 로컬 설치
 npx --yes @code0-god/paper-craft@latest update --project
+# Claude Code 프로젝트 설치
+npx --yes @code0-god/paper-craft@latest update --agent claude --project
 ```
 
 전역 CLI를 사용하는 경우 npm 패키지를 먼저 갱신하고 Skill에 반영합니다.
@@ -108,7 +147,7 @@ GitHub 소스에서 설치했다면 해당 checkout에서 `git pull --ff-only`, 
 
 ## 사용 예제
 
-원고 경로와 함께 연구 분야, 증거 자료, 목표 Venue·연도·트랙·제출 단계를 제공하세요. 원고 언어를 유지하며, 보고서는 한국어 또는 영어로 요청할 수 있습니다.
+원고 경로와 함께 연구 분야, 증거 자료, 목표 Venue·연도·트랙·제출 단계를 제공하세요. 원고 언어를 유지하며, 보고서는 한국어 또는 영어로 요청할 수 있습니다. 아래 Codex 예시의 `$paper-craft`는 도구별 호출 표에 맞게 바꿉니다.
 
 ```text
 $paper-craft 이 아이디어의 Motivation, Failure Mechanism, Insight와 실제 Contribution을 구분해줘.
@@ -122,6 +161,10 @@ $paper-craft 이 Accelerator 논문의 Baseline 공정성과 Claim–Evidence Ma
 $paper-craft main.tex를 ISCA 2026 research submission 기준으로 검토해줘. 공식 지침을 확인하고 제출 전 검사 결과를 구분해줘.
 
 $paper-craft IEEE CAL continuing letter submission에 맞는 압축안을 제시해줘. 기여·실험 조건·한계를 보존해줘.
+
+$paper-craft KSC 2026 research submission 기준으로 한국어 원고를 검토해줘. 일반논문 심사용 양식과 익명화 규정을 구분해줘.
+
+$paper-craft DAC 2027 research submission 기준으로 설계 근거와 평가를 검토해줘. 2026년 규칙과 혼용하지 마.
 
 $paper-craft 목표 학회 관점에서 가상 리뷰와 심사 답변 준비안을 작성해줘.
 ```
@@ -157,11 +200,14 @@ LaTeX 프로젝트, `.tex`, `.bib`, Markdown, plain text를 지원합니다. PDF
 
 ## Venue 지원 범위
 
-16개 Venue의 연도·트랙·단계별 캐시 프로파일 18개를 제공합니다.
+18개 Venue의 연도·트랙·단계별 캐시 프로파일 23개를 제공합니다.
 
 - Architecture: ISCA, MICRO, HPCA, ASPLOS, PACT, IEEE CAL, IEEE TC, ACM TACO
 - Systems: SOSP, OSDI, EuroSys, USENIX ATC, NSDI, ACM TOCS, IEEE TPDS
-- 관련 분야: MLSys
+- 관련 분야: MLSys, DAC (Design Automation Conference / Chips to Systems)
+- 국내 학회: KSC (한국소프트웨어종합학술대회 / Korea Software Congress)
+
+KSC는 KCC·KCSE와 구분합니다. KSC 2026 일반논문의 심사용·출판용 프로파일, DAC 2026 연구논문의 제출·최종본 프로파일, DAC 2027 연구논문 제출 프로파일을 제공합니다. KSC Oral/Poster는 일반논문의 발표 방식이며 학부생·주니어 경진대회 규칙을 적용하지 않습니다. DAC 2026 ACM 양식과 2027 IEEE 양식도 분리합니다. KSC의 AI 정책·최종본 분량 등 확인되지 않은 규칙은 UNKNOWN입니다.
 
 프로파일은 부분적으로 검증되어 있습니다. TC·TACO·TOCS·TPDS의 공식 규칙은 현재 UNKNOWN입니다. 지원 Venue가 모든 연도·트랙·제출 단계를 포함한다는 의미는 아닙니다. 캐시의 검증일은 과거 확인 기록이며, 투고 시에는 정확한 대상의 공식 지침을 다시 확인합니다.
 
