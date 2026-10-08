@@ -11,12 +11,26 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
+from symlink_support import symlink_or_skip
+
 SCRIPTS = Path(__file__).resolve().parents[1] / ".agents/skills/paper-craft/scripts"
 sys.path.insert(0, str(SCRIPTS))
 install_skill = importlib.import_module("install_skill")
 
 
 class InstallTargetsTests(unittest.TestCase):
+    def test_symlink_setup_skips_only_windows_privilege_failure(self) -> None:
+        link, target = Path("link"), Path("target")
+        for platform, winerror, expected in (("win32", 1314, unittest.SkipTest),
+                                              ("win32", 5, OSError), ("darwin", 1314, OSError)):
+            with self.subTest(platform=platform, winerror=winerror):
+                error = OSError("injected symlink creation failure")
+                error.winerror = winerror
+                with patch("symlink_support.sys.platform", platform), \
+                        patch.object(Path, "symlink_to", side_effect=error), \
+                        self.assertRaises(expected):
+                    symlink_or_skip(link, target)
+
     def invoke(self, arguments: list[str]) -> tuple[int, str]:
         output = io.StringIO()
         with patch.object(sys, "argv", [str(SCRIPTS / "install_skill.py"), *arguments]):
@@ -77,8 +91,7 @@ class InstallTargetsTests(unittest.TestCase):
             for destination in [first, second]:
                 destination.mkdir(parents=True)
                 (destination / "local.txt").write_text(str(destination), encoding="utf-8")
-            alias = Path(temporary) / "alias"
-            alias.symlink_to(first.parent, target_is_directory=True)
+            alias = first.parent / ".." / first.parent.name
             rename = os.rename
 
             def fail_second_stage(source: str | Path, destination: str | Path) -> None:

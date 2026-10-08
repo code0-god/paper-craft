@@ -9,6 +9,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from symlink_support import symlink_or_skip
+
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / ".agents/skills/paper-craft/scripts"
 FIXTURES = ROOT / "tests/fixtures"
@@ -193,7 +195,7 @@ class ManuscriptToolsTests(unittest.TestCase):
             project.mkdir()
             private = Path(folder) / "private.tex"
             private.write_text(r"\label{private}", encoding="utf-8")
-            (project / "linked.tex").symlink_to(private)
+            symlink_or_skip(project / "linked.tex", private)
             main = project / "main.tex"
             main.write_text(r"\documentclass{article}\input{linked}", encoding="utf-8")
             # When following the symlinked input.

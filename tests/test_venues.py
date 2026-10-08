@@ -11,6 +11,8 @@ import unittest
 from datetime import date
 from pathlib import Path
 
+from symlink_support import symlink_or_skip
+
 ROOT = Path(__file__).resolve().parents[1]
 SKILL = ROOT / ".agents/skills/paper-craft"
 SCRIPTS = SKILL / "scripts"
@@ -267,7 +269,7 @@ class VenueTests(unittest.TestCase):
             outside = Path(folder) / "outside.json"
             outside.write_text((package / "profile.json").read_text(), encoding="utf-8")
             (package / "profile.json").unlink()
-            (package / "profile.json").symlink_to(outside)
+            symlink_or_skip(package / "profile.json", outside)
             # When loading registry paths.
             result = self.run_tool("validate_profiles.py", [str(package)])
         # Then path escape is detected before reading an external profile.

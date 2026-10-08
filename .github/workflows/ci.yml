@@ -1,0 +1,108 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compatibility:
+    name: ${{ matrix.os }} / Python ${{ matrix.python }} / Node ${{ matrix.node }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python: ['3.10', '3.14']
+        node: ['22']
+        include:
+          - os: ubuntu-latest
+            python: '3.10'
+            node: '18'
+          - os: ubuntu-latest
+            python: '3.14'
+            node: '26'
+    defaults:
+      run:
+        shell: bash
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONUTF8: '1'
+      PAPER_CRAFT_TEST_LOG: ${{ github.workspace }}/ci-artifacts/commands.jsonl
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: ${{ matrix.python }}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with:
+          node-version: ${{ matrix.node }}
+          check-latest: true
+          package-manager-cache: false
+      - name: Record toolchain
+        run: |
+          mkdir -p ci-artifacts
+          python --version | tee ci-artifacts/python-version.log
+          node --version | tee ci-artifacts/node-version.log
+          npm --version | tee ci-artifacts/npm-version.log
+      - name: Python unit tests and isolated directory installs
+        run: python -m unittest discover -s tests -v 2>&1 | tee ci-artifacts/python-tests.log
+      - name: Node unit tests, actual npm pack, isolated npm and npx installs
+        run: npm test 2>&1 | tee ci-artifacts/node-tests.log
+      - name: Node syntax checks
+        run: npm run check 2>&1 | tee ci-artifacts/node-syntax.log
+      - name: Skill validator
+        run: python .agents/skills/paper-craft/scripts/validate_skill.py --json | tee ci-artifacts/skill-validation.json
+      - name: Venue validator
+        run: python .agents/skills/paper-craft/scripts/validate_profiles.py --json | tee ci-artifacts/venue-validation.json
+      - name: Observed writing-pattern validator
+        run: python .agents/skills/paper-craft/scripts/validate_writing_patterns.py --json | tee ci-artifacts/writing-patterns.json
+      - name: Graph and backward-compatible report validators
+        run: |
+          python .agents/skills/paper-craft/scripts/argument_graph.py validate .agents/skills/paper-craft/assets/argument-graph.json --project-root . --json | tee ci-artifacts/graph-validation.json
+          python .agents/skills/paper-craft/scripts/validate_review_report.py tests/scenarios/reports/v2.json --json | tee ci-artifacts/report-validation.json
+      - name: Capture compatibility evidence
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: compatibility-${{ matrix.os }}-python${{ matrix.python }}-node${{ matrix.node }}
+          path: ci-artifacts/
+          if-no-files-found: error
+          retention-days: 14
+
+  static-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: '3.14'
+      - name: Install pinned development tools in an isolated environment
+        run: |
+          python -m venv "$RUNNER_TEMP/paper-craft-checks"
+          "$RUNNER_TEMP/paper-craft-checks/bin/python" -m pip install ruff==0.16.10 basedpyright==1.40.1
+          mkdir -p ci-artifacts
+      - name: Ruff
+        run: '"$RUNNER_TEMP/paper-craft-checks/bin/ruff" check . 2>&1 | tee ci-artifacts/ruff.log'
+      - name: Basedpyright
+        run: '"$RUNNER_TEMP/paper-craft-checks/bin/basedpyright" 2>&1 | tee ci-artifacts/basedpyright.log'
+      - name: Capture static-check evidence
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: static-checks
+          path: ci-artifacts/
+          if-no-files-found: error
+          retention-days: 14

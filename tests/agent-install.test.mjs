@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { appendFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { test } from 'node:test';
 
@@ -23,8 +23,10 @@ function sandbox(t) {
 }
 
 function run(root, args) {
+  const env = { ...process.env, HOME: root, USERPROFILE: root, PYTHONDONTWRITEBYTECODE: '1' };
+  delete env.PAPER_CRAFT_PYTHON;
   const result = spawnSync(process.execPath, [cli, ...args], {
-    cwd: root, env: { ...process.env, HOME: root, USERPROFILE: root, PYTHONDONTWRITEBYTECODE: '1' },
+    cwd: root, env,
     encoding: 'utf8', timeout: 60_000,
   });
   if (process.env.PAPER_CRAFT_TEST_LOG) appendFileSync(process.env.PAPER_CRAFT_TEST_LOG,
@@ -93,7 +95,7 @@ test('all targets update preserves every original file outside discovery directo
   assert.equal(report.targets.length, 8);
   for (const target of report.targets) {
     assert.equal(readFileSync(join(target.backup, 'local.txt'), 'utf8'), target.destination);
-    assert.equal(target.backup.startsWith(dirname(target.destination) + '/'), false);
+    assert.equal(target.backup.startsWith(dirname(target.destination) + sep), false);
     assert.equal(existsSync(join(target.destination, 'SKILL.md')), true);
   }
 });
@@ -108,7 +110,15 @@ for (const conflict of ['existing', 'file', 'symlink', 'parent-file', 'backup-fi
       mkdirSync(late);
       writeFileSync(join(late, 'local.txt'), 'irreplaceable');
     } else if (conflict === 'file') writeFileSync(late, 'irreplaceable');
-    else if (conflict === 'symlink') symlinkSync(join(root, 'absent'), late);
+    else if (conflict === 'symlink') {
+      try {
+        symlinkSync(join(root, 'absent'), late);
+      } catch (error) {
+        if (process.platform !== 'win32' || error.code !== 'EPERM') throw error;
+        t.skip('Windows does not grant this process symbolic-link privileges');
+        return;
+      }
+    }
     else {
       rmSync(lateParent, { recursive: true });
       writeFileSync(lateParent, 'irreplaceable');
@@ -129,7 +139,7 @@ for (const conflict of ['existing', 'file', 'symlink', 'parent-file', 'backup-fi
 test('all deduplicates physical paths reached through an existing parent alias', t => {
   const root = sandbox(t);
   mkdirSync(join(root, '.agents'));
-  symlinkSync(join(root, '.agents'), join(root, '.claude'));
+  symlinkSync(join(root, '.agents'), join(root, '.claude'), 'junction');
   const result = run(root, ['--agent', 'all', '--project']);
   assert.equal(result.status, 0, result.stdout + result.stderr);
   assert.equal(JSON.parse(result.stdout).targets.length, 7);

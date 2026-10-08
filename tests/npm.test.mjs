@@ -3,10 +3,10 @@ import { spawnSync } from 'node:child_process';
 import { after, before, test } from 'node:test';
 import {
   appendFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync,
-  readdirSync, realpathSync, rmSync, symlinkSync, writeFileSync,
+  readdirSync, realpathSync, rmSync, writeFileSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join, resolve } from 'node:path';
+import { delimiter, dirname, join, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const repository = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -44,11 +44,26 @@ function successful(result) {
   return result.stdout;
 }
 
+function npmEntry(name) {
+  const launchers = process.env.npm_execpath ? [process.env.npm_execpath] :
+    (process.env.PATH ?? '').split(delimiter).map(path =>
+      join(path, process.platform === 'win32' ? 'npm.cmd' : 'npm'));
+  for (const launcher of launchers.filter(existsSync)) {
+    const directory = dirname(realpathSync(launcher));
+    for (const candidate of [join(directory, `${name}-cli.js`),
+      join(directory, 'node_modules/npm/bin', `${name}-cli.js`)]) {
+      if (existsSync(candidate)) return candidate;
+    }
+  }
+  throw new Error(`Cannot find the installed ${name} CLI`);
+}
+
 function npm(args) {
-  return process.env.npm_execpath
-    ? run(process.execPath, [process.env.npm_execpath, ...args])
-    : run(process.platform === 'win32' ? 'npm.cmd' : 'npm', args,
-      { shell: process.platform === 'win32' });
+  return run(process.execPath, [npmEntry('npm'), ...args]);
+}
+
+function npx(args, options = {}) {
+  return run(process.execPath, [npmEntry('npx'), ...args], options);
 }
 
 function tree(directory) {
@@ -109,7 +124,7 @@ test('default user, explicit user, project and relative destination route correc
   writeFileSync(join(destination, 'local-note.txt'), 'keep user note');
   const report = JSON.parse(successful(run(process.execPath, [cli, 'update', '--user'])));
   assert.equal(readFileSync(join(report.backup, 'local-note.txt'), 'utf8'), 'keep user note');
-  assert.ok(!report.backup.startsWith(join(home, '.agents/skills') + '/'));
+  assert.ok(!report.backup.startsWith(join(home, '.agents/skills') + sep));
   successful(run(process.execPath, [cli, 'install', '--project']));
   assert.ok(existsSync(join(temporary, '.agents/skills/paper-craft/SKILL.md')));
   successful(run(process.execPath, [cli, '--destination', 'relative space/paper-craft']));
@@ -142,17 +157,20 @@ test('argument and Python failures preserve an existing destination byte for byt
   assert.notEqual(incompatible.status, 0);
   assert.match(incompatible.stderr, /python/i);
   assert.deepEqual(tree(parent), snapshot);
-  const oldPython = join(temporary, 'python39');
-  writeFileSync(oldPython, '#!/usr/bin/env python3\nimport sys\nsys.version_info = (3, 9, 0)\nexec(sys.argv[2])\n', { mode: 0o755 });
-  const outdated = run(process.execPath, [cli, 'update', '--destination', destination, '--python', oldPython]);
+  const oldPython = join(temporary, 'python39 startup');
+  mkdirSync(oldPython);
+  writeFileSync(join(oldPython, 'sitecustomize.py'), 'import sys\nsys.version_info = (3, 9, 0)\n');
+  const outdated = run(process.execPath, [cli, 'update', '--destination', destination, '--python', python],
+    { env: { ...environment, PYTHONPATH: oldPython } });
   assert.equal(outdated.status, 2);
   assert.match(outdated.stderr, /3\.10/);
   assert.deepEqual(tree(parent), snapshot);
 });
 
 test('Python environment override and explicit executable paths with spaces work', () => {
-  const executable = join(temporary, process.platform === 'win32' ? 'python space.exe' : 'python space');
-  symlinkSync(python, executable);
+  const virtualenv = join(temporary, 'python environment with spaces');
+  successful(run(python, ['-m', 'venv', '--without-pip', virtualenv]));
+  const executable = join(virtualenv, process.platform === 'win32' ? 'Scripts/python.exe' : 'bin/python');
   const env = { ...environment, PAPER_CRAFT_PYTHON: executable };
   successful(run(process.execPath, [cli, '--destination', join(temporary, 'env/paper-craft')], { env }));
   successful(run(process.execPath, [cli, '--python', executable,
@@ -187,18 +205,19 @@ test('local npm install ships independently usable Python resources without auto
 test('global npm executable installs and updates with the full old tree in a backup', () => {
   const prefix = join(temporary, 'global npm');
   successful(npm(['install', '--global', '--prefix', prefix, '--ignore-scripts', '--no-audit', '--no-fund', tarball]));
-  const executable = process.platform === 'win32' ? process.execPath : join(prefix, 'bin/paper-craft');
-  const leading = process.platform === 'win32'
-    ? [join(prefix, 'node_modules/@code0-god/paper-craft/bin/paper-craft.mjs')] : [];
+  const executable = join(prefix, process.platform === 'win32' ? 'paper-craft.cmd' : 'bin/paper-craft');
+  const execute = args => process.platform === 'win32'
+    ? run(`"${executable}" ${args.map(argument => `"${argument}"`).join(' ')}`, [], { shell: true })
+    : run(executable, args);
   const destination = join(temporary, 'global target/paper-craft');
-  successful(run(executable, [...leading, 'install', '--destination', destination]));
+  successful(execute(['install', '--destination', destination]));
   writeFileSync(join(destination, 'SKILL.md'), 'user-edited skill');
   writeFileSync(join(destination, 'notes.txt'), 'preserve notes');
   const snapshot = tree(destination);
-  const refused = run(executable, [...leading, 'install', '--destination', destination]);
+  const refused = execute(['install', '--destination', destination]);
   assert.notEqual(refused.status, 0);
   assert.deepEqual(tree(destination), snapshot);
-  const report = JSON.parse(successful(run(executable, [...leading, 'update', '--destination', destination])));
+  const report = JSON.parse(successful(execute(['update', '--destination', destination])));
   assert.deepEqual(tree(report.backup), snapshot);
   assert.match(readFileSync(join(destination, 'SKILL.md'), 'utf8'), /name: paper-craft/);
   assert.equal(existsSync(join(destination, 'notes.txt')), false);
@@ -214,13 +233,12 @@ test('npm exec uses the local tarball without registry access', () => {
 
 test('npx updates from a local tarball and preserves existing files in a backup', () => {
   const destination = join(temporary, 'real npx target/paper-craft');
-  const command = process.platform === 'win32' ? 'npx.cmd' : 'npx';
   const args = ['--yes', '--offline', '--ignore-scripts', '--no-audit', '--no-fund',
     '--package', tarball, 'paper-craft', 'update', '--destination', destination];
-  successful(run(command, args, { shell: process.platform === 'win32' }));
+  successful(npx(args));
   writeFileSync(join(destination, 'npx-notes.txt'), 'preserve npx research');
   const snapshot = tree(destination);
-  const report = JSON.parse(successful(run(command, args, { shell: process.platform === 'win32' })));
+  const report = JSON.parse(successful(npx(args)));
   assert.deepEqual(tree(report.backup), snapshot);
   assert.ok(existsSync(join(destination, 'SKILL.md')));
   assert.equal(existsSync(join(destination, 'npx-notes.txt')), false);
@@ -229,10 +247,10 @@ test('npx updates from a local tarball and preserves existing files in a backup'
 test('npx tarball installs every native project target with one JSON report', () => {
   const project = join(temporary, 'npx native project');
   mkdirSync(project);
-  const result = run(process.platform === 'win32' ? 'npx.cmd' : 'npx',
+  const result = npx(
     ['--yes', '--offline', '--ignore-scripts', '--no-audit', '--no-fund', '--package', tarball,
       'paper-craft', 'install', '--agent', 'all', '--project'],
-    { cwd: project, shell: process.platform === 'win32' });
+    { cwd: project });
   const report = JSON.parse(successful(result));
   assert.equal(report.status, 'PASS');
   assert.equal(report.targets.length, 8);

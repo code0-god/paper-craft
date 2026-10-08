@@ -8,6 +8,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from symlink_support import symlink_or_skip
+
 SCRIPTS = Path(__file__).resolve().parents[1] / ".agents/skills/paper-craft/scripts"
 
 
@@ -30,7 +32,7 @@ class AuditRegressions(unittest.TestCase):
             project.mkdir()
             outside = Path(folder) / "outside.tex"
             outside.write_text(r"\documentclass{article}\ref{OUTSIDE_PRIVATE_SENTINEL}", encoding="utf-8")
-            (project / "linked.tex").symlink_to(outside)
+            symlink_or_skip(project / "linked.tex", outside)
             result = self.run_tool("latex_integrity_check.py", [str(project), "--project-root", str(project)])
         self.assertEqual(result.returncode, 2)
         self.assertNotIn("OUTSIDE_PRIVATE_SENTINEL", result.stdout + result.stderr)

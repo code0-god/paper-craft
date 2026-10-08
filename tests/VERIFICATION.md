@@ -1,5 +1,158 @@
 # Paper Craft verification record
 
+## Scientific review improvement — current verification, 2026-10-08
+
+Baseline was commit `bf070bc` on `main`: Python **70 PASS**, Node **38 PASS**,
+no existing test failure. The only pre-existing untracked data was `output/`.
+All four original review files still have their baseline SHA-256 hashes; they
+were not modified, moved or deleted. `output/` is now ignored. No GitHub push,
+npm publication or user-host configuration change occurred during this work.
+
+### Final automated checks actually run
+
+| Check | Observed result | Scope |
+|---|---|---|
+| `python3 -m unittest discover -s tests -q` | **134 PASS**, 14.006 s, Python 3.14.6 | Existing tests plus scientific graph, report, uncertainty, output, editing, numerical, PDF and atlas regressions |
+| `uv run --offline --no-project --python 3.10 python -m unittest discover -s tests -q` | **134 PASS**, 10.903 s, Python 3.10.21 | Actual minimum Python runtime execution, not only syntax parsing |
+| `npm test` | **38 PASS**, 6.180 s, Node 26.7.0 | Actual tarball packaging, isolated local/global installs, offline npm/npx, eight host targets and backup integrity |
+| Node 18.20.8 `npm test` | **38 PASS**, 5.433 s | Actual supported Node 18 execution with the expanded payload; no registry publication |
+| Node 22.23.2 `npm test` | **38 PASS** in Phase A | Portability changes tested before the Python-only scientific additions; later payload not separately rerun on Node 22 |
+| `npm run check`; `git diff --check` | **PASS** | Four Node source/test syntax checks; whitespace |
+| `uvx --offline ruff check .`; `uvx --offline basedpyright` | **PASS**; **0 errors / 0 warnings / 0 notes** | Ruff 0.16.10, basedpyright 1.40.1; development tools, no new runtime dependencies |
+| Skill/Profile/Writing-pattern validators | **PASS** | Standalone links/Python 3.10 syntax; 23 profiles/18 venues; four papers/12 bounded observations |
+| Graph template and v2 report validators | **Structure PASS**, scientific/reuse status **UNKNOWN** | Empty assertion-free graph template and real v2 fixture; legacy reports also accepted |
+| Draft 2020-12 JSON Schema checks | **PASS** | All schemas checked; legacy/v2 reports, graph template and writing atlas validated using cached optional development `jsonschema` |
+| SHA-pinned GitHub Actions workflow / actionlint 1.7.12 | **PASS** | Syntax/expressions checked after new validators were integrated; ShellCheck not run |
+| Final npm pack dry-run | **86 public files**, 117,077 compressed bytes | Swift helper and new standalone resources included; no `output/`, test data or local evidence |
+
+The automated CI matrix defines Ubuntu/macOS/Windows with Python 3.10/3.14 and
+Node 22, plus Ubuntu Node 18/26. **Hosted CI, Ubuntu and Windows execution were
+not performed.** Native PDF tests skip only when their optional tool capability
+is unavailable. Portable PDF seams retain product outcome checks; they do not
+claim actual Poppler or Windows integration.
+
+### Defect reproduction and fixes
+
+- Unrelated macros previously suppressed definite missing labels/citation keys.
+  Failing regressions preceded the scoped producer/conditional implementation;
+  literal closed graphs now FAIL missing symbols, while dynamic/external cases
+  retain uncertainty. Macro-produced literal candidates affect their own names.
+- Independent review reproduced an `includeonly` false positive against actual
+  successful `pdflatex` partial builds using cached auxiliary labels. Two new
+  label/citation subcases failed before the fix. Excluded includes now explicitly
+  leave their auxiliary symbol source unresolved. Ordinary missing symbols still
+  fail in closed graphs. Auxiliary TeX is not executed by the static checker.
+- Missing/timed-out Git originally returned an empty output-warning list. Both
+  new failure cases failed before the fix and now explicitly warn that tracking
+  could not be checked. Ordinary non-repository destinations remain supported.
+- Initial PDF test executables used POSIX shebangs, incompatible with Windows
+  discovery/execution. Controlled tool availability/subprocess seams now exercise
+  the actual CLI parser and report, while native macOS installation/CLI tests
+  remain real. A test asserting the fixture's implementation was removed after
+  independent review; all **16 meaningful PDF outcome tests** remain.
+- Graph validators reject overlapping performed/unperformed scopes and stale
+  hashes. Report v2 preserves the six legacy evidence states while adding source
+  provenance, independent evidence axes, claim references and edit categories.
+
+Independent review initially requested changes for three concrete defects; all
+were fixed and re-audited. Final verdict **CLEAR / APPROVE**, no blockers.
+Local artifact: `.omo/evidence/scientific-code-review.md`.
+
+### Scientific review behavior actually executed
+
+Nine fresh, isolated Codex CLI sessions used `gpt-6.1-sol` with high reasoning:
+A/B/C twice each and three negative controls once each. All exited 0 with
+`turn.completed`; complete-response assessment found **43 substantive criterion
+observations PASS** under the manifest and no listed hard failure. One ancillary
+false-positive quality-claim attribution was subsequently identified and corrected
+as described below; A-r1's overall review quality is therefore **QUALIFIED**.
+This is a finite controlled sample, not a reliability score. Reviewing sessions did not receive the evaluator
+manifest or other cases. Original inputs and installed Skill trees stayed identical
+within each run.
+
+| Case | Observed scientific decision | Verification limit |
+|---|---|---|
+| Per-row versus stripe-shared | Finds the row-common alternative, explicitly changes quantization granularity, separates factoring from hardware/quality costs, identifies the necessity argument gap | No invented comparison or claim that per-row is superior; actual hardware/accuracy unknown |
+| INT32 saturation | Both runs executed local Python arithmetic and the bundled checker: fragment result **-1**, joint result **0**; final clipping retains mismatch | Disproves the unrestricted synthetic identity, not actual RTL correctness or workload reachability |
+| Modeled versus measured latency | Rejects measured end-to-end wording and omission-only lower-bound inference; requires component bounds, schedule/overlap and model calibration | No timing values or experiments invented; model and full-path measurement unperformed |
+| Supported fixed-interface design | Accepts the narrow simulated comparison and valid interface constraint; permits integration contribution | No global novelty, universal superiority or hardware measurement claim |
+| Untested systems hypothesis | Defers utility/novelty judgment and proposes mechanism-specific verification | Missing evidence is not proof of a wrong idea |
+| Numeric-preserving semantic edit | Finds swapped method/value associations, model-to-hardware provenance and unjustified causal strengthening; keeps approval requirements | Token preservation never proves scientific meaning |
+
+A separate combined six-exercise invocation passed as an integration smoke; it
+is not counted as six fresh sessions. Exact raw prompts, responses, model/tool
+versions, hashes and substantive source/response locators are kept under
+`.omo/evidence/scientific-model/isolated/`. Initial installer refusals caused by
+temporarily unavailable integration links were retained and recovered after the
+Skill validator passed. Unrelated configured MCP 502 diagnostics did not prevent
+successful turns; no user configuration was changed.
+
+Two additional fresh sessions reviewed the **same source hash** in Argumentation
+and Suggest Edits modes, bringing formal executions to **11 sessions**. Both
+passed 12 substantive cross-mode checks, preserved C1/C2/C3 meanings and source
+locations, rechecked the prior report's hashes and ran fresh mathematical checks.
+Suggest Edits also ran the actual editing guard, delivered an English paragraph,
+ledger and unapplied diff, and explicitly disclosed claim qualification and
+evidence alignment requiring approval. Guard results stayed UNKNOWN/MANUAL_REQUIRED.
+
+Both follow-ups independently narrowed the prior A-r1 heading that alleged an
+overstated quality conclusion. The excerpt actually gives an unmeasured quality
+comparison as a limitation; it makes no affirmative quality-preservation claim.
+The core necessity judgment remains consistent, while this ancillary false
+positive is openly corrected. Original responses and historical narrow criterion
+receipts are retained. Evidence and exact locators:
+`.omo/evidence/scientific-model/isolated/mode-switch/REPORT.md`. No serialized
+graph existed in these narrow tasks; report hashes and stable claim mappings were
+checked, and no graph-validator run is claimed. Other models and real hardware
+were not evaluated.
+
+### Venue and PDF evidence
+
+Actual source bytes and cited passages were read for **Tartan** and **Designing
+Cloud Servers for Lower Carbon** (ISCA 2024), and **Supporting a Virtual Vector
+Instruction Set on a Commercial Compute-in-SRAM Accelerator** and **Address
+Scaling** (CAL 2024). The atlas records PDF hashes, one-based pages, partial read
+coverage and exact-revision UNKNOWN. Only `writing_style_observations` changed in
+the ISCA submission and CAL profiles; official rules, registry and tuple selection
+remain unchanged. MICRO/HPCA/ASPLOS/SOSP/OSDI are explicitly unsampled.
+
+The optional native reader actually extracted all four pages of the public
+Cornell CAL PDF, read metadata, rendered pages 1/4 and ran opt-in Tesseract OCR.
+Text/render operations passed; OCR stayed **UNKNOWN**. The images were opened and
+were legible; pages 2/3 and all equations/figures were not visually reviewed.
+Input SHA-256 stayed unchanged; source/PDF revision identity stayed UNKNOWN.
+Poppler is unavailable here; its outcomes were tested with controlled seams only.
+Source/reading/PDF receipts are under `.omo/evidence/venue-patterns/` and
+`.omo/evidence/pdf-reader/`.
+
+### Changed file responsibilities
+
+Paths below are relative to `.agents/skills/paper-craft/` unless prefixed otherwise.
+
+| Files | Role and reason |
+|---|---|
+| `SKILL.md` | Routes all existing modes through shared scientific prerequisites, private output and explicit verification limits |
+| `references/core/scientific-review.md`, `claim-graph.md`, `counterfactual-audit.md`, `references/workflows/scientific-triage.md` | Common ten-step process, stable dependency map, alternatives and early findings |
+| `references/core/argumentation.md`, `novelty.md`, `evidence.md` | Existing workflows share premises, evidence axes and judgments |
+| `references/domains/numerical-contracts.md`, `architecture.md`, `systems.md`, `codesign.md` | Separate mathematical, finite-precision, hardware and evaluation contracts; scope-dependent domain checks |
+| `references/workflows/academic-editing.md`, `reviewer-simulation.md`, `inputs-and-tools.md` | Claim-aware five-pass editing, shared findings and honest input/tool capabilities |
+| `references/workflows/output-policy.md`, `scripts/review_output.py` | Private OS defaults, explicit/environment overrides, Git warnings and read-only file hashes |
+| `scripts/manuscript_common.py`, `tex_uncertainty.py`, `latex_integrity_check.py`, `reference_audit.py` | Producer/consumer uncertainty, conservative partial-build handling and definite static errors |
+| `scripts/argument_graph.py`, `argument_graph_model.py`, `schemas/argument-graph.schema.json`, `assets/argument-graph.json` | Offline graph schema/reference validation, source-hash freshness and assertion-free template |
+| `scripts/numerical_contract_check.py` | Reproducible standard-library signed-saturation counterexample |
+| `scripts/editing_guard.py`, `editing_semantics.py` | Existing protected tokens/diff plus conservative context and numerical association risk hints |
+| `scripts/validate_review_report.py`, `review_report_fields.py`, `schemas/review-report.schema.json` | v2 reports with legacy unversioned/v1 reading; provenance, evidence axes and stable claim references |
+| `assets/review-report.md`, `edit-ledger.csv` | Performed scope, evidence type, argument effects and edit categories; original ledger columns retained |
+| `scripts/pdf_reader.py`, `pdfkit_reader.swift`, `references/workflows/pdf-reader.md` | Optional local PDF operations, selected rendering, uncertain opt-in OCR and hash-binding clues |
+| `venues/writing-patterns.json`, `schemas/writing-patterns.schema.json`, `scripts/validate_writing_patterns.py`, `references/venues/writing-patterns.md` | Evidence-based four-paper atlas with partial coverage and bounded observations |
+| `references/venues/README.md`, `sources.md`, `venues/profiles/isca-2026-research-submission.json`, `cal-continuing-letter-submission.json` | Separate five review dimensions and sampled observations; official requirements preserved |
+| Root `README.md`, `package.json`, `.gitignore`, `.github/workflows/ci.yml` | Installation/usage documentation, bundled Swift payload, generated-output protection and portable checks |
+| Root `tests/test_argument_graph.py`, `test_numerical_contracts.py`, `test_review_reports.py`, `test_semantic_editing.py`, `test_review_output.py`, `test_scoped_uncertainty.py`, `test_pdf_reader.py`, `test_writing_patterns.py` | New meaningful regression coverage for each executable boundary |
+| Root `tests/npm.test.mjs`, `agent-install.test.mjs`, `test_install_targets.py`, `test_venue_limits.py`, `test_venues.py`, `test_audit_regressions.py`, `test_manuscript_tools.py`, `symlink_support.py` | Portable npm launchers/external-tool seams and precise optional symlink capability handling |
+| Root `tests/scenarios/README.md`, `scientific-cases.json`, `counterfactual/`, `numerical-contracts/`, `evidence-inference/`, `graphs/`, `reports/`, `tests/VERIFICATION.md` | Synthetic blind-review inputs/rubrics, valid/invalid serialized fixtures and this actual execution record |
+
+### Earlier implementation records
+
 Executed 2026-10-08 on macOS, Python 3.14.6, Codex CLI 0.160.0. Runtime scripts use only Python standard library. Python 3.10 compatibility was checked by syntax parsing and configured type checking; a Python 3.10 interpreter run was not performed.
 
 ## Automated checks actually run

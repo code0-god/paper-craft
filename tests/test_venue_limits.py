@@ -1,18 +1,23 @@
-"""Exercise cached page ranges through the CLI with a controlled pdfinfo binary."""
+"""Exercise CLI page-range decisions with a controlled pdfinfo subprocess response."""
 
 from __future__ import annotations
 
+import contextlib
+import importlib
+import io
 import json
-import os
 import subprocess
 import sys
 import tempfile
 import unittest
 from datetime import date
 from pathlib import Path
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 SKILL = ROOT / ".agents/skills/paper-craft"
+sys.path.insert(0, str(SKILL / "scripts"))
+venue_preflight = importlib.import_module("venue_preflight")
 
 
 class VenueLimitTests(unittest.TestCase):
@@ -23,13 +28,6 @@ class VenueLimitTests(unittest.TestCase):
         self.profile = self.load_profile("ksc-2026-research-submission.json")
         self.pdf = self.folder / "paper.pdf"
         self.pdf.write_bytes(b"%PDF-1.4\n% synthetic input for the pdfinfo subprocess seam\n")
-        executable = self.folder / "pdfinfo"
-        executable.write_text(
-            f"#!{sys.executable}\nimport os, pathlib, sys\n"
-            "assert pathlib.Path(sys.argv[1]).read_bytes().startswith(b'%PDF-')\n"
-            "print('Pages: ' + os.environ['PDFINFO_TEST_PAGES'])\n", encoding="utf-8",
-        )
-        executable.chmod(0o755)
 
     def load_profile(self, name: str) -> dict:
         profile = json.loads((SKILL / "venues/profiles" / name).read_text(encoding="utf-8"))
@@ -55,8 +53,17 @@ class VenueLimitTests(unittest.TestCase):
                      "--profile-root", str(self.folder), "--json", *extra]
         if self.profile["year"] is not None:
             arguments.extend(["--year", str(self.profile["year"])])
-        return subprocess.run(arguments, capture_output=True, text=True, timeout=30, check=False,
-                              env=dict(os.environ, PATH=str(self.folder), PDFINFO_TEST_PAGES=str(pages)))
+        output, errors = io.StringIO(), io.StringIO()
+        response = subprocess.CompletedProcess(["pdfinfo-test", str(self.pdf.resolve())], 0,
+                                               f"Pages: {pages}\n", "")
+        with patch.object(sys, "argv", arguments[1:]), \
+                patch.object(venue_preflight.shutil, "which", return_value="pdfinfo-test"), \
+                patch.object(venue_preflight.subprocess, "run", return_value=response) as pdfinfo, \
+                contextlib.redirect_stdout(output), contextlib.redirect_stderr(errors):
+            status = venue_preflight.main()
+        pdfinfo.assert_called_once_with(["pdfinfo-test", str(self.pdf.resolve())], capture_output=True,
+                                       text=True, timeout=30, check=False)
+        return subprocess.CompletedProcess(arguments, status, output.getvalue(), errors.getvalue())
 
     def assert_pages(self, result: subprocess.CompletedProcess[str], pages: int, status: str) -> None:
         report = json.loads(result.stdout)
