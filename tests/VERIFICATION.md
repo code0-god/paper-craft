@@ -85,3 +85,9 @@ Subprocesses ran in unique temporary directories with isolated home/cache/config
 `npm run check` passed Node syntax checks for CLI and tests. Ruff checks passed; Basedpyright reported 0 errors/warnings for the Python code. The existing Python suite was rerun before the initial commit: **56 PASS**, 11.855 seconds. No JavaScript LSP/typecheck is claimed; unavailable Biome was not installed. Older Node/npm releases and Windows were not executed.
 
 Raw npm invocations/TAP and reviewer receipts are local Git-ignored evidence under `.omo/evidence/npm/` and `.omo/evidence/npm-distribution-code-review.md`. This committed summary is the portable record. No live registry publication or Git push was performed. Registry lookup for `@code0-god/paper-craft` returned E404; `@latest` instructions are explicitly conditional on publication and scope ownership. Local folder/tarball installation and update were actually tested and need no registry publication.
+
+## MIT license follow-up, 2026-10-08
+
+The owner selected MIT after the Git push and npm login. Root `LICENSE` and the self-contained Skill's `LICENSE` contain identical MIT notices, copyright 2026 code0-god. Package/lock metadata and Skill frontmatter identify MIT; README distinguishes project licensing from external original reference-material rights.
+
+Actual `npm test`: **9 PASS / 0 FAIL**, 13.347 seconds. Packaging assertions require both MIT notices and preserve independent installation. Python package tests: **7 PASS**. Node syntax and Skill validator checks passed. Independent QA packed **56 files**, confirmed identical licenses and metadata, extracted the tarball, ran its installer in an isolated destination, and verified the installed Skill retains its notice. No private inputs were included. Local receipts are under `.omo/evidence/mit-license/`. No live npm publication was performed during this change.

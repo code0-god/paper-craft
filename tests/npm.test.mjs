@@ -83,6 +83,11 @@ test('tarball contains the complete skill and only public runtime files', () => 
     assert.doesNotMatch(path, /(?:__pycache__|\.pyc$|source-materials|(?:^|\/)tests\/)/);
   }
   assert.equal(manifest.name, '@code0-god/paper-craft');
+  assert.equal(manifest.license, 'MIT');
+  assert.ok(paths.includes('LICENSE'));
+  assert.ok(paths.includes(skill + 'LICENSE'));
+  assert.equal(readFileSync(join(repository, 'LICENSE'), 'utf8'),
+    readFileSync(join(repository, skill, 'LICENSE'), 'utf8'));
   assert.equal(packed.version, manifest.version);
   assert.equal(manifest.bin['paper-craft'], 'bin/paper-craft.mjs');
   assert.deepEqual(manifest.dependencies ?? {}, {});

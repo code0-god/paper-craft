@@ -1,5 +1,6 @@
 ---
 name: paper-craft
+license: "MIT"
 description: "Academic paper writing and peer-review preparation for computer architecture and computer systems research. Use for research design, novelty and contribution analysis, research argument review, evidence and experimental evaluation, academic editing and proofreading, LaTeX manuscript review, and venue-aware manuscript preparation in these fields. Supports English and Korean manuscripts; does not apply to general business documents or unrelated prose."
 ---
 

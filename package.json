@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "description": "Install and update the Paper Craft architecture and systems research Agent Skill",
   "type": "module",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bin": {
     "paper-craft": "bin/paper-craft.mjs"
   },
   "files": [
     "bin/paper-craft.mjs",
+    ".agents/skills/paper-craft/LICENSE",
     ".agents/skills/paper-craft/**/*.md",
     ".agents/skills/paper-craft/**/*.yaml",
     ".agents/skills/paper-craft/**/*.json",

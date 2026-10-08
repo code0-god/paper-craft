@@ -66,7 +66,9 @@ npm pack --dry-run
 npm publish --access public
 ```
 
-새 릴리스는 `npm version patch --no-git-tag-version`으로 package.json/package-lock.json을 함께 갱신하고 위 검증을 반복합니다. `@code0-god` npm scope 소유권·게시 권한은 별도 확인해야 합니다. 메타데이터의 `UNLICENSED`는 별도 공개 라이선스를 부여하지 않은 현재 상태입니다.
+새 릴리스는 `npm version patch --no-git-tag-version`으로 package.json/package-lock.json을 함께 갱신하고 위 검증을 반복합니다. `@code0-god` npm scope 소유권·게시 권한은 별도 확인해야 합니다.
+
+프로젝트는 [MIT License](LICENSE)로 배포합니다. 독립 설치된 Skill에도 동일한 [라이선스 사본](.agents/skills/paper-craft/LICENSE)을 포함합니다. 외부 참고자료 원본의 권리는 각 권리자에게 있으며 이 프로젝트의 MIT 선택이 해당 원본을 재라이선스하지 않습니다. 원본 파일은 패키지에 포함하지 않습니다.
 
 ## 환경과 설치
 
