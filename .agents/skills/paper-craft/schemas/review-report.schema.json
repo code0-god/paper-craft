@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://paper-craft.local/schemas/review-report.schema.json",
+  "title": "Paper Craft review report",
+  "description": "Optional structured semantic review and actual tool results. Structural validity does not prove scientific correctness.",
+  "type": "object",
+  "required": ["task", "mode", "inputs", "findings", "checks", "limitations"],
+  "properties": {
+    "task": {"type": "string", "minLength": 1},
+    "mode": {"enum": ["review_only", "suggest_edits", "apply_approved_edits"]},
+    "inputs": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "required": ["path", "read_status"],
+        "properties": {
+          "path": {"type": "string", "minLength": 1},
+          "sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+          "read_status": {"enum": ["read", "partial", "unreadable", "missing"]},
+          "notes": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "target": {
+      "type": ["object", "null"],
+      "properties": {
+        "venue_id": {"type": "string"},
+        "year": {"type": ["integer", "null"]},
+        "track": {"type": "string"},
+        "stage": {"type": "string"},
+        "profile_path": {"type": ["string", "null"]},
+        "verification_status": {"enum": ["verified", "unverified", "outdated", "conflicting"]}
+      },
+      "required": ["venue_id", "year", "track", "stage", "verification_status"],
+      "additionalProperties": false
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "location", "category", "severity", "evidence", "explanation", "recommendation", "evidence_state"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "location": {"type": "string", "minLength": 1},
+          "category": {"type": "string", "minLength": 1},
+          "severity": {"enum": ["Critical", "Major", "Minor", "Suggestion"]},
+          "evidence": {"type": "array", "items": {"type": "string"}},
+          "explanation": {"type": "string", "minLength": 1},
+          "recommendation": {"type": "string", "minLength": 1},
+          "additional_material": {"type": "array", "items": {"type": "string"}},
+          "proposed_revision": {"type": ["string", "null"]},
+          "technical_meaning_risk": {"type": ["string", "null"]},
+          "evidence_state": {"$ref": "#/$defs/evidence_state"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object", "required": ["id", "text", "location", "evidence_locations", "evidence_state", "notes"],
+        "properties": {
+          "id": {"type": "string"}, "text": {"type": "string"}, "location": {"type": "string"},
+          "evidence_locations": {"type": "array", "items": {"type": "string"}},
+          "evidence_state": {"$ref": "#/$defs/evidence_state"},
+          "notes": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object", "required": ["name", "status", "evidence", "limits"],
+        "properties": {
+          "name": {"type": "string"},
+          "status": {"enum": ["PASS", "FAIL", "SKIPPED", "UNKNOWN"]},
+          "evidence": {"type": "string"}, "limits": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "limitations": {"type": "array", "items": {"type": "string"}}
+  },
+  "$defs": {
+    "evidence_state": {
+      "enum": ["directly_verified", "partially_verified", "indirectly_supported", "needs_validation", "unsupported", "cannot_determine"]
+    }
+  },
+  "additionalProperties": false
+}

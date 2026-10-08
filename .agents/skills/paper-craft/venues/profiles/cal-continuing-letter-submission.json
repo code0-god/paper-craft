@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "venue_id": "CAL",
+  "year": null,
+  "track": "letter",
+  "submission_stage": "submission",
+  "publication_type": "journal",
+  "official_source_urls": [
+    "https://www.computer.org/digital-library/journals/ca/cfp-ieee-computer-architecture-letters"
+  ],
+  "last_verified_date": "2026-10-08",
+  "rules": {
+    "paper_length_policy": {
+      "value": {
+        "max_pages": 4,
+        "basis": "all"
+      },
+      "source_url": "https://www.computer.org/digital-library/journals/ca/cfp-ieee-computer-architecture-letters",
+      "source_type": "call_for_papers",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "CAL",
+        "year": null,
+        "track": "letter",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "Submission Instructions; official indexed page text read 2026-10-08; direct fetch returned 403, revalidate before submission"
+    },
+    "reference_page_policy": {
+      "value": {
+        "excluded": false
+      },
+      "source_url": "https://www.computer.org/digital-library/journals/ca/cfp-ieee-computer-architecture-letters",
+      "source_type": "call_for_papers",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "CAL",
+        "year": null,
+        "track": "letter",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "Submission Instructions"
+    },
+    "appendix_supplementary_policy": {
+      "value": null,
+      "source_url": null,
+      "source_type": "unknown",
+      "verified_at": null,
+      "applies_to": {
+        "venue_id": "CAL",
+        "year": null,
+        "track": "letter",
+        "submission_stage": "submission"
+      },
+      "verification_status": "unverified",
+      "notes": "UNKNOWN: no verified applicable official rule retained; consult exact target instructions."
+    },
+    "template_requirements": {
+      "value": {
+        "required": true,
+        "documentclass": null,
+        "options": [],
+        "template": "IEEE Template Selector"
+      },
+      "source_url": "https://www.computer.org/digital-library/journals/ca/cfp-ieee-computer-architecture-letters",
+      "source_type": "call_for_papers",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "CAL",
+        "year": null,
+        "track": "letter",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "Submission Instructions; indexed official primary text"
+    },
+    "anonymity_requirements": {
+      "value": null,
+      "source_url": null,
+      "source_type": "unknown",
+      "verified_at": null,
+      "applies_to": {
+        "venue_id": "CAL",
+        "year": null,
+        "track": "letter",
+        "submission_stage": "submission"
+      },
+      "verification_status": "unverified",
+      "notes": "UNKNOWN: no verified applicable official rule retained; consult exact target instructions."
+    },
+    "review_criteria": {
+      "value": [
+        "Early high-impact architecture results; rigorous peer review."
+      ],
+      "source_url": "https://www.computer.org/digital-library/journals/ca/cfp-ieee-computer-architecture-letters",
+      "source_type": "call_for_papers",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "CAL",
+        "year": null,
+        "track": "letter",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "About IEEE Computer Architecture Letters"
+    },
+    "ai_disclosure_requirements": {
+      "value": null,
+      "source_url": null,
+      "source_type": "unknown",
+      "verified_at": null,
+      "applies_to": {
+        "venue_id": "CAL",
+        "year": null,
+        "track": "letter",
+        "submission_stage": "submission"
+      },
+      "verification_status": "unverified",
+      "notes": "UNKNOWN: no verified applicable official rule retained; consult exact target instructions."
+    },
+    "artifact_reproducibility_policy": {
+      "value": {
+        "dataport_upload": "encouraged, not mandatory"
+      },
+      "source_url": "https://www.computer.org/digital-library/journals/ca/cfp-ieee-computer-architecture-letters",
+      "source_type": "call_for_papers",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "CAL",
+        "year": null,
+        "track": "letter",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "Submission Instructions"
+    },
+    "writing_style_guidance": {
+      "value": {
+        "kind": "independent_guidance",
+        "items": [
+          "Build claim-evidence argument before prose; preserve technical meaning and state limitations."
+        ]
+      },
+      "source_url": null,
+      "source_type": "field_methodology",
+      "verified_at": null,
+      "applies_to": {
+        "venue_id": "CAL",
+        "year": null,
+        "track": "letter",
+        "submission_stage": "submission"
+      },
+      "verification_status": "unverified",
+      "notes": "Independent Paper Craft advice; not an official rule or a sampled venue convention."
+    },
+    "field_specific_evaluation_priorities": {
+      "value": {
+        "kind": "independent_guidance",
+        "items": [
+          "Distinguish measured silicon, RTL, cycle simulation, analytical models and estimates.",
+          "Check workload/baseline fairness and claim-specific performance, area, energy and timing evidence."
+        ]
+      },
+      "source_url": null,
+      "source_type": "field_methodology",
+      "verified_at": null,
+      "applies_to": {
+        "venue_id": "CAL",
+        "year": null,
+        "track": "letter",
+        "submission_stage": "submission"
+      },
+      "verification_status": "unverified",
+      "notes": "Independent field methodology, select metrics by claim; not mandatory venue review criteria."
+    }
+  },
+  "writing_style_observations": [],
+  "notes": "Continuing journal profile; year=null explicitly. Publisher/special-issue rules are not transferred to regular submissions."
+}

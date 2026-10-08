@@ -1,0 +1,282 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Paper Craft Venue Profile",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "venue_id",
+    "publication_type",
+    "year",
+    "track",
+    "submission_stage",
+    "official_source_urls",
+    "last_verified_date",
+    "rules",
+    "writing_style_observations",
+    "notes"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "venue_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "publication_type": {
+      "enum": [
+        "conference",
+        "journal"
+      ]
+    },
+    "year": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 1900,
+      "maximum": 2200
+    },
+    "track": {
+      "type": "string",
+      "minLength": 1
+    },
+    "submission_stage": {
+      "enum": [
+        "submission",
+        "camera-ready",
+        "revision"
+      ]
+    },
+    "official_source_urls": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri",
+        "pattern": "^https://"
+      }
+    },
+    "last_verified_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "notes": {
+      "type": "string",
+      "minLength": 1
+    },
+    "writing_style_observations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "paper_url",
+          "observation",
+          "scope_limit"
+        ],
+        "properties": {
+          "paper_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "observation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scope_limit": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "rules": {
+      "type": "object",
+      "required": [
+        "paper_length_policy",
+        "reference_page_policy",
+        "appendix_supplementary_policy",
+        "template_requirements",
+        "anonymity_requirements",
+        "review_criteria",
+        "ai_disclosure_requirements",
+        "artifact_reproducibility_policy",
+        "writing_style_guidance",
+        "field_specific_evaluation_priorities"
+      ],
+      "properties": {
+        "paper_length_policy": {
+          "$ref": "#/$defs/rule"
+        },
+        "reference_page_policy": {
+          "$ref": "#/$defs/rule"
+        },
+        "appendix_supplementary_policy": {
+          "$ref": "#/$defs/rule"
+        },
+        "template_requirements": {
+          "$ref": "#/$defs/rule"
+        },
+        "anonymity_requirements": {
+          "$ref": "#/$defs/rule"
+        },
+        "review_criteria": {
+          "$ref": "#/$defs/rule"
+        },
+        "ai_disclosure_requirements": {
+          "$ref": "#/$defs/rule"
+        },
+        "artifact_reproducibility_policy": {
+          "$ref": "#/$defs/rule"
+        },
+        "writing_style_guidance": {
+          "$ref": "#/$defs/rule"
+        },
+        "field_specific_evaluation_priorities": {
+          "$ref": "#/$defs/rule"
+        }
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/rule"
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "publication_type": {
+            "const": "conference"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "year": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "identity": {
+      "type": "object",
+      "required": [
+        "venue_id",
+        "year",
+        "track",
+        "submission_stage"
+      ],
+      "properties": {
+        "venue_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "year": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "track": {
+          "type": "string",
+          "minLength": 1
+        },
+        "submission_stage": {
+          "enum": [
+            "submission",
+            "camera-ready",
+            "revision"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "rule": {
+      "type": "object",
+      "required": [
+        "value",
+        "source_url",
+        "source_type",
+        "verified_at",
+        "applies_to",
+        "verification_status",
+        "notes"
+      ],
+      "properties": {
+        "value": {},
+        "source_url": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri",
+          "pattern": "^https://"
+        },
+        "source_type": {
+          "enum": [
+            "call_for_papers",
+            "submission_guidelines",
+            "reviewer_guidelines",
+            "official_template",
+            "publisher_policy",
+            "artifact_guidelines",
+            "camera_ready_guidelines",
+            "author_instructions",
+            "field_methodology",
+            "observed_style",
+            "unknown"
+          ]
+        },
+        "verified_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "applies_to": {
+          "$ref": "#/$defs/identity"
+        },
+        "verification_status": {
+          "enum": [
+            "verified",
+            "unverified",
+            "outdated",
+            "conflicting"
+          ]
+        },
+        "notes": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "verification_status": {
+                "const": "verified"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "verified_at": {
+                "type": "string",
+                "format": "date"
+              }
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$comment": "validate_profiles.py also validates registered official domains, exact applies_to identity, date coherence, and UNKNOWN for unverified official rules. This JSON Schema is documentation for external validators, not a dependency."
+}

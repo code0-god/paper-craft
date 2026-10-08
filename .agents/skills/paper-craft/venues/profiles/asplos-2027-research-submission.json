@@ -1,0 +1,200 @@
+{
+  "schema_version": 1,
+  "venue_id": "ASPLOS",
+  "year": 2027,
+  "track": "research",
+  "submission_stage": "submission",
+  "publication_type": "conference",
+  "official_source_urls": [
+    "https://www.asplos-conference.org/asplos2027/cfp/"
+  ],
+  "last_verified_date": "2026-10-08",
+  "rules": {
+    "paper_length_policy": {
+      "value": {
+        "max_pages": 11,
+        "basis": "main"
+      },
+      "source_url": "https://www.asplos-conference.org/asplos2027/cfp/",
+      "source_type": "call_for_papers",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "ASPLOS",
+        "year": 2027,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "Formatting and Editing: Page Layout and Limit"
+    },
+    "reference_page_policy": {
+      "value": {
+        "excluded": true,
+        "limit": null,
+        "all_authors_required": true
+      },
+      "source_url": "https://www.asplos-conference.org/asplos2027/cfp/",
+      "source_type": "call_for_papers",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "ASPLOS",
+        "year": 2027,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "References"
+    },
+    "appendix_supplementary_policy": {
+      "value": {
+        "extra_appendix_pages": true,
+        "limit": null,
+        "review_optional": true
+      },
+      "source_url": "https://www.asplos-conference.org/asplos2027/cfp/",
+      "source_type": "call_for_papers",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "ASPLOS",
+        "year": 2027,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "Anonymized Supplemental Material and Appendixes"
+    },
+    "template_requirements": {
+      "value": {
+        "required": true,
+        "documentclass": "acmart",
+        "options": [
+          "sigplan",
+          "anonymous",
+          "review",
+          "nonacm"
+        ],
+        "font_size_pt": 10
+      },
+      "source_url": "https://www.asplos-conference.org/asplos2027/cfp/",
+      "source_type": "call_for_papers",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "ASPLOS",
+        "year": 2027,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "Formatting and Editing"
+    },
+    "anonymity_requirements": {
+      "value": {
+        "double_blind": true,
+        "scope": "Authors, affiliations, metadata, repositories, known system names; ask chairs about exceptions."
+      },
+      "source_url": "https://www.asplos-conference.org/asplos2027/cfp/",
+      "source_type": "call_for_papers",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "ASPLOS",
+        "year": 2027,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "Anonymization"
+    },
+    "review_criteria": {
+      "value": [
+        "Relevance, novelty, technical merit, clarity; core-domain intellectual advance; rapid review of first two pages."
+      ],
+      "source_url": "https://www.asplos-conference.org/asplos2027/cfp/",
+      "source_type": "call_for_papers",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "ASPLOS",
+        "year": 2027,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "Scope and Expectations; Rapid Review Round"
+    },
+    "ai_disclosure_requirements": {
+      "value": {
+        "disclosure": "Fully disclose generative AI use; disclosure acknowledgments excluded from main limit.",
+        "prohibited_generation": null,
+        "authorship": "Follow ACM authorship policy."
+      },
+      "source_url": "https://www.asplos-conference.org/asplos2027/cfp/",
+      "source_type": "call_for_papers",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "ASPLOS",
+        "year": 2027,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "Using Generative AI"
+    },
+    "artifact_reproducibility_policy": {
+      "value": {
+        "evaluation_offered": true,
+        "details_url": "https://www.asplos-conference.org/asplos2027/artifact-evaluation/"
+      },
+      "source_url": "https://www.asplos-conference.org/asplos2027/cfp/",
+      "source_type": "call_for_papers",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "ASPLOS",
+        "year": 2027,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "Artifact Evaluation; details require separate lookup"
+    },
+    "writing_style_guidance": {
+      "value": {
+        "kind": "official_guidance",
+        "items": [
+          "First two pages must support rapid review; disclose implemented scope and proposal drawbacks."
+        ]
+      },
+      "source_url": "https://www.asplos-conference.org/asplos2027/cfp/",
+      "source_type": "call_for_papers",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "ASPLOS",
+        "year": 2027,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "Rapid Review Round; Scope and Expectations"
+    },
+    "field_specific_evaluation_priorities": {
+      "value": {
+        "kind": "independent_guidance",
+        "items": [
+          "Connect hardware/software interaction to a tested bottleneck and causal design rationale.",
+          "Use matched models, workloads and accuracy targets; report integration overhead and end-to-end effects."
+        ]
+      },
+      "source_url": null,
+      "source_type": "field_methodology",
+      "verified_at": null,
+      "applies_to": {
+        "venue_id": "ASPLOS",
+        "year": 2027,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "unverified",
+      "notes": "Independent field methodology, select metrics by claim; not mandatory venue review criteria."
+    }
+  },
+  "writing_style_observations": [],
+  "notes": "Exact named edition and track only; historical edition cannot establish a later edition's rules."
+}

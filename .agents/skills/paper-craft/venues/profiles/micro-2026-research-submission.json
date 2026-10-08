@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "venue_id": "MICRO",
+  "year": 2026,
+  "track": "research",
+  "submission_stage": "submission",
+  "publication_type": "conference",
+  "official_source_urls": [
+    "https://www.microarch.org/micro59/submit/guidelines.php"
+  ],
+  "last_verified_date": "2026-10-08",
+  "rules": {
+    "paper_length_policy": {
+      "value": {
+        "max_pages": 11,
+        "basis": "main"
+      },
+      "source_url": "https://www.microarch.org/micro59/submit/guidelines.php",
+      "source_type": "call_for_papers",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "MICRO",
+        "year": 2026,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "Format Highlights"
+    },
+    "reference_page_policy": {
+      "value": {
+        "excluded": true,
+        "limit": null,
+        "all_authors_required": true
+      },
+      "source_url": "https://www.microarch.org/micro59/submit/guidelines.php",
+      "source_type": "call_for_papers",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "MICRO",
+        "year": 2026,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "References"
+    },
+    "appendix_supplementary_policy": {
+      "value": {
+        "appendix_allowed": false
+      },
+      "source_url": "https://www.microarch.org/micro59/submit/guidelines.php",
+      "source_type": "call_for_papers",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "MICRO",
+        "year": 2026,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "Format Highlights: no appendix"
+    },
+    "template_requirements": {
+      "value": {
+        "required": false,
+        "documentclass": null,
+        "options": [],
+        "font_size_pt": 9,
+        "template_url": "https://www.microarch.org/micro59/submit/guidelines.php"
+      },
+      "source_url": "https://www.microarch.org/micro59/submit/guidelines.php",
+      "source_type": "call_for_papers",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "MICRO",
+        "year": 2026,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "Paper Formatting; template strongly encouraged, do not squeeze space"
+    },
+    "anonymity_requirements": {
+      "value": {
+        "double_blind": true,
+        "scope": "Names, affiliations, metadata, acknowledgments, artifact links."
+      },
+      "source_url": "https://www.microarch.org/micro59/submit/guidelines.php",
+      "source_type": "call_for_papers",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "MICRO",
+        "year": 2026,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "Content"
+    },
+    "review_criteria": {
+      "value": [
+        "Contribution merits; evaluation expectations depend on research scope."
+      ],
+      "source_url": "https://www.microarch.org/micro59/submit/guidelines.php",
+      "source_type": "call_for_papers",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "MICRO",
+        "year": 2026,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "Paper Evaluation Objectives"
+    },
+    "ai_disclosure_requirements": {
+      "value": null,
+      "source_url": null,
+      "source_type": "unknown",
+      "verified_at": null,
+      "applies_to": {
+        "venue_id": "MICRO",
+        "year": 2026,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "unverified",
+      "notes": "UNKNOWN: no verified applicable official rule retained; consult exact target instructions."
+    },
+    "artifact_reproducibility_policy": {
+      "value": null,
+      "source_url": null,
+      "source_type": "unknown",
+      "verified_at": null,
+      "applies_to": {
+        "venue_id": "MICRO",
+        "year": 2026,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "unverified",
+      "notes": "UNKNOWN: no verified applicable official rule retained; consult exact target instructions."
+    },
+    "writing_style_guidance": {
+      "value": {
+        "kind": "official_guidance",
+        "items": [
+          "Reference figures in text; ensure grayscale legibility."
+        ]
+      },
+      "source_url": "https://www.microarch.org/micro59/submit/guidelines.php",
+      "source_type": "call_for_papers",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "MICRO",
+        "year": 2026,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "Figures and Tables"
+    },
+    "field_specific_evaluation_priorities": {
+      "value": {
+        "kind": "independent_guidance",
+        "items": [
+          "Distinguish measured silicon, RTL, cycle simulation, analytical models and estimates.",
+          "Check workload/baseline fairness and claim-specific performance, area, energy and timing evidence."
+        ]
+      },
+      "source_url": null,
+      "source_type": "field_methodology",
+      "verified_at": null,
+      "applies_to": {
+        "venue_id": "MICRO",
+        "year": 2026,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "unverified",
+      "notes": "Independent field methodology, select metrics by claim; not mandatory venue review criteria."
+    }
+  },
+  "writing_style_observations": [],
+  "notes": "Exact named edition and track only; historical edition cannot establish a later edition's rules."
+}

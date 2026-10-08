@@ -1,0 +1,6 @@
+interface:
+  display_name: "Paper Craft"
+  short_description: "Architecture and systems paper writing and review"
+  default_prompt: "Use $paper-craft to review this architecture or systems manuscript's arguments, contributions, evidence, and target venue requirements."
+policy:
+  allow_implicit_invocation: true

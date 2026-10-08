@@ -1,0 +1,192 @@
+{
+  "schema_version": 1,
+  "venue_id": "ISCA",
+  "year": 2026,
+  "track": "research",
+  "submission_stage": "submission",
+  "publication_type": "conference",
+  "official_source_urls": [
+    "https://www.iscaconf.org/isca2026/submit/guidelines.php"
+  ],
+  "last_verified_date": "2026-10-08",
+  "rules": {
+    "paper_length_policy": {
+      "value": {
+        "max_pages": 11,
+        "basis": "main"
+      },
+      "source_url": "https://www.iscaconf.org/isca2026/submit/guidelines.php",
+      "source_type": "call_for_papers",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "ISCA",
+        "year": 2026,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "Paper Formatting"
+    },
+    "reference_page_policy": {
+      "value": {
+        "excluded": true,
+        "limit": null,
+        "all_authors_required": true
+      },
+      "source_url": "https://www.iscaconf.org/isca2026/submit/guidelines.php",
+      "source_type": "call_for_papers",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "ISCA",
+        "year": 2026,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "At a Glance and References"
+    },
+    "appendix_supplementary_policy": {
+      "value": {
+        "extra_appendix_pages": false,
+        "included_in_main_limit": true
+      },
+      "source_url": "https://www.iscaconf.org/isca2026/submit/guidelines.php",
+      "source_type": "call_for_papers",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "ISCA",
+        "year": 2026,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "At a Glance"
+    },
+    "template_requirements": {
+      "value": {
+        "required": false,
+        "documentclass": null,
+        "options": [],
+        "font_size_pt": 10,
+        "template_url": "https://www.iscaconf.org/isca2026/submit/ISCA2026_IEEE_template.zip"
+      },
+      "source_url": "https://www.iscaconf.org/isca2026/submit/guidelines.php",
+      "source_type": "call_for_papers",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "ISCA",
+        "year": 2026,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "Paper Formatting; provided IEEE-derived template"
+    },
+    "anonymity_requirements": {
+      "value": {
+        "double_blind": true,
+        "scope": "Authors and identifying metadata; cite prior work normally in third person."
+      },
+      "source_url": "https://www.iscaconf.org/isca2026/submit/guidelines.php",
+      "source_type": "call_for_papers",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "ISCA",
+        "year": 2026,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "Content"
+    },
+    "review_criteria": {
+      "value": [
+        "Contribution merits; evaluation expectations depend on research scope."
+      ],
+      "source_url": "https://www.iscaconf.org/isca2026/submit/guidelines.php",
+      "source_type": "call_for_papers",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "ISCA",
+        "year": 2026,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "Paper Evaluation Objectives"
+    },
+    "ai_disclosure_requirements": {
+      "value": {
+        "disclosure": "Generated content: disclose use in acknowledgments; language editing exempt but disclosure recommended.",
+        "prohibited_generation": null,
+        "authorship": "AI cannot be author; coauthors retain responsibility."
+      },
+      "source_url": "https://www.iscaconf.org/isca2026/submit/guidelines.php",
+      "source_type": "call_for_papers",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "ISCA",
+        "year": 2026,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "Guidelines for Use of Generative AI Tools"
+    },
+    "artifact_reproducibility_policy": {
+      "value": null,
+      "source_url": null,
+      "source_type": "unknown",
+      "verified_at": null,
+      "applies_to": {
+        "venue_id": "ISCA",
+        "year": 2026,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "unverified",
+      "notes": "UNKNOWN: no verified applicable official rule retained; consult exact target instructions."
+    },
+    "writing_style_guidance": {
+      "value": {
+        "kind": "official_guidance",
+        "items": [
+          "Make figures readable in grayscale; refer to them in text."
+        ]
+      },
+      "source_url": "https://www.iscaconf.org/isca2026/submit/guidelines.php",
+      "source_type": "call_for_papers",
+      "verified_at": "2026-10-08",
+      "applies_to": {
+        "venue_id": "ISCA",
+        "year": 2026,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "verified",
+      "notes": "Figures and Tables"
+    },
+    "field_specific_evaluation_priorities": {
+      "value": {
+        "kind": "independent_guidance",
+        "items": [
+          "Distinguish measured silicon, RTL, cycle simulation, analytical models and estimates.",
+          "Check workload/baseline fairness and claim-specific performance, area, energy and timing evidence."
+        ]
+      },
+      "source_url": null,
+      "source_type": "field_methodology",
+      "verified_at": null,
+      "applies_to": {
+        "venue_id": "ISCA",
+        "year": 2026,
+        "track": "research",
+        "submission_stage": "submission"
+      },
+      "verification_status": "unverified",
+      "notes": "Independent field methodology, select metrics by claim; not mandatory venue review criteria."
+    }
+  },
+  "writing_style_observations": [],
+  "notes": "Exact named edition and track only; historical edition cannot establish a later edition's rules."
+}

@@ -1,0 +1,1 @@
+claim_id,claim_text,manuscript_location,expected_evidence,actual_evidence_location,measurement_type,conditions,comparator,observed_values,evidence_state,scope_limit,mismatch,next_action

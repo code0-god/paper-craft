@@ -1,0 +1,12 @@
+\section{Design}\label{sec:design}
+An existing cache is connected to an existing systolic array.
+Both components are proposed; only a cycle-model implementation is available.
+The accelerator, which is made use of in this experiment, has a capacity of 64~MiB.
+The baseline has 16~MiB and runs at 1.0~GHz; the proposed design runs at 1.2~GHz.
+We hypothesize that reuse reduces off-chip traffic, but no traffic counter was collected.
+We use the analytical expression
+\begin{equation}\label{eq:model}
+T = \frac{C}{f} + \frac{B}{\beta}.
+\end{equation}
+Here $C$ is cycles, $f$ is frequency, $B$ is transferred bytes, and $\beta$ is bandwidth.
+There are no area, power, timing-closure, FPGA, or silicon measurements.

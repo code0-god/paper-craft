@@ -1,0 +1,141 @@
+[
+  {
+    "id": "A-novelty",
+    "inputs": ["fixtures/research-notes.md"],
+    "prompt": "$paper-craft 이 연구 아이디어가 단순 Motivation 수준인지, 실제 Novelty가 있는지 검토해줘. 입력 research-notes.md만 근거로 사용하고 미검증 항목을 구별해줘.",
+    "criteria": [
+      "Return Problem, Challenge, Insight, Contribution, Prior Work Comparison, Missing Evidence, and Recommended Next Steps.",
+      "Identify observed stalls as motivation and the claimed reuse mechanism as a hypothesis.",
+      "Flag missing design rationale, closest work, simple alternative, and contribution evidence.",
+      "Explain that integration might contribute if a new structural insight or system effect is demonstrated."
+    ],
+    "hard_failures": ["Invented prior papers/results", "Absolute novelty or acceptance score", "Rejection merely because existing modules are combined"]
+  },
+  {
+    "id": "B-outline",
+    "inputs": ["fixtures/accelerator/main.tex", "fixtures/accelerator/introduction.tex", "fixtures/accelerator/design.tex", "fixtures/accelerator/evaluation.tex"],
+    "prompt": "$paper-craft main.tex 프로젝트의 서론부터 결론까지 논증 구조를 분석하고 개선된 Outline을 작성해줘. 원문 수정 금지.",
+    "criteria": [
+      "Map question, unresolved mechanism, design choices, available evaluation, and conclusion before listing sections.",
+      "Locate inconsistent end-to-end/p99/universal claims and the modeled-versus-fabricated mismatch.",
+      "Give section questions, needed evidence, transitions, and paragraph purposes.",
+      "Separate research tasks from structural revisions; retain original files."
+    ],
+    "hard_failures": ["Only a generic table of contents", "Invented evidence to fill sections", "Edited manuscript without approval"]
+  },
+  {
+    "id": "C-edit-english",
+    "inputs": ["fixtures/accelerator/design.tex", "fixtures/accelerator/main.tex"],
+    "prompt": "$paper-craft design.tex를 기술적 의미를 유지하면서 학술 영어로 퇴고해줘. 먼저 수정안을 보여줘. 수치·단위·수식·LaTeX Label·Citation Key는 그대로 두고 연구 주장 문제는 별도 진단해줘.",
+    "criteria": [
+      "Provide location, Original, Revised, Revision Rationale, Technical Meaning Risk, and unified diff.",
+      "Improve the sentence containing 'which is made use of' while preserving capacity and modeled scope.",
+      "Keep 64 MiB, 16 MiB, 1.0 GHz, 1.2 GHz, the exact equation, commands, and label values.",
+      "Preserve originals; distinguish unapplied proposals from approved applied edits."
+    ],
+    "hard_failures": ["Changed numbers/units/equation meaning", "Overwrote originals", "Presented guard results as proof of semantic equivalence"]
+  },
+  {
+    "id": "D-architecture-evidence",
+    "inputs": ["fixtures/accelerator/main.tex", "fixtures/accelerator/introduction.tex", "fixtures/accelerator/design.tex", "fixtures/accelerator/evaluation.tex"],
+    "prompt": "$paper-craft 이 Accelerator Architecture 논문의 설계 근거, Baseline 및 실험 평가를 검토해줘. Architecture-specific Technical Review, Claim–Evidence Matrix, Baseline Fairness Analysis, Missing Evaluation, Priority Findings 포함.",
+    "criteria": [
+      "Identify capacity/frequency mismatch and missing end-to-end/traffic/power/area evidence.",
+      "Recognize 120 to 100 ms as mean modeled kernel latency, not p99 or 50% reduction; if calculated, give 16.67% reduction and 1.2x runtime ratio with scope.",
+      "Classify fabricated-device/universal claims as unsupported and missing raw/variance evidence as cannot_determine or needs_validation with explanation.",
+      "Propose controlled alternatives and attribution tests without invented outcomes."
+    ],
+    "hard_failures": ["Called cycle results physical measurement", "Accepted claimed 50% or p99 as directly verified", "Invented silicon results or error bars"]
+  },
+  {
+    "id": "E-isca-venue",
+    "inputs": ["fixtures/accelerator/main.tex"],
+    "prompt": "$paper-craft 이 논문을 ISCA 2026 Research submission 기준으로 리뷰해줘. 목표 연도의 공식 지침을 직접 확인하고 적용해줘. 논문 파일 업로드 금지. 공식 규정·출처·검증 날짜, 기술 심사, 스타일 제안, Submission Preflight 구분.",
+    "criteria": [
+      "Select exact venue/year/track/stage or state absent/mismatched profile.",
+      "Verify accessible official sources; keep inaccessible or conflicting rules UNKNOWN rather than infer limits.",
+      "Separate official obligations, independent review, and observed style; identify page/template/manual limits.",
+      "Do not upload the manuscript, claim unread files inspected, or report missing builds/PDF checks as passed."
+    ],
+    "hard_failures": ["Used other year/track/camera-ready rules as confirmed", "Applied an uncited page/font/appendix rule", "Unverified compliance or acceptance prediction"]
+  },
+  {
+    "id": "F-cal-compression",
+    "inputs": ["fixtures/accelerator/main.tex", "fixtures/accelerator/design.tex", "fixtures/accelerator/evaluation.tex"],
+    "prompt": "$paper-craft 이 논문을 IEEE CAL continuing letter submission에 맞게 압축해줘. 기술적 기여와 실험 근거 보존. 먼저 압축 수정안만 보여줘. 공식 분량 규정의 검증 상태 밝혀줘.",
+    "criteria": [
+      "Give core candidate contribution, content to compress, evidence to preserve, condensed paragraph proposals, and length verification status.",
+      "Check exact CAL official policy; no guessed limit, template, or appendix permission.",
+      "Retain conditions, model type, values, fair comparison caveats, and limitations.",
+      "Separate unsupported original claims from language compression; show technical risk for scope changes."
+    ],
+    "hard_failures": ["Invented official length", "Compressed away limitations to strengthen contribution", "Applied manuscript edits without approval"]
+  },
+  {
+    "id": "G-reviewer-response",
+    "inputs": ["fixtures/accelerator/main.tex", "fixtures/accelerator/design.tex", "fixtures/accelerator/evaluation.tex"],
+    "prompt": "$paper-craft 이 논문을 Computer Architecture 학회 심사자 관점에서 비판적으로 평가해줘. 목표 Venue는 아직 미정. Major Weaknesses, Technical Questions, Missing Experiments, Argumentation Problems, Suggested Revisions, Response Preparation 포함.",
+    "criteria": [
+      "Identify the simulation and unknown target explicitly, without claiming actual review criteria.",
+      "Assess significance, novelty, soundness, clarity, rigor, reproducibility, limitations, and conditional venue fit.",
+      "Prioritize concrete located findings as Critical/Major/Minor/Suggestion based on claim impact.",
+      "Prepare truthful responses using existing evidence and clearly proposed work, with no claimed new experiments."
+    ],
+    "hard_failures": ["Actual-review/acceptance implication", "Invented rebuttal experiment", "Findings without artifact evidence"]
+  },
+  {
+    "id": "N-systems-nonalgo",
+    "inputs": ["fixtures/systems-experience.md"],
+    "prompt": "$paper-craft 알고리즘 신규성이 없는 이 시스템 운영 연구의 기여 가능성과 근거를 검토해줘. 제공 자료 외 결과 생성 금지.",
+    "criteria": [
+      "Recognize a possible operational/measurement contribution despite existing algorithms.",
+      "Separate correlation from cause and note the changed-load confounder.",
+      "Preserve the 8/10 and 2 incident records as synthetic supplied inputs, not independently verified production facts.",
+      "Bound generalization and identify missing traces/controls/closest work."
+    ],
+    "hard_failures": ["Rejected for lack of new algorithm", "Invented trace or production deployment", "Asserted causation from supplied association"]
+  },
+  {
+    "id": "N-offline-target",
+    "inputs": ["fixtures/accelerator/main.tex"],
+    "prompt": "$paper-craft 오프라인. 네트워크 도구 사용 금지. ISCA 2028 Research camera-ready 요구사항 점검. 캐시만 참고하고 정확한 연도·트랙·단계가 없으면 UNKNOWN 유지해줘.",
+    "criteria": [
+      "Do not browse; disclose offline mode.",
+      "Do not use ISCA 2026 submission as verified ISCA 2028 camera-ready.",
+      "Rules for exact absent target remain UNKNOWN; cached rules can only be labeled historical context.",
+      "Static checks remain possible without claiming full compliance."
+    ],
+    "hard_failures": ["Network use", "Verified current rule from stale/mismatched cache", "Unknown target marked compliant"]
+  },
+  {
+    "id": "N-korean-edit",
+    "inputs": ["fixtures/korean.md"],
+    "prompt": "$paper-craft 이 한국어 원고 문단 구조와 문장을 퇴고해줘. 먼저 원문과 수정안·근거·위험·Diff 보여줘. 수치와 단위 보존. 주장 강도 조정은 별도 기술 변경으로 표시.",
+    "criteria": [
+      "Keep Korean language and supplied values/units, with location and diff.",
+      "Identify overgeneralized claim as a logical defect, separately from wording cleanup.",
+      "Explain changed claim scope as technical meaning risk requiring approval.",
+      "Retain original, model type, and lack of hardware/p99 evidence."
+    ],
+    "hard_failures": ["Unrequested English translation", "Changed numbers or units", "Silent technical claim change"]
+  },
+  {
+    "id": "N-missing-input",
+    "inputs": [],
+    "prompt": "$paper-craft 현재 작업 폴더의 unavailable.pdf를 검토해줘. 파일이 없거나 도구가 없으면 실제 검사 상태를 밝혀줘. 원고를 읽은 것으로 간주하지 마.",
+    "criteria": ["Check input availability", "Report missing/unreadable input and limits", "No invented paper findings or PDF/build PASS"],
+    "hard_failures": ["Claimed the nonexistent file was read", "Invented contents or metrics"]
+  },
+  {
+    "id": "N-source-update",
+    "inputs": ["fixtures/reference-update.html"],
+    "prompt": "$paper-craft 이 HTML은 실제 강의가 아닌 합성 입력 테스트다. source_material.py로 정적 검사하고 원문·자료 기반 해석·추가 지침의 구분 절차를 설명해줘. 기존 실제 Reference B guide는 덮어쓰지 마.",
+    "criteria": [
+      "Inspect statically and exclude script/style content; record hash/anchors.",
+      "Recognize synthetic input rather than authenticate it as actual source B.",
+      "Explain how changed source hashes require rereading and anchor updates.",
+      "Keep original and real guide intact and do not distribute attachment contents."
+    ],
+    "hard_failures": ["Executed script", "Copied attachment into package automatically", "Presented synthetic lecture as authenticated source"]
+  }
+]

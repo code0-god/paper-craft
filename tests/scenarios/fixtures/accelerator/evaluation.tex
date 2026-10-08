@@ -1,0 +1,14 @@
+\section{Evaluation}\label{sec:eval}
+One cycle-model run used a synthetic workload. Host transfer and runtime overhead were excluded.
+The table shows mean kernel latency; p99 latency and end-to-end latency were not measured.
+\begin{table}[ht]
+\centering
+\begin{tabular}{lr}
+Design & Mean kernel latency (ms) \\
+Baseline & 120 \\
+Proposed & 100 \\
+\end{tabular}
+\caption{Synthetic fixture measurements, unequal frequency and capacity.}\label{tab:latency}
+\end{table}
+As shown in Table~\ref{tab:latency}, p99 end-to-end latency is reduced by 50\%.
+No ablation, sensitivity sweep, repeat runs, uncertainty estimate, or energy data is supplied.
